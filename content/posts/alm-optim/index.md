@@ -12,7 +12,7 @@ categories:
   - Finance
   - Optimisation ALM
   - Banking
-image: /posts/alm-optim/thumbnail.jpg
+image: /posts/alm-optim/thumbnail.PNG
 execute:
   freeze: true
 ---
