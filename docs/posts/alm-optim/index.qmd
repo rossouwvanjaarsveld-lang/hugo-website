@@ -4,7 +4,7 @@ summary: "A worked Linear Programming example for the bank treasury function usi
 date: 2025-12-22
 draft: false
 categories: [Finance, Optimisation ALM, Banking]
-image: /posts/alm-optim/thumbnail.png
+image: /posts/alm-optim/thumbnail.PNG
 execute:
   freeze: true
 ---
