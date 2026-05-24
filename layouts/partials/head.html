@@ -1,0 +1,85 @@
+<head>
+  {{- partial "analytics" . -}}
+  <title>{{ if not .IsHome }}{{ .Title }} | {{ end }}{{ site.Title }}</title>
+  <meta charset="utf-8" />
+  <meta
+    name="viewport"
+    content="width=device-width, initial-scale=1, minimum-scale=1"
+  />
+  <link
+    rel="apple-touch-icon"
+    sizes="180x180"
+    href="{{ "favicon/apple-touch-icon.png" | relURL }}"
+  />
+  <link
+    rel="icon"
+    type="image/png"
+    sizes="32x32"
+    href="{{ "favicon/favicon-32x32.png" | relURL }}"
+  />
+  <link
+    rel="icon"
+    type="image/png"
+    sizes="16x16"
+    href="{{ "favicon/favicon-16x16.png" | relURL }}"
+  />
+  <link rel="manifest" href="{{ "favicon/site.webmanifest" | relURL }}" />
+  <link
+    rel="mask-icon"
+    href=" {{ "favicon/safari-pinned-tab.svg" | relURL }}"
+    color="#5bbad5"
+  />
+  <link rel="shortcut icon" href="{{ "favicon/favicon.ico" | relURL }}" />
+  <meta name="theme-color" content="#ffffff" />
+  <meta
+    property="og:title"
+    content="{{ if not .IsHome }}{{ .Title }}{{ else }}{{ site.Title }}{{ end }}"
+  />
+  {{ with resources.Get "css/style.css" }}
+    {{ $opts := dict "minify" (not hugo.IsDevelopment) }}
+    {{ with . | css.TailwindCSS $opts }}
+      {{ if hugo.IsDevelopment }}
+        <link rel="stylesheet" href="{{ .RelPermalink }}" />
+      {{ else }}
+        {{ with . | fingerprint }}
+          <link
+            rel="stylesheet"
+            href="{{ .RelPermalink }}"
+            integrity="{{ .Data.Integrity }}"
+            crossorigin="anonymous"
+          />
+        {{ end }}
+      {{ end }}
+    {{ end }}
+  {{ end }}
+  {{ partial "seo/print.html" . }}
+  {{ block "header_css" . }}{{ end }}
+
+  <!-- KaTeX for math rendering -->
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/katex@0.16.11/dist/katex.min.css">
+  <script defer src="https://cdn.jsdelivr.net/npm/katex@0.16.11/dist/katex.min.js"></script>
+  <script defer src="https://cdn.jsdelivr.net/npm/katex@0.16.11/dist/contrib/auto-render.min.js"
+    onload="renderMathInElement(document.body, {
+      delimiters: [
+        {left: '$$', right: '$$', display: true},
+        {left: '$',  right: '$',  display: false},
+        {left: '\\(', right: '\\)', display: false},
+        {left: '\\[', right: '\\]', display: true}
+      ],
+      throwOnError: false
+    });"></script>
+
+  <i class="dark hidden"></i>
+</head>
+
+<!-- Custom styles -->
+  <style>
+    .katex-display {
+      overflow-x: auto;
+      overflow-y: hidden;
+      padding: 4px 0;
+    }
+  </style>
+
+  <i class="dark hidden"></i>
+</head>

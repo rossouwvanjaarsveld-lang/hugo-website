@@ -1,0 +1,552 @@
+---
+title: Balance Sheet Optimisation Under South African Regulatory Constraints
+summary: >-
+  A worked Linear Programming example for the bank treasury function using SARB
+  Basel III requirements (LCR, NSFR, CET1). Includes full LP formulation,
+  step-by-step Simplex solution, shadow price interpretation, and how the solver
+  works mathematically. No actual treasury departments were harmed in the making
+  of this post, though a few may feel personally attacked.
+date: 2025-12-22T00:00:00.000Z
+draft: false
+categories:
+  - Finance
+  - Optimisation ALM
+  - Banking
+image: /posts/alm-optim/thumbnail.jpg
+execute:
+  freeze: true
+---
+
+
+{{< summary   trader="We construct a stylised mid-sized South African bank — **No Gut Feelings Bank Ltd** — and find the optimal allocation of its ZAR 330 bn productive asset base. A Linear Programme with SARB's Basel III constraints as hard limits solves in milliseconds what the ALCO has been arguing about for years. Shadow prices identify exactly where capital is being left on the table — and it is not the NSFR, no matter how many times it shows up in the risk report."   loremaster="7-variable, 11-constraint LP over SARB Basel III asset allocations — LCR with Level 2A cap linearised to 0.40x1 + 0.40x2 - 0.51x3 >= 0, NSFR RSF <= 264 bn, Tier 1 RWA <= 243.2 bn, CRR lower bound, and sector concentration caps. Standard form is 9x15 after slack augmentation. Revised dual Simplex via JuMP.jl + HiGHS.jl, optimal in 3–5 pivots. Complementary slackness confirms NSFR shadow price is zero. Extends to multi-period staircase LP with maturity rollover dynamics, two-stage stochastic LP over scenario trees with non-anticipativity constraints, and a convex QP mean-variance variant for ALCO risk appetite setting — assuming the ALCO ever agrees on lambda.">}}
+
+------------------------------------------------------------------------
+
+## Mock Balance Sheet
+
+The balance sheet has **ZAR 350 bn** in total assets. Liabilities and capital are held fixed;
+the seven asset classes below are the decision variables $\mathbf{x} = (x_1, \ldots, x_7)$.
+
+### Assets
+
+| Category | Asset Class | Var | Initial (bn) | Spread $c_i$ | Risk Wt | RSF | HQLA Tier |
+|--------|-----------------|:---:|------:|------:|-----:|----:|---------|
+| Liquidity | Cash & SARB Reserves | $x_1$ | 15.0 | −0.50% | 0% | 0% | Level 1 --- 100% |
+| Liquidity | RSA Government Bonds | $x_2$ | 25.0 | +0.80% | 0% | 5% | Level 1 --- 100% |
+| Liquidity | SOE / Parastatals Bonds | $x_3$ | 15.0 | +1.20% | 20% | 15% | Level 2A --- 85% |
+| Money Mkt | Interbank Loans (\< 30d) | $x_4$ | 10.0 | +0.50% | 20% | 15% | Inflow only |
+| Loans | Corporate Loans | $x_5$ | 80.0 | +3.00% | 100% | 50% | --- |
+| Loans | Retail Mortgages | $x_6$ | 120.0 | +2.50% | 35% | 65% | --- |
+| Loans | Unsecured Retail Loans | $x_7$ | 45.0 | +6.00% | 75% | 85% | --- |
+| Other | Fixed Assets & Other | $x_8$ | 20.0 | 0.00% | 100% | 100% | --- |
+|  | **Total** |  | **330.0** |  |  |  |  |
+
+> **Note**
+>
+> Spreads are annualised net margins above the blended cost of funds (approximately SARB repo
+> rate + term premium). Cash earns below repo, creating a negative carry of −0.50%. The SARB
+> makes you hold it anyway.
+
+### Liabilities & Capital (Fixed)
+
+| Category | Item | Balance (ZAR bn) | LCR Outflow Rate | ASF Factor |
+|---------|--------------------------|-----------:|------------:|-------:|
+| Retail | Stable Deposits (insured / loyal) | 80.0 | 5% | 95% |
+| Retail | Less Stable Deposits | 70.0 | 10% | 90% |
+| Corporate | Demand / Operational (\< 6 months) | 50.0 | 25% | 50% |
+| Corporate | Term (\> 1 year) | 40.0 | 5% | 100% |
+| Wholesale | Funding \< 6 months | 30.0 | 25% | 50% |
+| Wholesale | Funding \> 1 year | 30.0 | 5% | 100% |
+| Wholesale | Interbank Borrowings (\< 30 days) | 15.0 | 100% | 0% |
+| Capital | Tier 2 Subordinated Debt | 10.0 | --- | 100% |
+| Capital | Additional Tier 1 (AT1) | 5.0 | --- | 100% |
+| Capital | Common Equity Tier 1 (CET1) | 20.0 | --- | 100% |
+|  | **Total** | **350.0** |  |  |
+
+------------------------------------------------------------------------
+
+## South African Regulatory Framework
+
+The SARB implements Basel III through **Regulation 38 of the Banks Act** and associated
+circulars. Each ratio below is translated into a linear constraint that the optimiser must
+respect --- whether it wants to or not.
+
+### Liquidity Coverage Ratio (LCR)
+
+Effective from 1 January 2015, reaching its 100% minimum from 1 January 2019.
+
+$$\text{LCR} = \frac{\text{HQLA}}{\text{Net Cash Outflows}_{30\text{-day stress}}} \;\geq\; 100\%$$
+
+**HQLA composition:**
+
+$$\text{HQLA} = \underbrace{x_1 + x_2}_{\text{Level 1 (no haircut)}} + \underbrace{0.85\, x_3}_{\text{Level 2A (15\% haircut)}}$$
+
+The Level 2A composition cap (Level 2A $\leq$ 40% of HQLA) rearranges to:
+
+$$0.40\,x_1 + 0.40\,x_2 - 0.51\,x_3 \;\geq\; 0 \tag{L2A Cap}$$
+
+**Net Cash Outflows (NCO):**
+
+$$O = 80(0.05) + 70(0.10) + 50(0.25) + 40(0.05) + 30(0.25) + 30(0.05) + 15(1.00) = 49.50$$
+
+$$\text{Inflow Cap} = 0.75 \times 49.50 = 37.125 \qquad \text{NCO} = 49.50 - 37.125 = 12.375$$
+
+With $x_5 = 80$, gross inflows from corporate loans alone ($0.50 \times 80 = 40$) already
+exceed the 75% cap, so NCO stays fixed at **12.375** regardless of how we shuffle $x_4$
+and $x_5$ --- a fact worth knowing before spending an afternoon tweaking the interbank book.
+
+### Net Stable Funding Ratio (NSFR)
+
+Required $\geq$ 100% in South Africa from 1 January 2018.
+
+$$\text{NSFR} = \frac{\text{ASF}}{\text{RSF}} \;\geq\; 100\%$$
+
+**ASF** is fixed from the liability structure:
+
+$$\text{ASF} = 20 + 5 + 10 + 80(0.95) + 70(0.90) + 40 + 30 + 30(0.50) + 50(0.50) + 15(0) = 284.00$$
+
+**RSF** depends on asset decisions. Subtracting the fixed $x_8$ contribution of 20:
+
+$$0.05\,x_2 + 0.15\,x_3 + 0.15\,x_4 + 0.50\,x_5 + 0.65\,x_6 + 0.85\,x_7 \;\leq\; 264 \tag{NSFR}$$
+
+### Capital Adequacy Ratios
+
+Minima *inclusive of the 2.5% Capital Conservation Buffer (CCB)*:
+
+$$\text{RWA} = 0.20\,x_3 + 0.20\,x_4 + 1.00\,x_5 + 0.35\,x_6 + 0.75\,x_7 + \underbrace{20}_{x_8,\;\text{fixed}}$$
+
+$$\text{CET1}  = \frac{20}{\text{RWA}} \;\geq\; 7.5\% \;\Longrightarrow\; \text{RWA} \;\leq\; 266.7$$
+
+$$\text{Tier 1} = \frac{25}{\text{RWA}} \;\geq\; 9.5\% \;\Longrightarrow\; \text{RWA} \;\leq\; 263.2 \quad \leftarrow \text{most binding}$$
+
+$$\text{Total Capital} = \frac{35}{\text{RWA}} \;\geq\; 11.5\% \;\Longrightarrow\; \text{RWA} \;\leq\; 304.3$$
+
+Subtracting the fixed $x_8$ term, the binding Tier 1 constraint becomes:
+
+$$0.20\,x_3 + 0.20\,x_4 + x_5 + 0.35\,x_6 + 0.75\,x_7 \;\leq\; 243.2 \tag{Tier 1}$$
+
+### Leverage Ratio & Cash Reserve Requirement
+
+$$\text{Leverage} = \frac{25}{350} = 7.14\% \;\geq\; 4\% \checkmark \quad \text{(non-binding, slack = 3.14 ppts)}$$
+
+$$x_1 \;\geq\; 0.025 \times 315 = 7.875 \approx 8.0 \tag{CRR}$$
+
+------------------------------------------------------------------------
+
+## Initial Balance Sheet Metrics
+
+Plugging the initial allocation into every ratio:
+
+$$\text{HQLA} = 15 + 25 + 0.85(15) = 52.75 \qquad \text{LCR} = \frac{52.75}{12.375} = 426.3\%$$
+
+$$\text{RSF} = 1.25 + 2.25 + 1.50 + 40.0 + 78.0 + 38.25 + 20.0 = 181.25 \qquad \text{NSFR} = \frac{284}{181.25} = 156.7\%$$
+
+$$\text{RWA} = 180.75 \qquad \text{CET1} = 11.1\% \qquad \text{Tier 1} = 13.8\% \qquad \text{Total Cap} = 19.4\%$$
+
+$$\text{NII} = -0.005(15) + 0.008(25) + 0.012(15) + 0.005(10) + 0.030(80) + 0.025(120) + 0.060(45) = \mathbf{8.455 \text{ bn}}$$
+
+| Metric         |        Value | SA Minimum | Status |
+|----------------|-------------:|-----------:|--------|
+| LCR            |         426% |       100% | Pass   |
+| NSFR           |         157% |       100% | Pass   |
+| CET1 Ratio     |        11.1% |       7.5% | Pass   |
+| Tier 1 Ratio   |        13.8% |       9.5% | Pass   |
+| Total Capital  |        19.4% |      11.5% | Pass   |
+| Leverage Ratio |         7.1% |       4.0% | Pass   |
+| CRR            |        4.76% |       2.5% | Pass   |
+| NII            | ZAR 8.455 bn |        --- | ---    |
+
+> **Note**
+>
+> The initial balance sheet passes every regulatory test with room to spare, which is the
+> polite way of saying the bank is holding a large pile of low-yielding assets it does not
+> need to. An LCR of 426% against a 100% minimum suggests the treasury team has been reading
+> too many post-GFC risk circulars and not enough income statements. Optimisation can fix this.
+
+------------------------------------------------------------------------
+
+## Optimisation Problem Formulation
+
+### Decision Variables
+
+| Variable | Asset Class              | Spread $c_i$ | Upper Bound | Lower Bound |
+|----------|--------------------------|-------------:|------------:|------------:|
+| $x_1$    | Cash & SARB Reserves     |       −0.50% |         --- |   8.0 (CRR) |
+| $x_2$    | RSA Government Bonds     |       +0.80% |         --- |           0 |
+| $x_3$    | SOE / Parastatals Bonds  |       +1.20% |         --- |           0 |
+| $x_4$    | Interbank Loans (\< 30d) |       +0.50% |         --- |           0 |
+| $x_5$    | Corporate Loans          |       +3.00% |       120.0 |           0 |
+| $x_6$    | Retail Mortgages         |       +2.50% |       150.0 |           0 |
+| $x_7$    | Unsecured Retail Loans   |       +6.00% |        80.0 |           0 |
+
+### Objective Function
+
+Maximise annualised NII as the inner product of spread coefficients and asset allocations:
+
+$$\max_{\mathbf{x}} \quad Z = \mathbf{c}^\top \mathbf{x} = \sum_{i=1}^{7} c_i\, x_i$$
+
+$$Z = -0.005\,x_1 + 0.008\,x_2 + 0.012\,x_3 + 0.005\,x_4 + 0.030\,x_5 + 0.025\,x_6 + 0.060\,x_7$$
+
+### Constraints
+
+**C1 --- Balance Sheet Identity**
+
+$$\sum_{i=1}^{7} x_i = 330$$
+
+**C2 --- LCR Minimum HQLA**
+
+$$x_1 + x_2 + 0.85\,x_3 \;\geq\; 12.375$$
+
+**C3 --- LCR Level 2A Cap**
+
+$$0.40\,x_1 + 0.40\,x_2 - 0.51\,x_3 \;\geq\; 0$$
+
+**C4 --- NSFR**
+
+$$0.05\,x_2 + 0.15\,x_3 + 0.15\,x_4 + 0.50\,x_5 + 0.65\,x_6 + 0.85\,x_7 \;\leq\; 264$$
+
+**C5 --- Tier 1 Capital Ratio (binding)**
+
+$$0.20\,x_3 + 0.20\,x_4 + x_5 + 0.35\,x_6 + 0.75\,x_7 \;\leq\; 243.2$$
+
+**C6 --- Leverage Ratio** --- non-binding by construction at $25/350 = 7.14\% \geq 4\%$
+
+**C7 --- SARB Cash Reserve Requirement**
+
+$$x_1 \;\geq\; 8.0$$
+
+**C8 --- Sector Concentration Limits**
+
+$$x_5 \;\leq\; 120, \qquad x_6 \;\leq\; 150, \qquad x_7 \;\leq\; 80$$
+
+**C9 --- Non-negativity:** $\;x_i \geq 0 \;\; \forall\, i$
+
+### Complete LP
+
+$$\max_{\mathbf{x}} \quad Z = -0.005\,x_1 + 0.008\,x_2 + 0.012\,x_3 + 0.005\,x_4 + 0.030\,x_5 + 0.025\,x_6 + 0.060\,x_7$$
+
+$$\begin{array}{ll}
+[\text{BS}]   & x_1 + x_2 + x_3 + x_4 + x_5 + x_6 + x_7 = 330 \\[4pt]
+[\text{LCR}]  & x_1 + x_2 + 0.85\,x_3 \geq 12.375 \\[4pt]
+[\text{L2A}]  & 0.40\,x_1 + 0.40\,x_2 - 0.51\,x_3 \geq 0 \\[4pt]
+[\text{NSFR}] & 0.05\,x_2 + 0.15\,x_3 + 0.15\,x_4 + 0.50\,x_5 + 0.65\,x_6 + 0.85\,x_7 \leq 264 \\[4pt]
+[\text{T1}]   & 0.20\,x_3 + 0.20\,x_4 + x_5 + 0.35\,x_6 + 0.75\,x_7 \leq 243.2 \\[4pt]
+[\text{CRR}]  & x_1 \geq 8.0 \\[4pt]
+[\text{Caps}] & x_5 \leq 120,\quad x_6 \leq 150,\quad x_7 \leq 80 \\[4pt]
+              & x_i \geq 0 \quad \forall\, i
+\end{array}$$
+
+This is a **7-variable, 11-constraint LP**. The solver will find the optimal solution
+considerably faster than the average ALCO meeting reaches consensus.
+
+------------------------------------------------------------------------
+
+## Step-by-Step Solution
+
+We solve analytically by exploiting objective structure and constraint binding, mirroring
+the logic of the Simplex Method.
+
+1.  **Fix $x_1$ at its lower bound.**
+    Cash has the lowest objective coefficient ($c_1 = -0.005$). The CRR lower bound
+    binds immediately:
+    $$x_1^* = 8.0 \qquad \Rightarrow \qquad \sum_{i=2}^{7} x_i = 322$$
+
+2.  **Rank remaining assets by spread.**
+    $$c_7 = 6.0\% \;>\; c_5 = 3.0\% \;>\; c_6 = 2.5\% \;>\; c_3 = 1.2\% \;>\; c_2 = 0.8\% \;>\; c_4 = 0.5\%$$
+    Push $x_7$ and $x_5$ to their sector caps first; cover mandatory HQLA as cheaply as
+    possible; fill residual capacity with $x_6$.
+
+3.  **Allocate $x_7$ to its sector cap.**
+    $$x_7 = 80 \quad \text{(sector cap binding)}$$
+    RWA consumed: $0.75 \times 80 = 60.0$ against budget 243.2.
+    RSF consumed: $0.85 \times 80 = 68.0$ against budget 264.
+    Remaining balance sheet: $\sum_{i=2}^{6} x_i = 242$.
+
+4.  **Allocate $x_5$ to its sector cap.**
+    $$x_5 = 120 \quad \text{(sector cap binding)}$$
+    $$\text{Running RWA: } 60 + 120 = 180 \quad\Rightarrow\quad \text{Remaining: } 63.2$$
+
+5.  **Choose the cheapest HQLA instrument.**
+    We need $x_2 + 0.85\,x_3 \geq 4.375$. Compare opportunity cost per unit of HQLA
+    provided, relative to investing in $x_6$ at 2.5%:
+    $$\text{Via } x_2: \;\frac{0.025 - 0.008}{1.00} = 0.0170 \qquad \text{Via } x_3: \;\frac{0.025 - 0.012}{0.85} = 0.0153$$
+    $x_3$ is cheaper per unit of HQLA. Set $x_2 = 0$:
+    $$0.85\,x_3 \geq 4.375 \;\Rightarrow\; x_3 \geq 5.147 \qquad \Rightarrow \qquad x_3 = 5.18,\quad x_2 = 0$$
+    L2A cap check: $\;4.403 / 12.403 = 35.5\% \leq 40\% \checkmark$
+
+6.  **Confirm $x_4 = 0$, fill remainder with $x_6$.**
+    Interbank ($c_4 = 0.5\%$) offers no LCR benefit (inflow cap already saturated) and
+    is dominated by mortgages at 2.5%. So $x_4^* = 0$.
+    $$x_6 = 322 - 5.18 - 120 - 80 = 116.82 \;\leq\; 150 \checkmark$$
+    Final Tier 1 RWA: $\;1.036 + 120 + 40.887 + 60 + 20 = 241.923 \leq 243.2 \checkmark$
+
+7.  **Compute optimal NII.**
+    $$Z^* = -0.005(8) + 0.012(5.18) + 0.030(120) + 0.025(116.82) + 0.060(80)$$
+    $$= -0.040 + 0.062 + 3.600 + 2.921 + 4.800 = \mathbf{11.343 \text{ bn}}$$
+    $$\Delta\text{NII} = 11.343 - 8.455 = +2.888 \text{ bn} \quad (+34.2\%)$$
+
+------------------------------------------------------------------------
+
+## Results Comparison
+
+### Balance Sheet Before vs After
+
+| Asset | Initial | Optimal | Change | NII Impact (bn) |
+|----|---:|---:|---:|---:|
+| $x_1$ --- Cash & SARB | 15.00 | 8.00 | −7.00 | +0.035 |
+| $x_2$ --- RSA Govt Bonds | 25.00 | 0.00 | −25.00 | +0.425 (redeployed) |
+| $x_3$ --- SOE Bonds | 15.00 | 5.18 | −9.82 | −0.118 |
+| $x_4$ --- Interbank | 10.00 | 0.00 | −10.00 | +0.200 (redeployed) |
+| $x_5$ --- Corporate Loans | 80.00 | 120.00 | **+40.00** | **+1.200** |
+| $x_6$ --- Retail Mortgages | 120.00 | 116.82 | −3.18 | −0.080 |
+| $x_7$ --- Unsecured Retail | 45.00 | 80.00 | **+35.00** | **+2.100** |
+| **Total** | **330.00** | **330.00** | --- | **+2.888 bn** |
+
+### Regulatory Metrics Before vs After
+
+| Metric         | SA Minimum | Initial |    Optimal | Status     |
+|----------------|-----------:|--------:|-----------:|------------|
+| LCR            |       100% |    426% |     100.2% | Binding    |
+| NSFR           |       100% |    157% |       126% | 26% slack  |
+| CET1 Ratio     |       7.5% |   11.1% |       8.3% | Tight      |
+| Tier 1 Ratio   |       9.5% |   13.8% |      10.3% | Binding    |
+| Total Capital  |      11.5% |   19.4% |      14.5% | 3.0 ppts   |
+| Leverage Ratio |       4.0% |    7.1% |       7.1% | 3.1 ppts   |
+| CRR            |       2.5% |    4.8% |       2.5% | Binding    |
+| NII (ZAR bn)   |        --- |   8.455 | **11.343** | **+34.2%** |
+
+> **Optimal Solution**
+>
+> $$\mathbf{x}^* = (\underbrace{8.00}_{x_1},\;\underbrace{0}_{x_2},\;\underbrace{5.18}_{x_3},\;\underbrace{0}_{x_4},\;\underbrace{120.00}_{x_5},\;\underbrace{116.82}_{x_6},\;\underbrace{80.00}_{x_7})$$
+>
+> $$Z^* = \mathbf{11.343 \text{ bn ZAR}} \quad (+2.888 \text{ bn vs initial},\; +34.2\%)$$
+>
+> Binding constraints: LCR, Tier 1 RWA, CRR, $x_5 \leq 120$, $x_7 \leq 80$. The optimal
+> portfolio holds HQLA at the regulatory minimum, zeroes out the low-spread liquid book, and
+> pushes every rand of remaining capacity into the highest-yielding loans the sector caps allow.
+
+------------------------------------------------------------------------
+
+## Extensions: Dynamic and Stochastic Optimisation
+
+The LP above is static and deterministic --- a useful starting point, but real balance sheets
+mature, roll over, and get surprised by interest rates. Below are three progressively more
+honest frameworks.
+
+### Multi-Period LP (Dynamic Programming)
+
+Replace the static snapshot with a $T$-period horizon where assets mature and must
+be reinvested:
+
+$$\max_{\{x_{it}\}} \quad \sum_{t=1}^{T} \sum_{i=1}^{N} c_{it}\, x_{it}$$
+
+$$\text{s.t. for each } t: \quad \sum_i x_{it} = B_t, \quad \text{HQLA}_t \geq \text{NCO}_t, \quad \text{RSF}_t \leq \text{ASF}_t, \quad \text{RWA}_t \leq \frac{K}{r_{\min}}$$
+
+$$x_{i,t+1} = (1 - \delta_i)\,x_{it} + n_{i,t+1}, \quad x_{it} \geq 0$$
+
+$\delta_i$ is the contractual maturity/runoff rate; $n_{i,t+1}$ is new origination --- the
+true decision variable. This yields a staircase LP solvable with Bertsekas-style DP backward
+induction.
+
+### Stochastic Programming with Scenario Trees
+
+Interest rates, deposit runoff, and credit losses are uncertain. Model them via a scenario
+tree with $S$ branches at each decision node:
+
+$$\max \quad \sum_{s=1}^{S} \pi_s \sum_{t=1}^{T} \sum_i c_{its}\, x_{its}$$
+
+$$\text{Non-anticipativity:} \quad x_{its} = x_{its'} \quad \text{if scenarios } s, s' \text{ are identical up to } t$$
+
+Decisions at time $t$ cannot depend on uncertainty not yet revealed. Problem size grows as
+$O(S \times T \times N)$ but the problem remains linear --- the approach in Zenios & Ziemba.
+
+### Quadratic Programme (Risk-Adjusted Return)
+
+$$\max_{\mathbf{x}} \quad \mathbb{E}[\text{NII}] - \frac{\lambda}{2}\,\text{Var}[\text{NII}] = \mathbf{c}^\top\mathbf{x} - \frac{\lambda}{2}\,\mathbf{x}^\top \boldsymbol{\Sigma}\, \mathbf{x}$$
+
+$\boldsymbol{\Sigma}$ is the covariance matrix of spread realisations; $\lambda$ is the
+ALCO's risk aversion parameter. The efficient frontier of $\mathbb{E}[\text{NII}]$ vs
+$\sqrt{\text{Var}[\text{NII}]}$ is the key output for ALCO risk appetite setting --- assuming
+the ALCO agrees on what $\lambda$ is, which has never happened in the history of ALCOs.
+
+> **Practical ALM Technology Stack**
+>
+> I really wonder if there are any banks that tried to implement this type of system.
+> I highly doubt that KRM lends itself to this.
+
+------------------------------------------------------------------------
+
+## Shadow Prices
+
+In LP duality, the shadow price $\mu_j$ of a binding constraint $j$ measures the marginal
+gain in the objective from relaxing that constraint by one unit:
+
+$$\mu_j = \frac{\partial Z^*}{\partial b_j}$$
+
+| Binding Constraint | Shadow Price Interpretation | ALCO Action |
+|------------------------|------------------------|------------------------|
+| Tier 1 RWA $\leq 243.2$ | Each ZAR 1 bn of AT1 capital relaxes RWA budget by $\approx$ ZAR 10.5 bn, enabling ~ZAR 35--40 mn NII | Issue AT1 if spread differential exceeds coupon cost |
+| LCR HQLA $\geq 12.375$ | Tighter SARB outflow rates raise the HQLA floor, destroying NII at ~1.5--1.7 cents per ZAR | Stress-test HQLA sensitivity; pursue stable deposit reclassification |
+| $x_7 \leq 80$ | Each ZAR 1 bn expansion adds ~ZAR 60 mn NII at the 6% marginal spread | Invest in credit scoring infrastructure to safely expand appetite |
+| $x_5 \leq 120$ | Corporate expansion adds ~ZAR 5 mn NII per ZAR 1 bn --- near indifference with mortgages but more RWA-intensive | Prefer secured retail on a risk-adjusted basis |
+| CRR $x_1 \geq 8.0$ | A CRR increase of 50 bps costs ~ZAR 50 mn NII annually | Advocate for interest-bearing reserve accounts |
+
+The NSFR shadow price is zero, meaning the constraint is slack and tightening it would cost
+nothing. This will nonetheless not stop it from appearing prominently in every risk report.
+
+> **Key ALCO Insight**
+>
+> Tier 1 capital and high-yield origination capacity are the true binding scarce resources ---
+> not liquidity. The highest-return investments are **(i)** AT1 issuance to expand RWA
+> headroom and **(ii)** credit infrastructure investment to grow the $x_7$ sector cap safely.
+> The model is happy to recommend issuing AT1 capital. Whether your AT1 investors share this
+> enthusiasm is a separate, and considerably more political, optimisation problem.
+
+------------------------------------------------------------------------
+
+## How the Software Solves the LP
+
+When the problem is dispatched to `HiGHS.jl` via `JuMP.jl`, the solver executes one of two
+algorithms --- the **Simplex Method** or **Interior Point (barrier) Methods**. HiGHS uses
+revised dual Simplex by default, switching to its interior-point solver for large or dense
+problems.
+
+### Standard Form Conversion
+
+Every LP solver first converts the problem to **standard equality form** by introducing
+non-negative slack or surplus variables:
+
+$$\max_{\mathbf{x}} \quad \mathbf{c}^\top \mathbf{x} \qquad \text{subject to} \quad A\mathbf{x} = \mathbf{b}, \quad \mathbf{x} \geq \mathbf{0}$$
+
+The extended vector $\tilde{\mathbf{x}} \in \mathbb{R}^{15}_{\geq 0}$ includes the original
+7 decision variables plus one slack per inequality:
+
+$$\tilde{\mathbf{x}} = (x_1,\ldots,x_7,\; s_{\text{LCR}},\; s_{\text{L2A}},\; s_{\text{NSFR}},\; s_{\text{T1}},\; s_{\text{CRR}},\; s_5,\; s_6,\; s_7)^\top$$
+
+Each "$\leq$" constraint gains a slack --- e.g. $[\text{T1}]$ becomes
+$0.20x_3 + x_5 + 0.35x_6 + 0.75x_7 + s_{\text{T1}} = 243.2$. Each "$\geq$" constraint
+gains a surplus --- $[\text{LCR}]$ becomes $x_1 + x_2 + 0.85x_3 - s_{\text{LCR}} = 12.375$.
+The full matrix form is $A \in \mathbb{R}^{9 \times 15}$:
+
+$$A = \begin{pmatrix}
+1 & 1 & 1 & 1 & 1 & 1 & 1 & 0 & 0 & 0 & 0 & 0 & 0 & 0 & 0 \\
+1 & 1 & 0.85 & 0 & 0 & 0 & 0 & -1 & 0 & 0 & 0 & 0 & 0 & 0 & 0 \\
+0.40 & 0.40 & -0.51 & 0 & 0 & 0 & 0 & 0 & -1 & 0 & 0 & 0 & 0 & 0 & 0 \\
+0 & 0.05 & 0.15 & 0.15 & 0.50 & 0.65 & 0.85 & 0 & 0 & 1 & 0 & 0 & 0 & 0 & 0 \\
+0 & 0 & 0.20 & 0.20 & 1 & 0.35 & 0.75 & 0 & 0 & 0 & 1 & 0 & 0 & 0 & 0 \\
+1 & 0 & 0 & 0 & 0 & 0 & 0 & 0 & 0 & 0 & 0 & -1 & 0 & 0 & 0 \\
+0 & 0 & 0 & 0 & 1 & 0 & 0 & 0 & 0 & 0 & 0 & 0 & 1 & 0 & 0 \\
+0 & 0 & 0 & 0 & 0 & 1 & 0 & 0 & 0 & 0 & 0 & 0 & 0 & 1 & 0 \\
+0 & 0 & 0 & 0 & 0 & 0 & 1 & 0 & 0 & 0 & 0 & 0 & 0 & 0 & 1
+\end{pmatrix}$$
+
+$$\mathbf{b} = (330,\; 12.375,\; 0,\; 264,\; 243.2,\; 8.0,\; 120,\; 150,\; 80)^\top$$
+
+### The Simplex Method
+
+The Simplex Method exploits a fundamental theorem of LP: **if an optimal solution exists,
+at least one lies at a vertex of the feasible polytope.** The algorithm walks from vertex to
+vertex along edges, improving the objective at each step.
+
+With $m = 9$ constraints and $n = 15$ variables, a **basis** $\mathcal{B}$ is any set of
+$m$ linearly independent columns of $A$. Non-basic variables are set to zero:
+
+$$A = [B \mid N], \qquad \mathbf{x}_N = \mathbf{0}, \qquad \mathbf{x}_B = B^{-1}\mathbf{b} \geq \mathbf{0}$$
+
+The **reduced cost** of each non-basic variable measures how much the objective improves
+per unit increase:
+
+$$\bar{c}_j = c_j - \mathbf{c}_B^\top B^{-1} \mathbf{a}_j \qquad \text{Optimal when: } \bar{c}_j \leq 0 \quad \forall\; j \notin \mathcal{B}$$
+
+The leaving variable is chosen by the **minimum ratio test**:
+
+$$l = \arg\min_{i:\; (B^{-1}\mathbf{a}_e)_i > 0} \;\frac{(B^{-1}\mathbf{b})_i}{(B^{-1}\mathbf{a}_e)_i}$$
+
+The basis is updated via LU factorisation with partial pivoting, reducing each pivot from
+$O(m^3)$ to $O(m^2)$.
+
+**Simplex path through our LP:**
+
+| Iteration | Action | $Z$ |
+|----|----|---:|
+| 0 --- Initial BFS | $\mathbf{x} = (8, 0, 0, 0, 0, 322, 0)$ | 8.05 |
+| 1 | Enter $x_7$ (highest $\bar{c}_7 > 0$) → sector cap 80 | ~10.85 |
+| 2 | Enter $x_5$ → sector cap 120 | ~11.20 |
+| 3 | Enter $x_3$ (cheapest HQLA) → $s_\text{LCR} \to 0$ | 11.343 |
+| **Optimal** | All $\bar{c}_j \leq 0$ | **11.343** |
+
+The Simplex method reaches the optimal solution in approximately 3--5 pivot steps. This is
+meaningfully faster than the average South African bank implements anything.
+
+### Duality and the Dual Problem
+
+$$\textbf{Primal:} \quad \max\; \mathbf{c}^\top\mathbf{x} \quad \text{s.t.}\quad A\mathbf{x} \leq \mathbf{b},\; \mathbf{x} \geq 0$$
+
+$$\textbf{Dual:} \quad \min\; \mathbf{b}^\top\boldsymbol{\mu} \quad \text{s.t.}\quad A^\top\boldsymbol{\mu} \geq \mathbf{c},\; \boldsymbol{\mu} \geq 0$$
+
+**Strong Duality:** at optimality, $\;\mathbf{c}^\top\mathbf{x}^* = \mathbf{b}^\top\boldsymbol{\mu}^*$ --- no duality gap for LP.
+
+**Complementary Slackness:**
+
+$$\mu_j^* \cdot (b_j - A_j\mathbf{x}^*) = 0 \quad \forall\; j \qquad x_i^* \cdot (A^\top\boldsymbol{\mu}^* - \mathbf{c})_i = 0 \quad \forall\; i$$
+
+In plain terms: **if a constraint is not binding, its shadow price is zero.** The NSFR and
+leverage constraints are non-binding, so $\mu_{\text{NSFR}} = \mu_{\text{lev}} = 0$.
+
+### Interior Point Methods
+
+For large-scale problems, solvers switch to **primal-dual interior point** methods with
+polynomial worst-case complexity $O(n^{3.5} L)$. The log-barrier formulation replaces
+inequality constraints with a penalty that prevents the solution from touching the boundary:
+
+$$\max_{\mathbf{x}} \quad \mathbf{c}^\top\mathbf{x} + \mu \sum_{i=1}^{n} \ln(x_i) \quad \text{s.t.}\quad A\mathbf{x} = \mathbf{b}$$
+
+As $\mu \to 0$, the solution converges to the LP optimum along the **central path**. At
+each $\mu$, the KKT conditions are linearised and solved via a Newton step:
+
+$$A\mathbf{x} = \mathbf{b}, \qquad A^\top\boldsymbol{\mu} + \mathbf{s} = \mathbf{c}, \qquad x_i s_i = \mu \quad \forall\; i$$
+
+This reduces to a symmetric positive-definite $m \times m$ system solved by sparse Cholesky
+factorisation. Convergence is declared when the duality gap falls below
+$\varepsilon \approx 10^{-8}$, typically in 20--50 Newton steps regardless of problem size.
+
+### Algorithm Comparison
+
+| Property | Revised Simplex | Interior Point |
+|------------------------|------------------------|------------------------|
+| Path | Boundary of feasible polytope | Interior, following central path |
+| Iterations (this LP) | ~5 pivots | ~15 Newton steps |
+| Iterations (large LP) | $O(m)$ to $O(m^2)$ typical | $O(20\text{–}50)$ regardless |
+| Cost per step | $O(m^2)$ with LU update | $O(m^3)$ Cholesky |
+| Warm-starting | Excellent --- reuse basis | Poor --- restart from interior |
+| Shadow prices | Read from final tableau | Recovered from $\boldsymbol{\mu}^*$ |
+
+> **Note**
+>
+> For the ALM use case, Simplex is preferred because the ALCO reruns the optimisation daily
+> with only small changes to $\mathbf{b}$ (updated NCO, deposit volumes). Simplex warm-starts
+> from the previous optimal basis and converges in a handful of pivots. Interior point methods
+> must restart from scratch --- which is fine for a first solve but inconvenient when the CFO
+> wants updated numbers by 8 am.
+
+------------------------------------------------------------------------
+
+> **Note**
+>
+> Balance sheet figures are illustrative. Regulatory thresholds per SARB Guidance Note 7/2023
+> and Banks Act Regulation 38 --- Basel III SA implementation. **For educational purposes only ---
+> not financial advice.**
+
+> **Further reading**
+>
+> - Choudhry, M. --- *Bank Asset and Liability Management* --- the definitive practitioner
+>   reference, and the one most likely to be on the desk of whoever reviews your ALCO pack.
+> - Zenios, S. & Ziemba, W. --- *Handbook of Asset and Liability Management* --- covers the
+>   stochastic programming framework in full detail.
+> - Bertsekas, D. --- *Dynamic Programming and Optimal Control*, Vols I & II --- the DP
+>   foundations. Dense, but worth it. Read it twice.
+> - Boyd, S. & Vandenberghe, L. --- *Convex Optimization* --- freely available online, which
+>   is convenient because the interior-point chapter alone will require multiple sittings.
+> - Brigo, D. & Mercurio, F. --- *Interest Rate Models --- Theory and Practice* --- for the
+>   term structure models that feed the scenario generation layer, should you ever get
+>   that far.

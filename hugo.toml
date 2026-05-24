@@ -1,0 +1,82 @@
+baseURL = "https://overfitandchill.co.za/"
+languageCode = "en"
+title = "Rossouw van Jaarsveld | Overfit and Chill"
+theme = "blonde"
+enableRobotsTXT = true
+enableInlineShortcodes = true
+
+[params]
+  description = "Stuff about analytics"
+  author = "Rossouw van Jaarsveld"
+  base_color = "bg-gray-800"
+  paginator_pages = 5
+  archive_dropdown = "false"
+  tagsLimit = 20
+  recentLimit = 5
+  darkmode = "dark"
+
+  [params.post]
+  thumbnail = true
+  noimage = true
+  thumbnail_height = "lg:h-44"
+  thumbnail_width = "lg:w-auto"
+  description = "500"
+
+  [params.widgets]
+  display = true
+  mobile = true
+  widgets = ["category", "tags", "recent"]
+
+  [params.share]
+  enable = true
+
+  [[params.social]]
+  name = "GitHub"
+  url = "https://github.com/rossouwvanjaarsveld-lang"
+  icon = "github"
+
+[menu]
+  [[menu.main]]
+  identifier = "home"
+  name = "Home"
+  url = "/"
+  weight = 1
+
+  [[menu.main]]
+  identifier = "about"
+  name = "About"
+  url = "/about/"
+  weight = 2
+
+[taxonomies]
+category = "categories"
+tag = "tags"
+archive = "archives"
+
+[markup]
+  [markup.goldmark]
+    [markup.goldmark.renderer]
+    unsafe = true
+
+[build]
+  [build.buildStats]
+  enable = true
+  [[build.cachebusters]]
+  source = 'assets/notwatching/hugo_stats\.json'
+  target = 'css'
+
+[module]
+  [[module.mounts]]
+  source = 'assets'
+  target = 'assets'
+
+  [[module.mounts]]
+  disableWatch = true
+  source = 'hugo_stats.json'
+  target = 'assets/notwatching/hugo_stats.json'
+
+[markup.goldmark.extensions.passthrough]
+  enable = true
+  [markup.goldmark.extensions.passthrough.delimiters]
+    block  = [["$$", "$$"], ["\\[", "\\]"]]
+    inline = [["$", "$"], ["\\(", "\\)"]]

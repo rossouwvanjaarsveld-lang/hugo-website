@@ -1,0 +1,9 @@
+project:
+  type: default
+
+execute:
+  freeze: auto
+
+format:
+  hugo-md:
+    html-math-method: plain

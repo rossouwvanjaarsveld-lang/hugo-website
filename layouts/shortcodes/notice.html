@@ -1,0 +1,31 @@
+<div style="
+  display: flex;
+  align-items: flex-start;
+  gap: 14px;
+  border: 1px solid {{ default "#3a5a7a" (.Get "bordercolor") }};
+  border-left: 4px solid {{ default "#a8d4f5" (.Get "accentcolor") }};
+  border-radius: 8px;
+  background: {{ default "#161e26" (.Get "bgcolor") }};
+  padding: 16px 20px;
+  margin: 1.5rem 0;
+  font-size: 0.9rem;
+  line-height: 1.6;
+  color: #cccccc;
+">
+  <span style="font-size: 1.2rem; flex-shrink: 0; margin-top: 1px;">
+    {{ default "ℹ️" (.Get "icon") }}
+  </span>
+  <div>
+    {{ if .Get "title" }}
+    <div style="
+      font-size: 0.72rem;
+      font-weight: 600;
+      letter-spacing: 0.08em;
+      text-transform: uppercase;
+      color: {{ default "#a8d4f5" (.Get "accentcolor") }};
+      margin-bottom: 5px;
+    ">{{ .Get "title" }}</div>
+    {{ end }}
+    <div>{{ .Inner | markdownify }}</div>
+  </div>
+</div>
