@@ -23,9 +23,7 @@ jobs:
           node-version: '20'
 
       - name: Install TailwindCSS dependencies
-        run: |
-          npm install
-          npm install -g @tailwindcss/cli
+        run: npm install
 
       - name: Install Hugo
         uses: peaceiris/actions-hugo@v3
@@ -34,7 +32,9 @@ jobs:
           extended: true
 
       - name: Build with Hugo
-        run: hugo --minify
+        run: |
+          export PATH="${PATH}:$(pwd)/node_modules/.bin"
+          hugo --minify
 
       - name: Commit and push public folder
         run: |
