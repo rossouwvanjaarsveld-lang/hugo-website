@@ -5,6 +5,8 @@ theme = "blonde"
 enableRobotsTXT = true
 enableInlineShortcodes = true
 
+publishDir = "docs"
+
 [params]
   description = "Stuff about analytics"
   author = "Rossouw van Jaarsveld"
