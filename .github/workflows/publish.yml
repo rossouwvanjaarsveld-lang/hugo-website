@@ -17,15 +17,11 @@ jobs:
         with:
           submodules: true
 
-      - name: Install Node.js
-        uses: actions/setup-node@v4
-        with:
-          node-version: '18'
-
-      - name: Install TailwindCSS dependencies
+      - name: Install TailwindCSS standalone CLI
         run: |
-          npm install
-          sudo ln -sf $(pwd)/node_modules/.bin/tailwindcss /usr/local/bin/tailwindcss
+          curl -sLO https://github.com/tailwindlabs/tailwindcss/releases/download/v4.3.0/tailwindcss-linux-x64
+          chmod +x tailwindcss-linux-x64
+          sudo mv tailwindcss-linux-x64 /usr/local/bin/tailwindcss
 
       - name: Install Hugo
         uses: peaceiris/actions-hugo@v3
