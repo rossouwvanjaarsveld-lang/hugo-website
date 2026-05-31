@@ -18,6 +18,8 @@ echo.
 echo [1/5] Running R scrape script to update ETF data...
 set HUGO_FWD=C:/Users/user pc/Desktop/my-hugo-website
 set SCRIPT_FWD=C:/Users/user pc/Desktop/website-code/ee-etf-tracker/scrape_etfs.R
+set HUGO_FWD=C:/Users/user pc/Desktop/my-hugo-website
+set SCRIPT_FWD=C:/Users/user pc/Desktop/website-code/ee-etf-tracker/scrape_etfs.R
 "%RSCRIPT%" --vanilla -e "setwd('%HUGO_FWD%/content'); source('%SCRIPT_FWD%')"
 if errorlevel 1 (
     echo ERROR: R scrape script failed. Stopping.
