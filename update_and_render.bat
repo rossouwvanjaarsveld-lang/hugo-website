@@ -17,7 +17,8 @@ set RSCRIPT=C:\Program Files\R\R-4.6.0\bin\Rscript.exe
 echo.
 echo [1/5] Running R scrape script to update ETF data...
 cd /d "%HUGO_SITE%\content"
-"%RSCRIPT%" "%SCRAPE_SCRIPT%"
+echo Running R script from: %CD%
+"%RSCRIPT%" --vanilla -e "setwd('%HUGO_SITE%\\content'); source('%SCRAPE_SCRIPT%')"
 cd /d "%HUGO_SITE%"
 if errorlevel 1 (
     echo ERROR: R scrape script failed. Stopping.
@@ -74,4 +75,18 @@ echo  All steps completed successfully.
 echo  Run 'hugo server' to preview, or push to GitHub to deploy.
 echo ============================================================
 echo.
+
+:: ============================================================
+:: PUSH TO GITHUB
+:: ============================================================
+echo.
+echo [6/6] Pushing to GitHub...
+cd /d "%HUGO_SITE%"
+git add .
+git commit -m "update etf data"
+git pull origin main --rebase
+git push
+echo Done.
+echo.
 pause
+
