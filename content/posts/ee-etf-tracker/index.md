@@ -1,6 +1,6 @@
 ---
 title: Easy Equities TFSA ETF Analytics
-date: 2026-05-24T00:00:00.000Z
+date: 2026-05-31T00:00:00.000Z
 draft: false
 summary: >-
   Interactive leaderboards, price history, risk metrics, top holdings and index
