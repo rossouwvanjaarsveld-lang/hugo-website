@@ -16,15 +16,15 @@ set RSCRIPT=C:\Program Files\R\R-4.6.0\bin\Rscript.exe
 :: ============================================================
 echo.
 echo [1/5] Running R scrape script to update ETF data...
-cd /d "%HUGO_SITE%\content"
-echo Running R script from: %CD%
-"%RSCRIPT%" --vanilla -e "setwd('%HUGO_SITE%\\content'); source('%SCRAPE_SCRIPT%')"
-cd /d "%HUGO_SITE%"
+set HUGO_FWD=C:/Users/user pc/Desktop/my-hugo-website
+set SCRIPT_FWD=C:/Users/user pc/Desktop/website-code/ee-etf-tracker/scrape_etfs.R
+"%RSCRIPT%" --vanilla -e "setwd('%HUGO_FWD%/content'); source('%SCRIPT_FWD%')"
 if errorlevel 1 (
     echo ERROR: R scrape script failed. Stopping.
     pause
     exit /b 1
 )
+cd /d "%HUGO_SITE%"
 echo Done.
 
 :: ============================================================
