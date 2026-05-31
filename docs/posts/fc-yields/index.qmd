@@ -1,6 +1,6 @@
 ---
 title: "Forecasting South African Government Bond Yields"
-date: "2026-05-30"
+date: "2026-05-31"
 draft: false
 summary: "I raced about twenty forecasting models against each other on SA government bond yield buckets, and the humble random walk turned out to be really difficult to beat. The only thing that reliably helps is averaging two simple models. Sophistication is not the same thing as accuracy."
 categories: [yield curve, machine learning, fixed income]
