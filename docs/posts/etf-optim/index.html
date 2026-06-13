@@ -1,1032 +1,191 @@
-<!doctype html>
-<html lang="en"><head><script src="/livereload.js?mindelay=10&amp;v=2&amp;port=1313&amp;path=livereload" data-no-instant defer></script>
-<title>ML-Driven TFSA ETF Portfolio Optimization for EE | Rossouw van Jaarsveld | Overfit and Chill</title>
-  <meta charset="utf-8" />
-  <meta
-    name="viewport"
-    content="width=device-width, initial-scale=1, minimum-scale=1"
-  />
-  <link
-    rel="apple-touch-icon"
-    sizes="180x180"
-    href="/favicon/apple-touch-icon.png"
-  />
-  <link
-    rel="icon"
-    type="image/png"
-    sizes="32x32"
-    href="/favicon/favicon-32x32.png"
-  />
-  <link
-    rel="icon"
-    type="image/png"
-    sizes="16x16"
-    href="/favicon/favicon-16x16.png"
-  />
-  <link rel="manifest" href="/favicon/site.webmanifest" />
-  <link
-    rel="mask-icon"
-    href=" /favicon/safari-pinned-tab.svg"
-    color="#5bbad5"
-  />
-  <link rel="shortcut icon" href="/favicon/favicon.ico" />
-  <meta name="theme-color" content="#ffffff" />
-  <meta
-    property="og:title"
-    content="ML-Driven TFSA ETF Portfolio Optimization for EE"
-  />
-  
-    
-    
-      
-        <link rel="stylesheet" href="/css/style.css" />
-      
-    
-  
-  
-
-
-
-<meta name="description" content="A LightGBM &#43; conformal &#43; Black-Litterman pipeline..." />
-<meta property="og:site_name" content="Rossouw van Jaarsveld | Overfit and Chill" />
-<meta property="og:description" content="A LightGBM &#43; conformal &#43; Black-Litterman pipeline..." />
-<meta property="og:url" content="http://localhost:1313/posts/etf-optim/" />
-<meta property="og:type" content="website" />
-<meta property="og:locale" content="en_US" />
-<meta name="twitter:card" content="summary_large_image" />
-<meta name="twitter:site" content="" />
-
-  <link rel="canonical" href="http://localhost:1313/posts/etf-optim/" />
-
-<meta name="twitter:description" content="A LightGBM &#43; conformal &#43; Black-Litterman pipeline..." />
-<meta property="article:published_time" content="2026-05-17T00:00:00&#43;00:00" />
-  <meta property="article:updated_time" content="2026-05-17T00:00:00&#43;00:00" />
-
-
-
-
-
-
-  
-    <meta property="og:image" content="http://localhost:1313/posts/etf-optim/thumbnail.png" />
-    <meta property="og:image:url" content="http://localhost:1313/posts/etf-optim/thumbnail.png" />
-  
-
-
-  
-
-  
-  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/katex@0.16.11/dist/katex.min.css">
-  <script defer src="https://cdn.jsdelivr.net/npm/katex@0.16.11/dist/katex.min.js"></script>
-  <script defer src="https://cdn.jsdelivr.net/npm/katex@0.16.11/dist/contrib/auto-render.min.js"
-    onload="renderMathInElement(document.body, {
-      delimiters: [
-        {left: '$$', right: '$$', display: true},
-        {left: '$',  right: '$',  display: false},
-        {left: '\\(', right: '\\)', display: false},
-        {left: '\\[', right: '\\]', display: true}
-      ],
-      throwOnError: false
-    });"></script>
-
-  <i class="dark hidden"></i>
-</head>
-
-
-  <style>
-    .katex-display {
-      overflow-x: auto;
-      overflow-y: hidden;
-      padding: 4px 0;
-    }
-  </style>
-
-  <i class="dark hidden"></i>
-</head><body class="font-sans">
-    <div class="min-h-screen flex flex-col bg-gray-100 dark:bg-warmgray-800"><div class="bg-gray-800 shadow-sm">
-  <div class="container max-w-7xl mr-auto ml-auto">
-    <nav class="flex items-center justify-between flex-wrap px-6 py-4">
-      <div class="flex items-center flex-no-shrink text-white mr-6">
-        <a href="http://localhost:1313/"
-          >
-            <span class="font-semibold text-xl tracking-tight"
-              >Rossouw van Jaarsveld | Overfit and Chill</span
-            >
-          </a
-        >
-      </div>
-      <div class="flex md:hidden">
-        <div class="py-2">
-          <button
-            onclick="toggleDarkMode()"
-            class="focus-visible:outline-none mr-1 text-white/80 hover:text-white transition-colors duration-200 cursor-pointer"
-            aria-label="Darkmode Toggle Button"
-          >
-            <span id="icon-moon"
-              ><span
-      class="inline-flex align-middle pb-0.5 text-lg"
-      ><svg xmlns="http://www.w3.org/2000/svg" height="1em" viewBox="0 -960 960 960" width="1em" fill="currentColor"><path d="M484-80q-84 0-157.5-32t-128-86.5Q144-253 112-326.5T80-484q0-146 93-257.5T410-880q-18 99 11 193.5T521-521q71 71 165.5 100T880-410q-26 144-138 237T484-80Z"/></svg></span
-    ></span
->
-</span
-            >
-            <span id="icon-sun" class="hidden"
-              ><span
-      class="inline-flex align-middle pb-0.5 text-lg"
-      ><svg xmlns="http://www.w3.org/2000/svg" height="1em" viewBox="0 -960 960 960" width="1em" fill="currentColor"><path d="M440-760v-160h80v160h-80Zm266 110-55-55 112-115 56 57-113 113Zm54 210v-80h160v80H760ZM440-40v-160h80v160h-80ZM254-652 140-763l57-56 113 113-56 54Zm508 512L651-255l54-54 114 110-57 59ZM40-440v-80h160v80H40Zm157 300-56-57 112-112 29 27 29 28-114 114Zm113-170q-70-70-70-170t70-170q70-70 170-70t170 70q70 70 70 170t-70 170q-70 70-170 70t-170-70Z"/></svg></span
-    ></span
->
-</span
-            >
-          </button>
-          <span class="text-white">|</span>
-        </div>
-        <button
-          id="hamburgerbtn"
-          class="flex items-center px-3 py-2 text-white/80 hover:text-white transition-colors duration-200"
-          aria-label="Hamburger Button"
-        >
-          <span
-      class="inline-flex align-middle pb-0.5 text-2xl"
-      ><svg xmlns="http://www.w3.org/2000/svg" height="1em" viewBox="0 -960 960 960" width="1em" fill="currentColor"><path d="M120-240v-80h720v80H120Zm0-200v-80h720v80H120Zm0-200v-80h720v80H120Z"/></svg></span
-    ></span
->
-
-        </button>
-      </div>
-      <div
-        class="hidden w-full md:flex md:flex-row sm:items-center md:w-auto"
-        id="mobileMenu"
-      >
-        <div class="text-sm lg:grow"></div>
-        <div class="flex flex-col md:flex-row gap-2">
-          
-            <a
-              href="/"
-              class="no-underline font-medium text-sm block sm:inline-block sm:mt-0 text-white/80 hover:text-white mr-4 py-2 sm:py-0 transition-colors duration-200"
-            >
-              Home
-            </a>
-          
-            <a
-              href="/about/"
-              class="no-underline font-medium text-sm block sm:inline-block sm:mt-0 text-white/80 hover:text-white mr-4 py-2 sm:py-0 transition-colors duration-200"
-            >
-              About
-            </a>
-          
-        </div>
-        <div class="text-white hidden md:block">
-          <span>|</span>
-          <button
-            onclick="toggleDarkMode()"
-            class="focus-visible:outline-none hover:opacity-50 duration-200 ml-2 cursor-pointer"
-            aria-label="Darkmode Toggle Button"
-          >
-            <span id="icon2-moon"
-              ><span
-      class="inline-flex align-middle pb-0.5 text-lg"
-      ><svg xmlns="http://www.w3.org/2000/svg" height="1em" viewBox="0 -960 960 960" width="1em" fill="currentColor"><path d="M484-80q-84 0-157.5-32t-128-86.5Q144-253 112-326.5T80-484q0-146 93-257.5T410-880q-18 99 11 193.5T521-521q71 71 165.5 100T880-410q-26 144-138 237T484-80Z"/></svg></span
-    ></span
->
-</span
-            >
-            <span id="icon2-sun" class="hidden"
-              ><span
-      class="inline-flex align-middle pb-0.5 text-lg"
-      ><svg xmlns="http://www.w3.org/2000/svg" height="1em" viewBox="0 -960 960 960" width="1em" fill="currentColor"><path d="M440-760v-160h80v160h-80Zm266 110-55-55 112-115 56 57-113 113Zm54 210v-80h160v80H760ZM440-40v-160h80v160h-80ZM254-652 140-763l57-56 113 113-56 54Zm508 512L651-255l54-54 114 110-57 59ZM40-440v-80h160v80H40Zm157 300-56-57 112-112 29 27 29 28-114 114Zm113-170q-70-70-70-170t70-170q70-70 170-70t170 70q70 70 70 170t-70 170q-70 70-170 70t-170-70Z"/></svg></span
-    ></span
->
-</span
-            >
-          </button>
-        </div>
-      </div>
-    </nav>
-  </div>
-</div>
-<style>
-  .active {
-    display: block;
-  }
-</style>
-
-<script>
-  let hamburger = document.getElementById("hamburgerbtn");
-
-  let mobileMenu = document.getElementById("mobileMenu");
-
-  hamburger.addEventListener("click", function () {
-    mobileMenu.classList.toggle("active");
-  });
-</script>
-<div
-        class="container max-w-7xl mx-auto mt-4 grow px-5 lg:px-0"
-        id="content"
-      >
-        <div class="lg:mx-5">
-<div class="grid grid-cols-3 gap-4">
-  
-  <main class="col-span-3 lg:col-span-2">
-  
-    <article class="bg-white dark:bg-warmgray-900 dark:text-white rounded-xl shadow-sm p-6 my-4">
-      <h1 class="title text-4xl font-bold mb-2">ML-Driven TFSA ETF Portfolio Optimization for EE</h1>
-      <div class="content prose md:prose-base lg:prose-lg max-w-none dark:prose-invert py-1"><div style="
-  display: flex;
-  align-items: flex-start;
-  gap: 14px;
-  border: 1px solid #3a5a7a;
-  border-left: 4px solid #a8d4f5;
-  border-radius: 8px;
-  background: #161e26;
-  padding: 16px 20px;
-  margin: 1.5rem 0;
-  font-size: 0.9rem;
-  line-height: 1.6;
-  color: #cccccc;
-">
-  <span style="font-size: 1.2rem; flex-shrink: 0; margin-top: 1px;">ℹ️</span>
-  <div>
-    <div style="font-size:0.72rem;font-weight:600;letter-spacing:0.08em;text-transform:uppercase;color:#a8d4f5;margin-bottom:5px;">Disclaimer</div>
-    <div>This is not financial advice.</div>
-  </div>
-</div>
-<div style="
-  border: 1px solid #2a2a2a;
-  border-radius: 10px;
-  padding: 24px 28px;
-  background: #1c1c1c;
-  margin: 2rem 0;
-  font-family: inherit;
-">
-  
-  <div style="margin-bottom: 20px;">
-    <div style="
-      font-size: 0.68rem;
-      font-weight: 700;
-      letter-spacing: 0.1em;
-      text-transform: uppercase;
-      color: #ffffff;
-      margin-bottom: 8px;
-    ">For the Lantern Bearers</div>
-    <div style="
-      font-size: 0.95rem;
-      font-weight: 400;
-      color: #a8d4f5;
-      line-height: 1.5;
-    ">Three risk-tiered ETF portfolios for your EE TFSA that beat the JSE Top 40 by 6 to 9 percentage points annualised with about half the drawdown. The model reads global macro signals (VIX, USD/ZAR, US 10-year yields) to pick which 8–10 ETFs to hold each quarter, then equal-weights them — the JSE doesn&#39;t really need optimising so much as it needs *editing*. Balanced tier is the recommended default; pure aggressive if you&#39;re feeling lucky, defensive if you remember 2022.</div>
-  </div>
-
-  <hr style="border: none; border-top: 1px solid #2a2a2a; margin: 16px 0;" />
-
-  
-  <div>
-    <div style="
-      font-size: 0.68rem;
-      font-weight: 700;
-      letter-spacing: 0.1em;
-      text-transform: uppercase;
-      color: #ffffff;
-      margin-bottom: 8px;
-    ">For the Elven Loremasters</div>
-    <div style="
-      font-size: 0.88rem;
-      font-weight: 400;
-      color: #cccccc;
-      line-height: 1.7;
-    ">LightGBM &#43; ACI &#43; Black-Litterman &#43; top-K equal weight. 9 features split into 5 ETF-level signals and 4 macro-conditional interactions (ETF features × z-scored VIX/US10Y/USDZAR). The interactions are the entire edge: raw macros are constant across ETFs so they just teach the model &#39;next month: good or bad?&#39; — technically a forecast, ranks zero ETFs. Multiplying them by ETF-level signals lifts Sharpe by &#43;0.5 and cuts 2022 rate-shock losses from -18% to -5%. The portfolio construction step is `argsort(-mu_BL)[:K]`, because optimisation is for people who trust their forecasts more than they should.</div>
-  </div>
-
-</div>
-
-<p>I&rsquo;ve been working on this ETF-picking framework for so long that my code probably deserves anniversary flowers. When it comes to a TFSA, most people toss a couple of ETFs in there, let compounding do its quiet magic, and move on with their lives. Me? I went full nerd and built a machine-learning pipeline with macro-conditional features and Bayesian shrinkage. The payoff: a system that outpaces the JSE Top 40 by 6.4 to 9.1 percentage points annualized, with Sharpe ratios twice as high &mdash; all while I keep insisting this is &ldquo;just passive investing&rdquo;. Over-engineered retirement planning? Guilty as charged.</p>
-<p>The <strong>macro-conditional features</strong> is the real star of the show. This lets the model learn that the
+<!doctype html><html lang=en><head><title>ML-Driven TFSA ETF Portfolio Optimization for EE | Rossouw van Jaarsveld | Overfit and Chill</title><meta charset=utf-8><meta name=viewport content="width=device-width,initial-scale=1,minimum-scale=1"><link rel=apple-touch-icon sizes=180x180 href=/favicon/apple-touch-icon.png><link rel=icon type=image/png sizes=32x32 href=/favicon/favicon-32x32.png><link rel=icon type=image/png sizes=16x16 href=/favicon/favicon-16x16.png><link rel=manifest href=/favicon/site.webmanifest><link rel=mask-icon href=/favicon/safari-pinned-tab.svg color=#5bbad5><link rel="shortcut icon" href=/favicon/favicon.ico><meta name=theme-color content="#ffffff"><meta property="og:title" content="ML-Driven TFSA ETF Portfolio Optimization for EE"><link rel=stylesheet href=/css/style.57448882beba0f5433eb3e00d53e7df9c65497e574d97ecf1e744aa60ca65992.css integrity="sha256-V0SIgr66D1Qz6z4A1T59+cZUl+V02X7PHnRKpgymWZI=" crossorigin=anonymous><meta name=description content="A LightGBM + conformal + Black-Litterman pipeline..."><meta property="og:site_name" content="Rossouw van Jaarsveld | Overfit and Chill"><meta property="og:description" content="A LightGBM + conformal + Black-Litterman pipeline..."><meta property="og:url" content="https://overfitandchill.co.za/posts/etf-optim/"><meta property="og:type" content="website"><meta property="og:locale" content="en_US"><meta name=twitter:card content="summary_large_image"><meta name=twitter:site content><link rel=canonical href=https://overfitandchill.co.za/posts/etf-optim/><meta name=twitter:description content="A LightGBM + conformal + Black-Litterman pipeline..."><meta property="article:published_time" content="2026-05-17T00:00:00+00:00"><meta property="article:updated_time" content="2026-05-17T00:00:00+00:00"><meta property="og:image" content="https://overfitandchill.co.za/posts/etf-optim/thumbnail.png"><meta property="og:image:url" content="https://overfitandchill.co.za/posts/etf-optim/thumbnail.png"><link rel=stylesheet href=https://cdn.jsdelivr.net/npm/katex@0.16.11/dist/katex.min.css><script defer src=https://cdn.jsdelivr.net/npm/katex@0.16.11/dist/katex.min.js></script><script defer src=https://cdn.jsdelivr.net/npm/katex@0.16.11/dist/contrib/auto-render.min.js onload='renderMathInElement(document.body,{delimiters:[{left:"$$",right:"$$",display:!0},{left:"$",right:"$",display:!1},{left:"\\(",right:"\\)",display:!1},{left:"\\[",right:"\\]",display:!0}],throwOnError:!1})'></script><i class="dark hidden"></i></head><style>.katex-display{overflow-x:auto;overflow-y:hidden;padding:4px 0}</style><i class="dark hidden"></i></head><body class=font-sans><div class="min-h-screen flex flex-col bg-gray-100 dark:bg-warmgray-800"><div class="bg-gray-800 shadow-sm"><div class="container max-w-7xl mr-auto ml-auto"><nav class="flex items-center justify-between flex-wrap px-6 py-4"><div class="flex items-center flex-no-shrink text-white mr-6"><a href=https://overfitandchill.co.za/><span class="font-semibold text-xl tracking-tight">Rossouw van Jaarsveld | Overfit and Chill</span></a></div><div class="flex md:hidden"><div class=py-2><button onclick=toggleDarkMode() class="focus-visible:outline-none mr-1 text-white/80 hover:text-white transition-colors duration-200 cursor-pointer" aria-label="Darkmode Toggle Button">
+<span id=icon-moon><span class="inline-flex align-middle pb-0.5 text-lg"><svg height="1em" viewBox="0 -960 960 960" width="1em" fill="currentColor"><path d="M484-80q-84 0-157.5-32t-128-86.5-86.5-128T80-484q0-146 93-257.5T410-880q-18 99 11 193.5T521-521t165.5 1e2T880-410q-26 144-138 237T484-80z"/></svg></span></span>
+</span><span id=icon-sun class=hidden><span class="inline-flex align-middle pb-0.5 text-lg"><svg height="1em" viewBox="0 -960 960 960" width="1em" fill="currentColor"><path d="M440-760v-160h80v160h-80zm266 110-55-55 112-115 56 57-113 113zm54 210v-80h160v80H760zM440-40v-160h80v160h-80zM254-652 140-763l57-56 113 113-56 54zm508 512L651-255l54-54 114 110-57 59zM40-440v-80h160v80H40zm157 3e2-56-57 112-112 29 27 29 28-114 114zm113-170q-70-70-70-170t70-170 170-70 170 70 70 170-70 170-170 70-170-70z"/></svg></span></span>
+</span></button>
+<span class=text-white>|</span></div><button id=hamburgerbtn class="flex items-center px-3 py-2 text-white/80 hover:text-white transition-colors duration-200" aria-label="Hamburger Button">
+<span class="inline-flex align-middle pb-0.5 text-2xl"><svg height="1em" viewBox="0 -960 960 960" width="1em" fill="currentColor"><path d="M120-240v-80h720v80H120zm0-2e2v-80h720v80H120zm0-2e2v-80h720v80H120z"/></svg></span></span></button></div><div class="hidden w-full md:flex md:flex-row sm:items-center md:w-auto" id=mobileMenu><div class="text-sm lg:grow"></div><div class="flex flex-col md:flex-row gap-2"><a href=/ class="no-underline font-medium text-sm block sm:inline-block sm:mt-0 text-white/80 hover:text-white mr-4 py-2 sm:py-0 transition-colors duration-200">Home
+</a><a href=/about/ class="no-underline font-medium text-sm block sm:inline-block sm:mt-0 text-white/80 hover:text-white mr-4 py-2 sm:py-0 transition-colors duration-200">About</a></div><div class="text-white hidden md:block"><span>|</span>
+<button onclick=toggleDarkMode() class="focus-visible:outline-none hover:opacity-50 duration-200 ml-2 cursor-pointer" aria-label="Darkmode Toggle Button">
+<span id=icon2-moon><span class="inline-flex align-middle pb-0.5 text-lg"><svg height="1em" viewBox="0 -960 960 960" width="1em" fill="currentColor"><path d="M484-80q-84 0-157.5-32t-128-86.5-86.5-128T80-484q0-146 93-257.5T410-880q-18 99 11 193.5T521-521t165.5 1e2T880-410q-26 144-138 237T484-80z"/></svg></span></span>
+</span><span id=icon2-sun class=hidden><span class="inline-flex align-middle pb-0.5 text-lg"><svg height="1em" viewBox="0 -960 960 960" width="1em" fill="currentColor"><path d="M440-760v-160h80v160h-80zm266 110-55-55 112-115 56 57-113 113zm54 210v-80h160v80H760zM440-40v-160h80v160h-80zM254-652 140-763l57-56 113 113-56 54zm508 512L651-255l54-54 114 110-57 59zM40-440v-80h160v80H40zm157 3e2-56-57 112-112 29 27 29 28-114 114zm113-170q-70-70-70-170t70-170 170-70 170 70 70 170-70 170-170 70-170-70z"/></svg></span></span></span></button></div></div></nav></div></div><style>.active{display:block}</style><script>let hamburger=document.getElementById("hamburgerbtn"),mobileMenu=document.getElementById("mobileMenu");hamburger.addEventListener("click",function(){mobileMenu.classList.toggle("active")})</script><div class="container max-w-7xl mx-auto mt-4 grow px-5 lg:px-0" id=content><div class=lg:mx-5><div class="grid grid-cols-3 gap-4"><main class="col-span-3 lg:col-span-2"><article class="bg-white dark:bg-warmgray-900 dark:text-white rounded-xl shadow-sm p-6 my-4"><h1 class="title text-4xl font-bold mb-2">ML-Driven TFSA ETF Portfolio Optimization for EE</h1><div class="content prose md:prose-base lg:prose-lg max-w-none dark:prose-invert py-1"><div style="display:flex;align-items:flex-start;gap:14px;border:1px solid #3a5a7a;border-left:4px solid #a8d4f5;border-radius:8px;background:#161e26;padding:16px 20px;margin:1.5rem 0;font-size:.9rem;line-height:1.6;color:#ccc"><span style=font-size:1.2rem;flex-shrink:0;margin-top:1px>ℹ️</span><div><div style=font-size:.72rem;font-weight:600;letter-spacing:.08em;text-transform:uppercase;color:#a8d4f5;margin-bottom:5px>Disclaimer</div><div>This is not financial advice.</div></div></div><div style="border:1px solid #2a2a2a;border-radius:10px;padding:24px 28px;background:#1c1c1c;margin:2rem 0;font-family:inherit"><div style=margin-bottom:20px><div style=font-size:.68rem;font-weight:700;letter-spacing:.1em;text-transform:uppercase;color:#fff;margin-bottom:8px>For the Lantern Bearers</div><div style=font-size:.95rem;font-weight:400;color:#a8d4f5;line-height:1.5>Three risk-tiered ETF portfolios for your EE TFSA that beat the JSE Top 40 by 6 to 9 percentage points annualised with about half the drawdown. The model reads global macro signals (VIX, USD/ZAR, US 10-year yields) to pick which 8–10 ETFs to hold each quarter, then equal-weights them — the JSE doesn't really need optimising so much as it needs *editing*. Balanced tier is the recommended default; pure aggressive if you're feeling lucky, defensive if you remember 2022.</div></div><hr style="border:none;border-top:1px solid #2a2a2a;margin:16px 0"><div><div style=font-size:.68rem;font-weight:700;letter-spacing:.1em;text-transform:uppercase;color:#fff;margin-bottom:8px>For the Elven Loremasters</div><div style=font-size:.88rem;font-weight:400;color:#ccc;line-height:1.7>LightGBM + ACI + Black-Litterman + top-K equal weight. 9 features split into 5 ETF-level signals and 4 macro-conditional interactions (ETF features × z-scored VIX/US10Y/USDZAR). The interactions are the entire edge: raw macros are constant across ETFs so they just teach the model 'next month: good or bad?' — technically a forecast, ranks zero ETFs. Multiplying them by ETF-level signals lifts Sharpe by +0.5 and cuts 2022 rate-shock losses from -18% to -5%. The portfolio construction step is `argsort(-mu_BL)[:K]`, because optimisation is for people who trust their forecasts more than they should.</div></div></div><p>I&rsquo;ve been working on this ETF-picking framework for so long that my code probably deserves anniversary flowers. When it comes to a TFSA, most people toss a couple of ETFs in there, let compounding do its quiet magic, and move on with their lives. Me? I went full nerd and built a machine-learning pipeline with macro-conditional features and Bayesian shrinkage. The payoff: a system that outpaces the JSE Top 40 by 6.4 to 9.1 percentage points annualized, with Sharpe ratios twice as high &mdash; all while I keep insisting this is &ldquo;just passive investing&rdquo;. Over-engineered retirement planning? Guilty as charged.</p><p>The <strong>macro-conditional features</strong> is the real star of the show. This lets the model learn that the
 same momentum reading means something different in a high-vol regime
 than in a calm one &mdash; a regime-dependence that pure momentum signals
-cannot capture. The sophistication lives entirely in the forecast &mdash; the rest is just me pretending I&rsquo;m not running a glorified &ldquo;sort and slice&rdquo; function.</p>
-<h2 id="portfolio-rules-and-caveats">Portfolio rules and caveats</h2>
-<ul>
-<li>An ETF only becomes eligible for selection when more than 6 months of data is available,</li>
-<li>Rebalancing occurs at a quarterly frequency,</li>
-<li>Only $K=8$ ETFs are allowed in the portfolio. If you can make it to the end of the post you will understand why.</li>
-<li>I am only considering ETFs that are eligible for TFSA and available on EE. Why? Because I&rsquo;ve been hoarding data on them like a dragon sitting on a pile of CSV files.</li>
-<li>The out-of sample test is not nearly as long as I would like. It&rsquo;s basically the financial equivalent of a movie trailer &mdash; just enough to get you excited, but not enough to prove the plot won&rsquo;t collapse halfway through so please read the disclaimer up top again!</li>
-</ul>
-<h2 id="data">Data</h2>
-<p>73 TFSA-listed ETFs from January 2019 to April 2026. The universe
-spans six broad categories:</p>
-<table>
-  <thead>
-      <tr>
-          <th>Category</th>
-          <th>Count</th>
-      </tr>
-  </thead>
-  <tbody>
-      <tr>
-          <td>Global Equity</td>
-          <td>30</td>
-      </tr>
-      <tr>
-          <td>Local Equity</td>
-          <td>18</td>
-      </tr>
-      <tr>
-          <td>Local Income</td>
-          <td>7</td>
-      </tr>
-      <tr>
-          <td>Global Income</td>
-          <td>5</td>
-      </tr>
-      <tr>
-          <td>Global REIT</td>
-          <td>4</td>
-      </tr>
-      <tr>
-          <td>Local REIT</td>
-          <td>3</td>
-      </tr>
-      <tr>
-          <td>Multi-Asset / Other</td>
-          <td>6</td>
-      </tr>
-  </tbody>
-</table>
-<p>I use three macro time series from FRED:</p>
-<table>
-  <thead>
-      <tr>
-          <th>Series</th>
-          <th>FRED ID</th>
-          <th>What it measures</th>
-      </tr>
-  </thead>
-  <tbody>
-      <tr>
-          <td>USD/ZAR exchange rate</td>
-          <td><code>EXSFUS</code></td>
-          <td>Rand strength against the US dollar</td>
-      </tr>
-      <tr>
-          <td>US 10-Year Treasury yield</td>
-          <td><code>GS10</code></td>
-          <td>Global rate environment</td>
-      </tr>
-      <tr>
-          <td>CBOE VIX</td>
-          <td><code>VIXCLS</code> (monthly avg)</td>
-          <td>Global equity risk sentiment</td>
-      </tr>
-  </tbody>
-</table>
-<p>Monthly returns are computed from each ETF&rsquo;s total-return series. No cheating is allowed &mdash; features and forecasts at time $t$ only use
-data through $t$.</p>
-<p>The JSE top40 benchmark is the average return of the JSE top 40 ETFs. The equal weighting benchmark is the result of buying every ETF (when they are available) and allocating equal weights.</p>
-<h2 id="the-pipeline">The pipeline</h2>
-<p>Four sequential steps. Steps 1-3 produce a calibrated posterior
+cannot capture. The sophistication lives entirely in the forecast &mdash; the rest is just me pretending I&rsquo;m not running a glorified &ldquo;sort and slice&rdquo; function.</p><h2 id=portfolio-rules-and-caveats>Portfolio rules and caveats</h2><ul><li>An ETF only becomes eligible for selection when more than 6 months of data is available,</li><li>Rebalancing occurs at a quarterly frequency,</li><li>Only $K=8$ ETFs are allowed in the portfolio. If you can make it to the end of the post you will understand why.</li><li>I am only considering ETFs that are eligible for TFSA and available on EE. Why? Because I&rsquo;ve been hoarding data on them like a dragon sitting on a pile of CSV files.</li><li>The out-of sample test is not nearly as long as I would like. It&rsquo;s basically the financial equivalent of a movie trailer &mdash; just enough to get you excited, but not enough to prove the plot won&rsquo;t collapse halfway through so please read the disclaimer up top again!</li></ul><h2 id=data>Data</h2><p>73 TFSA-listed ETFs from January 2019 to April 2026. The universe
+spans six broad categories:</p><table><thead><tr><th>Category</th><th>Count</th></tr></thead><tbody><tr><td>Global Equity</td><td>30</td></tr><tr><td>Local Equity</td><td>18</td></tr><tr><td>Local Income</td><td>7</td></tr><tr><td>Global Income</td><td>5</td></tr><tr><td>Global REIT</td><td>4</td></tr><tr><td>Local REIT</td><td>3</td></tr><tr><td>Multi-Asset / Other</td><td>6</td></tr></tbody></table><p>I use three macro time series from FRED:</p><table><thead><tr><th>Series</th><th>FRED ID</th><th>What it measures</th></tr></thead><tbody><tr><td>USD/ZAR exchange rate</td><td><code>EXSFUS</code></td><td>Rand strength against the US dollar</td></tr><tr><td>US 10-Year Treasury yield</td><td><code>GS10</code></td><td>Global rate environment</td></tr><tr><td>CBOE VIX</td><td><code>VIXCLS</code> (monthly avg)</td><td>Global equity risk sentiment</td></tr></tbody></table><p>Monthly returns are computed from each ETF&rsquo;s total-return series. No cheating is allowed &mdash; features and forecasts at time $t$ only use
+data through $t$.</p><p>The JSE top40 benchmark is the average return of the JSE top 40 ETFs. The equal weighting benchmark is the result of buying every ETF (when they are available) and allocating equal weights.</p><h2 id=the-pipeline>The pipeline</h2><p>Four sequential steps. Steps 1-3 produce a calibrated posterior
 forecast of expected returns per ETF; Step 4 converts that into
-portfolio weights.</p>
-<h3 id="step-1-lightgbm-panel-forecast">Step 1: LightGBM panel forecast</h3>
-<p>I build a &ldquo;panel&rdquo; &mdash; one row per (ETF $i$, month $t$) combination &mdash;
+portfolio weights.</p><h3 id=step-1-lightgbm-panel-forecast>Step 1: LightGBM panel forecast</h3><p>I build a &ldquo;panel&rdquo; &mdash; one row per (ETF $i$, month $t$) combination &mdash;
 with <strong>9 feature columns</strong> plus the next-month return as the target.
 LightGBM is trained on this panel to predict expected return per ETF
-per month.</p>
-<p>The 8 features split into two groups:</p>
-<ul>
-<li><strong>Feature group A (5 features): ETF-level signals.</strong> Tell the model
+per month.</p><p>The 8 features split into two groups:</p><ul><li><strong>Feature group A (5 features): ETF-level signals.</strong> Tell the model
 what each ETF has been doing &mdash; momentum, volatility, risk-adjusted
-momentum, etc.</li>
-<li><strong>Feature group B (3 features): macro-conditional interactions.</strong>
+momentum, etc.</li><li><strong>Feature group B (3 features): macro-conditional interactions.</strong>
 Tell the model what <em>kind of environment</em> the ETF is operating in.
-These are the most important features in the pipeline.</li>
-</ul>
-<p>The macro interactions are not optional add-ons &mdash; they are responsible
-for most of the pipeline&rsquo;s edge.</p>
-<h4 id="feature-group-a-etf-level-features-5">Feature group A: ETF-level features (5)</h4>
-<p>These describe each ETF&rsquo;s own price behaviour:</p>
-$$\begin{aligned}
+These are the most important features in the pipeline.</li></ul><p>The macro interactions are not optional add-ons &mdash; they are responsible
+for most of the pipeline&rsquo;s edge.</p><h4 id=feature-group-a-etf-level-features-5>Feature group A: ETF-level features (5)</h4><p>These describe each ETF&rsquo;s own price behaviour:</p>$$\begin{aligned}
 \text{mom}_{6-1, i, t} &= \sum_{s=t-6}^{t-1} \log(1 + r_{i, s}) \\
 \text{mom}_{3-1, i, t} &= \sum_{s=t-3}^{t-1} \log(1 + r_{i, s}) \\
 \sigma_{i, t} &= \sqrt{12} \cdot \text{stdev}(r_{i, t-5:t-1}) \\
 \text{mom\_scaled}_{i, t} &= \text{mom}_{6-1, i, t} \;/\; \sigma_{i, t} \\
 \text{defensive}_{i, t} &= 1 \;/\; \sigma_{i, t}
-\end{aligned}$$<p><strong>What each variable means:</strong></p>
-<ul>
-<li>$r_{i, s}$ &mdash; simple monthly return of ETF $i$ in month $s$</li>
-<li><strong>$\text{mom}_{6-1}$</strong> &mdash; 6-month log-return ending one month back.
+\end{aligned}$$<p><strong>What each variable means:</strong></p><ul><li>$r_{i, s}$ &mdash; simple monthly return of ETF $i$ in month $s$</li><li><strong>$\text{mom}_{6-1}$</strong> &mdash; 6-month log-return ending one month back.
 Captures medium-term trend. The &ldquo;$-1$&rdquo; lag avoids using same-month
-return as both feature and target.</li>
-<li><strong>$\text{mom}_{3-1}$</strong> &mdash; 3-month log-return ending one month back.
-Captures shorter-term trend; reacts faster than the 6-month version.</li>
-<li><strong>$\sigma_{i, t}$</strong> &mdash; annualized volatility over the past 6 months.
-Higher = more risky.</li>
-<li><strong>$\text{mom\_scaled}$</strong> &mdash; risk-adjusted momentum. A 10% gain on a
-high-vol ETF is less convincing than the same gain on a stable ETF.</li>
-<li><strong>$\text{defensive}$</strong> &mdash; inverse volatility. A &ldquo;stability score&rdquo;;
-high values flag low-vol ETFs (bonds, income, defensive equities).</li>
-</ul>
-<h4 id="feature-group-b-macro-conditional-interaction-features">Feature group B: Macro-conditional interaction features</h4>
-<p>The 5 ETF-level features above tell the model <em>what each ETF has been
+return as both feature and target.</li><li><strong>$\text{mom}_{3-1}$</strong> &mdash; 3-month log-return ending one month back.
+Captures shorter-term trend; reacts faster than the 6-month version.</li><li><strong>$\sigma_{i, t}$</strong> &mdash; annualized volatility over the past 6 months.
+Higher = more risky.</li><li><strong>$\text{mom\_scaled}$</strong> &mdash; risk-adjusted momentum. A 10% gain on a
+high-vol ETF is less convincing than the same gain on a stable ETF.</li><li><strong>$\text{defensive}$</strong> &mdash; inverse volatility. A &ldquo;stability score&rdquo;;
+high values flag low-vol ETFs (bonds, income, defensive equities).</li></ul><h4 id=feature-group-b-macro-conditional-interaction-features>Feature group B: Macro-conditional interaction features</h4><p>The 5 ETF-level features above tell the model <em>what each ETF has been
 doing</em>. They don&rsquo;t tell it <em>what kind of environment that&rsquo;s happening
 in</em>. Adding macro context is essential &mdash; but the way macros are
-encoded matters enormously, and the naive approach fails badly.</p>
-<p>Pure ETF features are regime-blind. A 10% rally looks the same whether it&rsquo;s March 2020 (VIX screaming at 50, world on fire) or January 2024 (VIX chilling at 14, markets sipping piña coladas). Without macro context, the model is basically that friend who insists &ldquo;all parties are the same&rdquo; &mdash; which is why we had to teach it that a rave at 3 a.m. is not the same as a Sunday brunch. Enter macro interactions: multiplying ETF signals by z-scored macros so the model finally stops being socially oblivious.</p>
-<p>The obvious fix is to add macro variables as new columns to the panel:</p>
-<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;-webkit-text-size-adjust:none;"><code class="language-text" data-lang="text"><span style="display:flex;"><span>panel columns (naive approach):
-</span></span><span style="display:flex;"><span>  [mom_3_1, mom_6_1, vol_recent, mom_scaled, defensive,
-</span></span><span style="display:flex;"><span>   vix_level, usdzar_mom6, us10y_mom6]
+encoded matters enormously, and the naive approach fails badly.</p><p>Pure ETF features are regime-blind. A 10% rally looks the same whether it&rsquo;s March 2020 (VIX screaming at 50, world on fire) or January 2024 (VIX chilling at 14, markets sipping piña coladas). Without macro context, the model is basically that friend who insists &ldquo;all parties are the same&rdquo; &mdash; which is why we had to teach it that a rave at 3 a.m. is not the same as a Sunday brunch. Enter macro interactions: multiplying ETF signals by z-scored macros so the model finally stops being socially oblivious.</p><p>The obvious fix is to add macro variables as new columns to the panel:</p><div class=highlight><pre tabindex=0 style=color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;-webkit-text-size-adjust:none><code class=language-text data-lang=text><span style=display:flex><span>panel columns (naive approach):
+</span></span><span style=display:flex><span>  [mom_3_1, mom_6_1, vol_recent, mom_scaled, defensive,
+</span></span><span style=display:flex><span>   vix_level, usdzar_mom6, us10y_mom6]
 </span></span></code></pre></div><p>I tested this. It <em>hurt</em> performance by 2.6 to 4.3 percentage points
-of return across all three configurations.</p>
-<p>The reason is structural. Macro variables are <strong>identical across all
-ETFs at any given month</strong>. At month $t$:</p>
-<table>
-  <thead>
-      <tr>
-          <th>ETF</th>
-          <th style="text-align: center">$\text{mom}_{3-1}$</th>
-          <th style="text-align: center">$\text{VIX}_t$</th>
-      </tr>
-  </thead>
-  <tbody>
-      <tr>
-          <td>ETF A</td>
-          <td style="text-align: center">+0.10</td>
-          <td style="text-align: center">28.5</td>
-      </tr>
-      <tr>
-          <td>ETF B</td>
-          <td style="text-align: center">-0.05</td>
-          <td style="text-align: center">28.5</td>
-      </tr>
-      <tr>
-          <td>ETF C</td>
-          <td style="text-align: center">+0.02</td>
-          <td style="text-align: center">28.5</td>
-      </tr>
-  </tbody>
-</table>
-<p>The VIX column has the same value for every ETF. A LightGBM split like
-&ldquo;if vix_level &gt; 25, predict lower return&rdquo; affects <em>every ETF
+of return across all three configurations.</p><p>The reason is structural. Macro variables are <strong>identical across all
+ETFs at any given month</strong>. At month $t$:</p><table><thead><tr><th>ETF</th><th style=text-align:center>$\text{mom}_{3-1}$</th><th style=text-align:center>$\text{VIX}_t$</th></tr></thead><tbody><tr><td>ETF A</td><td style=text-align:center>+0.10</td><td style=text-align:center>28.5</td></tr><tr><td>ETF B</td><td style=text-align:center>-0.05</td><td style=text-align:center>28.5</td></tr><tr><td>ETF C</td><td style=text-align:center>+0.02</td><td style=text-align:center>28.5</td></tr></tbody></table><p>The VIX column has the same value for every ETF. A LightGBM split like
+&ldquo;if vix_level > 25, predict lower return&rdquo; affects <em>every ETF
 identically</em> &mdash; it shifts the level of all predictions but doesn&rsquo;t
-change the <strong>ranking</strong> of ETFs.</p>
-<p>Portfolio construction is fundamentally a <strong>cross-sectional</strong>
+change the <strong>ranking</strong> of ETFs.</p><p>Portfolio construction is fundamentally a <strong>cross-sectional</strong>
 problem: pick the top-K out of 70+ ETFs at each rebalance. What
 matters is which ETF outperforms others, not whether the average ETF
 will have a good or bad month. Standalone macros provide no help with
-ranking ETFs against each other.</p>
-<p>Feature importance analysis confirmed the failure point. Standalone
+ranking ETFs against each other.</p><p>Feature importance analysis confirmed the failure point. Standalone
 macros accumulated <strong>57% of total LightGBM feature importance</strong>,
 crowding out the ETF-specific signals that actually drive selection.
-The model became a regime predictor instead of an ETF picker.</p>
-<p>The solution is to <strong>multiply</strong> each macro variable by an ETF-specific
-signal. Econometricians have been doing this since dinosaurs roamed the earth (okay, maybe since the 1970s), but slap a &ldquo;feature engineering&rdquo; label on it and suddenly it&rsquo;s treated like the moon landing. The result is a feature that actually varies across ETFs at every timestep:</p>
-$$\begin{aligned}
+The model became a regime predictor instead of an ETF picker.</p><p>The solution is to <strong>multiply</strong> each macro variable by an ETF-specific
+signal. Econometricians have been doing this since dinosaurs roamed the earth (okay, maybe since the 1970s), but slap a &ldquo;feature engineering&rdquo; label on it and suddenly it&rsquo;s treated like the moon landing. The result is a feature that actually varies across ETFs at every timestep:</p>$$\begin{aligned}
 \widetilde{x}_t &= \dfrac{x_t - \bar{x}_{0:t}}{\text{std}(x_{0:t})} \quad
-  \text{(causal expanding z-score)} \\[6pt]
-\text{mom3\_x\_vix}_{i, t}     &= \text{mom}_{3-1, i, t} \cdot \widetilde{\text{VIX}}_t \\
-\text{mom3\_x\_us10y}_{i, t}   &= \text{mom}_{3-1, i, t} \cdot \widetilde{\Delta\text{US10Y}}_t \\
-\text{mom6\_x\_usdzar}_{i, t}  &= \text{mom}_{6-1, i, t} \cdot \widetilde{\Delta\text{USDZAR}}_t \\
-\text{vol\_x\_vix}_{i, t}      &= \sigma_{i, t} \cdot \widetilde{\text{VIX}}_t
-\end{aligned}$$<p><strong>What each variable means:</strong></p>
-<ul>
-<li><strong>$\widetilde{x}_t$</strong> &mdash; the z-score of macro variable $x$ at month
+\text{(causal expanding z-score)} \\[6pt]
+\text{mom3\_x\_vix}_{i, t} &= \text{mom}_{3-1, i, t} \cdot \widetilde{\text{VIX}}_t \\
+\text{mom3\_x\_us10y}_{i, t} &= \text{mom}_{3-1, i, t} \cdot \widetilde{\Delta\text{US10Y}}_t \\
+\text{mom6\_x\_usdzar}_{i, t} &= \text{mom}_{6-1, i, t} \cdot \widetilde{\Delta\text{USDZAR}}_t \\
+\text{vol\_x\_vix}_{i, t} &= \sigma_{i, t} \cdot \widetilde{\text{VIX}}_t
+\end{aligned}$$<p><strong>What each variable means:</strong></p><ul><li><strong>$\widetilde{x}_t$</strong> &mdash; the z-score of macro variable $x$ at month
 $t$, using only data through $t$ (expanding mean and standard
 deviation). A positive z-score means $x$ is above its historical
-average; negative means below.</li>
-<li><strong>$\widetilde{\text{VIX}}_t$</strong> &mdash; VIX level relative to its own
-history. Positive = elevated global equity risk.</li>
-<li><strong>$\widetilde{\Delta\text{US10Y}}_t$</strong> &mdash; 6-month change in US 10y
+average; negative means below.</li><li><strong>$\widetilde{\text{VIX}}_t$</strong> &mdash; VIX level relative to its own
+history. Positive = elevated global equity risk.</li><li><strong>$\widetilde{\Delta\text{US10Y}}_t$</strong> &mdash; 6-month change in US 10y
 yield, z-scored. Positive = rates rising fast (typically headwind
-for growth/duration-sensitive assets).</li>
-<li><strong>$\widetilde{\Delta\text{USDZAR}}_t$</strong> &mdash; 6-month log change in
+for growth/duration-sensitive assets).</li><li><strong>$\widetilde{\Delta\text{USDZAR}}_t$</strong> &mdash; 6-month log change in
 USD/ZAR, z-scored. Positive = rand weakening (helps SA resources,
-hurts importers).</li>
-<li>The <strong>four interaction terms</strong> are each ETF-specific (because they
+hurts importers).</li><li>The <strong>four interaction terms</strong> are each ETF-specific (because they
 contain an ETF-specific factor) AND regime-aware (because they
-contain a macro factor).</li>
-</ul>
-<p>Now look at the same panel example, but using the interaction column:</p>
-<table>
-  <thead>
-      <tr>
-          <th>ETF</th>
-          <th style="text-align: center">$\text{mom}_{3-1}$</th>
-          <th style="text-align: center">$\widetilde{\text{VIX}}_t$</th>
-          <th style="text-align: center">$\text{mom3\_x\_vix}$</th>
-      </tr>
-  </thead>
-  <tbody>
-      <tr>
-          <td>ETF A</td>
-          <td style="text-align: center">+0.10</td>
-          <td style="text-align: center">+1.5</td>
-          <td style="text-align: center">$+0.10 \times 1.5 = +0.15$</td>
-      </tr>
-      <tr>
-          <td>ETF B</td>
-          <td style="text-align: center">-0.05</td>
-          <td style="text-align: center">+1.5</td>
-          <td style="text-align: center">$-0.05 \times 1.5 = -0.075$</td>
-      </tr>
-      <tr>
-          <td>ETF C</td>
-          <td style="text-align: center">+0.02</td>
-          <td style="text-align: center">+1.5</td>
-          <td style="text-align: center">$+0.02 \times 1.5 = +0.03$</td>
-      </tr>
-  </tbody>
-</table>
-<p>The interaction column <strong>varies across ETFs</strong>. A tree split on this
+contain a macro factor).</li></ul><p>Now look at the same panel example, but using the interaction column:</p><table><thead><tr><th>ETF</th><th style=text-align:center>$\text{mom}_{3-1}$</th><th style=text-align:center>$\widetilde{\text{VIX}}_t$</th><th style=text-align:center>$\text{mom3\_x\_vix}$</th></tr></thead><tbody><tr><td>ETF A</td><td style=text-align:center>+0.10</td><td style=text-align:center>+1.5</td><td style=text-align:center>$+0.10 \times 1.5 = +0.15$</td></tr><tr><td>ETF B</td><td style=text-align:center>-0.05</td><td style=text-align:center>+1.5</td><td style=text-align:center>$-0.05 \times 1.5 = -0.075$</td></tr><tr><td>ETF C</td><td style=text-align:center>+0.02</td><td style=text-align:center>+1.5</td><td style=text-align:center>$+0.02 \times 1.5 = +0.03$</td></tr></tbody></table><p>The interaction column <strong>varies across ETFs</strong>. A tree split on this
 column produces different outcomes for different ETFs &mdash; exactly what
-we need for cross-sectional selection.</p>
-<h5 id="how-lightgbm-uses-these-features-for-selection">How LightGBM uses these features for selection</h5>
-<p>LightGBM is a gradient-boosted tree model. Each tree learns a series
-of splits like:</p>
-<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;-webkit-text-size-adjust:none;"><code class="language-text" data-lang="text"><span style="display:flex;"><span>if mom3_x_vix &lt; -0.05:
-</span></span><span style="display:flex;"><span>    predict +1.2% (next-month return)
-</span></span><span style="display:flex;"><span>else if mom3_x_vix &gt; 0.10:
-</span></span><span style="display:flex;"><span>    predict -0.8%
-</span></span><span style="display:flex;"><span>else:
-</span></span><span style="display:flex;"><span>    predict +0.4%
+we need for cross-sectional selection.</p><h5 id=how-lightgbm-uses-these-features-for-selection>How LightGBM uses these features for selection</h5><p>LightGBM is a gradient-boosted tree model. Each tree learns a series
+of splits like:</p><div class=highlight><pre tabindex=0 style=color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;-webkit-text-size-adjust:none><code class=language-text data-lang=text><span style=display:flex><span>if mom3_x_vix &lt; -0.05:
+</span></span><span style=display:flex><span>    predict +1.2% (next-month return)
+</span></span><span style=display:flex><span>else if mom3_x_vix &gt; 0.10:
+</span></span><span style=display:flex><span>    predict -0.8%
+</span></span><span style=display:flex><span>else:
+</span></span><span style=display:flex><span>    predict +0.4%
 </span></span></code></pre></div><p>These splits encode <strong>regime-conditional</strong> rules that pure momentum or
-standalone macros fundamentally cannot express:</p>
-<ul>
-<li>A split like &ldquo;$\text{mom3\_x\_vix} > 0.10$&rdquo; triggers only when <em>both</em>
+standalone macros fundamentally cannot express:</p><ul><li>A split like &ldquo;$\text{mom3\_x\_vix} > 0.10$&rdquo; triggers only when <em>both</em>
 short-term momentum is positive <em>and</em> VIX is elevated (their product
 is large and positive). This is the &ldquo;high-momentum-in-stress&rdquo;
-bucket, which historically tends to mean-revert.</li>
-<li>The same split is dormant when the macro is neutral
+bucket, which historically tends to mean-revert.</li><li>The same split is dormant when the macro is neutral
 ($\widetilde{\text{VIX}}_t \approx 0$): the product is near zero
 regardless of the ETF&rsquo;s momentum, so the split doesn&rsquo;t fire for any
-ETF.</li>
-<li>Different ETFs at the same timestep produce different values of
+ETF.</li><li>Different ETFs at the same timestep produce different values of
 $\text{mom3\_x\_vix}$ (because their $\text{mom}_{3-1}$ differs).
 So one ETF might end up in the &ldquo;predict $-0.8\%$&rdquo; bucket while
 another ends up in &ldquo;predict $+1.2\%$&rdquo; &mdash; directly creating a
-<strong>cross-sectional ranking signal</strong>.</li>
-</ul>
-<p>The end result: at each rebalance time, LightGBM produces an expected
+<strong>cross-sectional ranking signal</strong>.</li></ul><p>The end result: at each rebalance time, LightGBM produces an expected
 return $\hat{\mu}_i$ for every ETF that reflects <em>both</em> its
 ETF-specific behavior <em>and</em> the current macro regime. ETFs whose
 momentum signal &ldquo;aligns with&rdquo; the regime (e.g., strong momentum in a
 benign environment) get higher $\hat{\mu}_i$. ETFs whose signal
 &ldquo;fights&rdquo; the regime (e.g., strong momentum during stress) get lower
-$\hat{\mu}_i$ &mdash; even if their pure momentum is the same.</p>
-<p>This regime-conditional forecast then flows <strong>unchanged</strong> through
+$\hat{\mu}_i$ &mdash; even if their pure momentum is the same.</p><p>This regime-conditional forecast then flows <strong>unchanged</strong> through
 Steps 2-4. ACI, Black-Litterman, and Top-K selection all operate on
 $\hat{\mu}_i$ and $\hat{q}_i$ values &mdash; they don&rsquo;t need to know about
 macros, because the macro information is already baked into those
-predictions.</p>
-<p>The four chosen interactions each have an economic story:</p>
-<table>
-  <thead>
-      <tr>
-          <th>Interaction</th>
-          <th>Economic intuition</th>
-      </tr>
-  </thead>
-  <tbody>
-      <tr>
-          <td>$\text{mom}_{3-1} \times \widetilde{\text{VIX}}$</td>
-          <td>High short-momentum during high-vol regimes tends to mean-revert</td>
-      </tr>
-      <tr>
-          <td>$\text{mom}_{3-1} \times \widetilde{\Delta\text{US10Y}}$</td>
-          <td>Rising rates penalize rate-sensitive picks; flat rates do not</td>
-      </tr>
-      <tr>
-          <td>$\text{mom}_{6-1} \times \widetilde{\Delta\text{USDZAR}}$</td>
-          <td>Rand-weakening helps ZAR-exposed picks (resources) and hurts others</td>
-      </tr>
-      <tr>
-          <td>$\sigma \times \widetilde{\text{VIX}}$</td>
-          <td>High-vol assets in a high global-vol regime are doubly exposed</td>
-      </tr>
-  </tbody>
-</table>
-<p>I don&rsquo;t bother including Brent crude, GDP, inflation, or interest rate interactions &mdash; even though I freaking sourced them and tried. In my tests, they added about as much predictive value as a horoscope. Their moves in the model is basically just USD/ZAR and VIX in disguise, so the information was already absorbed. In other words, throwing them in would be like adding extra garlic to a dish that&rsquo;s already 90% garlic: technically possible, but nobody&rsquo;s going to thank you for it.</p>
-<h4 id="training-three-lightgbm-models">Training three LightGBM models</h4>
-<p>I pool all observations into a single panel and train
-three gradient-boosted tree models:</p>
-<table>
-  <thead>
-      <tr>
-          <th>Model</th>
-          <th>Objective</th>
-          <th>What it predicts</th>
-      </tr>
-  </thead>
-  <tbody>
-      <tr>
-          <td><code>m_mean</code></td>
-          <td>Regression (squared loss)</td>
-          <td>Expected return $\hat{\mu}_i$</td>
-      </tr>
-      <tr>
-          <td><code>m_lo</code></td>
-          <td>Quantile, $\alpha = 0.10$</td>
-          <td>10th percentile $\hat{q}_{i, 0.1}$</td>
-      </tr>
-      <tr>
-          <td><code>m_hi</code></td>
-          <td>Quantile, $\alpha = 0.90$</td>
-          <td>90th percentile $\hat{q}_{i, 0.9}$</td>
-      </tr>
-  </tbody>
-</table>
-<p>Hyperparameters: 300 trees, max_depth=4, learning_rate=0.03,
-num_leaves=15, min_child_samples=30, mild L1/L2 regularization.</p>
-<p><strong>Why three models?</strong> The mean prediction $\hat{\mu}_i$ tells us <em>what
+predictions.</p><p>The four chosen interactions each have an economic story:</p><table><thead><tr><th>Interaction</th><th>Economic intuition</th></tr></thead><tbody><tr><td>$\text{mom}_{3-1} \times \widetilde{\text{VIX}}$</td><td>High short-momentum during high-vol regimes tends to mean-revert</td></tr><tr><td>$\text{mom}_{3-1} \times \widetilde{\Delta\text{US10Y}}$</td><td>Rising rates penalize rate-sensitive picks; flat rates do not</td></tr><tr><td>$\text{mom}_{6-1} \times \widetilde{\Delta\text{USDZAR}}$</td><td>Rand-weakening helps ZAR-exposed picks (resources) and hurts others</td></tr><tr><td>$\sigma \times \widetilde{\text{VIX}}$</td><td>High-vol assets in a high global-vol regime are doubly exposed</td></tr></tbody></table><p>I don&rsquo;t bother including Brent crude, GDP, inflation, or interest rate interactions &mdash; even though I freaking sourced them and tried. In my tests, they added about as much predictive value as a horoscope. Their moves in the model is basically just USD/ZAR and VIX in disguise, so the information was already absorbed. In other words, throwing them in would be like adding extra garlic to a dish that&rsquo;s already 90% garlic: technically possible, but nobody&rsquo;s going to thank you for it.</p><h4 id=training-three-lightgbm-models>Training three LightGBM models</h4><p>I pool all observations into a single panel and train
+three gradient-boosted tree models:</p><table><thead><tr><th>Model</th><th>Objective</th><th>What it predicts</th></tr></thead><tbody><tr><td><code>m_mean</code></td><td>Regression (squared loss)</td><td>Expected return $\hat{\mu}_i$</td></tr><tr><td><code>m_lo</code></td><td>Quantile, $\alpha = 0.10$</td><td>10th percentile $\hat{q}_{i, 0.1}$</td></tr><tr><td><code>m_hi</code></td><td>Quantile, $\alpha = 0.90$</td><td>90th percentile $\hat{q}_{i, 0.9}$</td></tr></tbody></table><p>Hyperparameters: 300 trees, max_depth=4, learning_rate=0.03,
+num_leaves=15, min_child_samples=30, mild L1/L2 regularization.</p><p><strong>Why three models?</strong> The mean prediction $\hat{\mu}_i$ tells us <em>what
 we expect</em> the next monthly return to be. The 10th and 90th percentile
 predictions bracket the range of plausible outcomes. The wider this
 bracket, the less confident the model is about the prediction &mdash; which
-is critical information for the Bayesian step that follows.</p>
-<h3 id="step-2-adaptive-conformal-inference-aci">Step 2: Adaptive Conformal Inference (ACI)</h3>
-<p>A naive 10-90 quantile interval covers 80% of observations <em>only if
+is critical information for the Bayesian step that follows.</p><h3 id=step-2-adaptive-conformal-inference-aci>Step 2: Adaptive Conformal Inference (ACI)</h3><p>A naive 10-90 quantile interval covers 80% of observations <em>only if
 the model is well-calibrated</em>. But monthly returns are
 non-stationary: the model will be over- or under-confident depending
-on regime.</p>
-<p>ACI <a href="https://arxiv.org/abs/2106.00170">(Gibbs &amp; Candès, 2021)</a> adjusts
+on regime.</p><p>ACI <a href=https://arxiv.org/abs/2106.00170>(Gibbs & Candès, 2021)</a> adjusts
 the effective $\alpha$ over time so that long-run coverage matches the
-target:</p>
-$$\alpha_{t+1} = \alpha_t + \gamma \cdot \left( \alpha^{*} - \mathbb{1}\{y_t \notin C_t\} \right)$$<p><strong>What each variable means:</strong></p>
-<ul>
-<li><strong>$\alpha^{*}$</strong> &mdash; target miscoverage rate. We use $\alpha^{*} = 0.20$,
+target:</p>$$\alpha_{t+1} = \alpha_t + \gamma \cdot \left( \alpha^{*} - \mathbb{1}\{y_t \notin C_t\} \right)$$<p><strong>What each variable means:</strong></p><ul><li><strong>$\alpha^{*}$</strong> &mdash; target miscoverage rate. We use $\alpha^{*} = 0.20$,
 i.e. we want the interval to <em>fail</em> 20% of the time on average
-(equivalent to 80% coverage).</li>
-<li><strong>$\alpha_t$</strong> &mdash; the <em>effective</em> miscoverage we&rsquo;re using at time $t$.
-Starts at $\alpha^{*}$ and adapts.</li>
-<li><strong>$\mathbb{1}\{y_t \notin C_t\}$</strong> &mdash; indicator that equals 1 if the
+(equivalent to 80% coverage).</li><li><strong>$\alpha_t$</strong> &mdash; the <em>effective</em> miscoverage we&rsquo;re using at time $t$.
+Starts at $\alpha^{*}$ and adapts.</li><li><strong>$\mathbb{1}\{y_t \notin C_t\}$</strong> &mdash; indicator that equals 1 if the
 actual return $y_t$ fell <em>outside</em> the previous interval $C_t$, and
-0 if it was inside.</li>
-<li><strong>$\gamma$</strong> &mdash; adaptation step size. We use $\gamma = 0.02$. Small
-enough to be smooth, large enough to adapt within a few months.</li>
-<li><strong>The intuition</strong>: if the interval keeps missing ($\mathbb{1} = 1$
+0 if it was inside.</li><li><strong>$\gamma$</strong> &mdash; adaptation step size. We use $\gamma = 0.02$. Small
+enough to be smooth, large enough to adapt within a few months.</li><li><strong>The intuition</strong>: if the interval keeps missing ($\mathbb{1} = 1$
 often), $\alpha_t$ decreases → wider intervals are demanded. If the
 interval keeps covering ($\mathbb{1} = 0$ often), $\alpha_t$
-increases → tighter intervals are allowed.</li>
-</ul>
-<p>The width adjustment $\hat{Q}_t$ is the empirical quantile (at level
+increases → tighter intervals are allowed.</li></ul><p>The width adjustment $\hat{Q}_t$ is the empirical quantile (at level
 $1 - \alpha_t$) of recent <em>non-conformity scores</em> &mdash; how much each
 recent observation fell outside the predicted interval. The calibrated
-interval becomes:</p>
-$$C_t = \left[\hat{q}_{i, 0.1} - \hat{Q}_t,\; \hat{q}_{i, 0.9} + \hat{Q}_t\right]$$<p>This is the interval the next step (Black-Litterman) uses as the
-&ldquo;uncertainty&rdquo; attached to each view.</p>
-<h3 id="step-3-black-litterman-posterior">Step 3: Black-Litterman posterior</h3>
-<p>Raw LightGBM forecasts are noisy &mdash; like a toddler with a drum set. Black‑Litterman steps in like the responsible adult, combining them with a market equilibrium prior in a Bayesian way. Think of it as noise‑canceling headphones for your portfolio: the forecasts are still banging away in the background, but now they&rsquo;re blended with something sensible so you don&rsquo;t lose your mind (or your Sharpe ratio).</p>
-$$\mu_{BL} = \left[(\tau\Sigma)^{-1} + \Omega^{-1}\right]^{-1}
-           \left[(\tau\Sigma)^{-1}\pi + \Omega^{-1}\hat{\mu}\right]$$<p><strong>What each variable means:</strong></p>
-<ul>
-<li><strong>$\mu_{BL}$</strong> &mdash; the posterior expected return vector (one number
-per ETF). This is what Step 4 uses to rank ETFs.</li>
-<li><strong>$\hat{\mu}$</strong> &mdash; the raw mean prediction from LightGBM (the
-&ldquo;views&rdquo;). This is what it <em>think</em> will happen, but it&rsquo;s noisy.</li>
-<li><strong>$\pi = \delta \Sigma w_{\text{mkt}}$</strong> &mdash; the equilibrium return
+interval becomes:</p>$$C_t = \left[\hat{q}_{i, 0.1} - \hat{Q}_t,\; \hat{q}_{i, 0.9} + \hat{Q}_t\right]$$<p>This is the interval the next step (Black-Litterman) uses as the
+&ldquo;uncertainty&rdquo; attached to each view.</p><h3 id=step-3-black-litterman-posterior>Step 3: Black-Litterman posterior</h3><p>Raw LightGBM forecasts are noisy &mdash; like a toddler with a drum set. Black‑Litterman steps in like the responsible adult, combining them with a market equilibrium prior in a Bayesian way. Think of it as noise‑canceling headphones for your portfolio: the forecasts are still banging away in the background, but now they&rsquo;re blended with something sensible so you don&rsquo;t lose your mind (or your Sharpe ratio).</p>$$\mu_{BL} = \left[(\tau\Sigma)^{-1} + \Omega^{-1}\right]^{-1}
+\left[(\tau\Sigma)^{-1}\pi + \Omega^{-1}\hat{\mu}\right]$$<p><strong>What each variable means:</strong></p><ul><li><strong>$\mu_{BL}$</strong> &mdash; the posterior expected return vector (one number
+per ETF). This is what Step 4 uses to rank ETFs.</li><li><strong>$\hat{\mu}$</strong> &mdash; the raw mean prediction from LightGBM (the
+&ldquo;views&rdquo;). This is what it <em>think</em> will happen, but it&rsquo;s noisy.</li><li><strong>$\pi = \delta \Sigma w_{\text{mkt}}$</strong> &mdash; the equilibrium return
 vector. It&rsquo;s what returns <em>would have to be</em> for the current market
-weights to make sense given risk aversion $\delta$.
-<ul>
-<li><strong>$\delta = 2.5$</strong> &mdash; risk-aversion coefficient (standard textbook value)</li>
-<li><strong>$w_{\text{mkt}}$</strong> &mdash; equal-weighted market portfolio (we don&rsquo;t
+weights to make sense given risk aversion $\delta$.<ul><li><strong>$\delta = 2.5$</strong> &mdash; risk-aversion coefficient (standard textbook value)</li><li><strong>$w_{\text{mkt}}$</strong> &mdash; equal-weighted market portfolio (we don&rsquo;t
 have market caps for all ETFs, so equal-weighted is the neutral
-prior)</li>
-</ul>
-</li>
-<li><strong>$\Sigma$</strong> &mdash; the covariance matrix of ETF returns, estimated using
+prior)</li></ul></li><li><strong>$\Sigma$</strong> &mdash; the covariance matrix of ETF returns, estimated using
 the past 36 months with 20% diagonal shrinkage (Ledoit-Wolf style,
-to stabilize the inverse when some pairs lack overlap).</li>
-<li><strong>$\tau = 0.05$</strong> &mdash; scaling parameter. Small $\tau$ means the prior
+to stabilize the inverse when some pairs lack overlap).</li><li><strong>$\tau = 0.05$</strong> &mdash; scaling parameter. Small $\tau$ means the prior
 is &ldquo;tight&rdquo; (we trust the equilibrium more); large $\tau$ means the
-prior is &ldquo;loose&rdquo; (we trust the views more).</li>
-<li><strong>$\Omega = \text{diag}(\text{view\_std}^2)$</strong> &mdash; diagonal matrix of
+prior is &ldquo;loose&rdquo; (we trust the views more).</li><li><strong>$\Omega = \text{diag}(\text{view\_std}^2)$</strong> &mdash; diagonal matrix of
 view uncertainties, derived from the ACI-calibrated interval widths.
 When ACI says &ldquo;the interval is wide right now,&rdquo; $\Omega$ is large
-and the views get down-weighted.</li>
-</ul>
-<p><strong>Intuition</strong>: $\mu_{BL}$ is a precision-weighted average of the prior
+and the views get down-weighted.</li></ul><p><strong>Intuition</strong>: $\mu_{BL}$ is a precision-weighted average of the prior
 $\pi$ and the views $\hat{\mu}$. Where ACI says the views are reliable,
 $\mu_{BL}$ leans toward $\hat{\mu}$. Where ACI says the views are
 unreliable, $\mu_{BL}$ leans toward $\pi$. This is a principled way to
-shrink noisy forecasts toward a sensible baseline.</p>
-<h3 id="step-4-top-k-equal-weight--optional-defensive-sleeve">Step 4: Top-K equal weight (+ optional defensive sleeve)</h3>
-<p>The portfolio is built in two lines. Step 1, rank ETFs by $\mu_{BL}$
-and equal-weight the top $K$:</p>
-$$\text{top}_K = \text{argsort}(-\mu_{BL})[:K], \quad
-w_i^{\text{equity}} = \frac{1}{K} \cdot \mathbb{1}\{i \in \text{top}_K\}$$<p><strong>What each variable means:</strong></p>
-<ul>
-<li><strong>$\mu_{BL}$</strong> &mdash; the Black-Litterman posterior expected returns from Step 3</li>
-<li><strong>$\text{argsort}(-\mu_{BL})$</strong> &mdash; index permutation that sorts ETFs
-from highest expected return to lowest</li>
-<li><strong>$[:K]$</strong> &mdash; keep only the first $K$ (the top performers)</li>
-<li><strong>$\mathbb{1}\{i \in \text{top}_K\}$</strong> &mdash; indicator: 1 if ETF $i$ is
-in the top-$K$, 0 otherwise</li>
-</ul>
-<p>Step 2, optionally, reserve a fraction $d$ for a defensive asset:</p>
-$$w_i^{\text{final}} =
+shrink noisy forecasts toward a sensible baseline.</p><h3 id=step-4-top-k-equal-weight--optional-defensive-sleeve>Step 4: Top-K equal weight (+ optional defensive sleeve)</h3><p>The portfolio is built in two lines. Step 1, rank ETFs by $\mu_{BL}$
+and equal-weight the top $K$:</p>$$\text{top}_K = \text{argsort}(-\mu_{BL})[:K], \quad
+w_i^{\text{equity}} = \frac{1}{K} \cdot \mathbb{1}\{i \in \text{top}_K\}$$<p><strong>What each variable means:</strong></p><ul><li><strong>$\mu_{BL}$</strong> &mdash; the Black-Litterman posterior expected returns from Step 3</li><li><strong>$\text{argsort}(-\mu_{BL})$</strong> &mdash; index permutation that sorts ETFs
+from highest expected return to lowest</li><li><strong>$[:K]$</strong> &mdash; keep only the first $K$ (the top performers)</li><li><strong>$\mathbb{1}\{i \in \text{top}_K\}$</strong> &mdash; indicator: 1 if ETF $i$ is
+in the top-$K$, 0 otherwise</li></ul><p>Step 2, optionally, reserve a fraction $d$ for a defensive asset:</p>$$w_i^{\text{final}} =
 \begin{cases}
 (1 - d) \cdot w_i^{\text{equity}} + d & \text{if } i = \text{STXNAM} \\[4pt]
 (1 - d) \cdot w_i^{\text{equity}} & \text{otherwise}
-\end{cases}$$<p><strong>What each variable means:</strong></p>
-<ul>
-<li><strong>$d$</strong> &mdash; defensive fraction (0%, 25%, or 30% in my three configs)</li>
-<li><strong>STXNAM</strong> &mdash; Satrix S&amp;P Namibia Bond ETF (see &ldquo;Why STXNAM&rdquo; below)</li>
-</ul>
-<h2 id="three-configurations">Three configurations</h2>
-<table>
-  <thead>
-      <tr>
-          <th>Config</th>
-          <th>K</th>
-          <th>Defensive %</th>
-          <th>Description</th>
-      </tr>
-  </thead>
-  <tbody>
-      <tr>
-          <td><strong>TopK</strong></td>
-          <td>10</td>
-          <td>0%</td>
-          <td>Pure aggressive &mdash; top-10 ETFs at 10% each</td>
-      </tr>
-      <tr>
-          <td><strong>TopK8-Def25</strong></td>
-          <td>8</td>
-          <td>25% (STXNAM)</td>
-          <td>Balanced &mdash; top-8 ETFs at 9.375% + 25% Namibian bonds</td>
-      </tr>
-      <tr>
-          <td><strong>TopK-Def30</strong></td>
-          <td>10</td>
-          <td>30% (STXNAM)</td>
-          <td>Defensive &mdash; top-10 ETFs at 7% + 30% Namibian bonds</td>
-      </tr>
-  </tbody>
-</table>
-<p><strong>Why STXNAM?</strong> The Satrix S&amp;P Namibia Bond ETF was chosen as the
+\end{cases}$$<p><strong>What each variable means:</strong></p><ul><li><strong>$d$</strong> &mdash; defensive fraction (0%, 25%, or 30% in my three configs)</li><li><strong>STXNAM</strong> &mdash; Satrix S&amp;P Namibia Bond ETF (see &ldquo;Why STXNAM&rdquo; below)</li></ul><h2 id=three-configurations>Three configurations</h2><table><thead><tr><th>Config</th><th>K</th><th>Defensive %</th><th>Description</th></tr></thead><tbody><tr><td><strong>TopK</strong></td><td>10</td><td>0%</td><td>Pure aggressive &mdash; top-10 ETFs at 10% each</td></tr><tr><td><strong>TopK8-Def25</strong></td><td>8</td><td>25% (STXNAM)</td><td>Balanced &mdash; top-8 ETFs at 9.375% + 25% Namibian bonds</td></tr><tr><td><strong>TopK-Def30</strong></td><td>10</td><td>30% (STXNAM)</td><td>Defensive &mdash; top-10 ETFs at 7% + 30% Namibian bonds</td></tr></tbody></table><p><strong>Why STXNAM?</strong> The Satrix S&amp;P Namibia Bond ETF was chosen as the
 defensive asset over more obvious candidates (STXILB inflation-linked
 bonds, ETFBND nominal bonds, ETFUSD US Treasuries) after head-to-head
-testing. The mechanism:</p>
-<ol>
-<li>Namibia is in the Common Monetary Area &mdash; NAD is pegged 1:1 to ZAR,
-so there&rsquo;s no FX risk for an SA investor.</li>
-<li>Namibian sovereign yields are typically higher than SA yields (lower
-credit rating + similar macro = higher carry).</li>
-<li>Different economic exposure (uranium and diamonds vs SA&rsquo;s gold and
-platinum) provides genuine diversification.</li>
-<li>The macro-conditional model doesn&rsquo;t pick STXNAM directly &mdash; it&rsquo;s not
+testing. The mechanism:</p><ol><li>Namibia is in the Common Monetary Area &mdash; NAD is pegged 1:1 to ZAR,
+so there&rsquo;s no FX risk for an SA investor.</li><li>Namibian sovereign yields are typically higher than SA yields (lower
+credit rating + similar macro = higher carry).</li><li>Different economic exposure (uranium and diamonds vs SA&rsquo;s gold and
+platinum) provides genuine diversification.</li><li>The macro-conditional model doesn&rsquo;t pick STXNAM directly &mdash; it&rsquo;s not
 a momentum-driven asset &mdash; but as a fixed allocation it adds material
-risk-adjusted return.</li>
-</ol>
-<h2 id="results">Results</h2>
-<p>After 23 quarterly rebalances (68 months out of sample, September 2020
-to April 2026):</p>
-<figure>
-<img src="figures/fig_01_cumret.png" style="width:100.0%" alt="Cumulative returns and drawdowns vs benchmarks" />
-<figcaption aria-hidden="true">Cumulative returns and drawdowns vs benchmarks</figcaption>
-</figure>
-<table>
-  <thead>
-      <tr>
-          <th>Strategy</th>
-          <th style="text-align: center">Ann. Return</th>
-          <th style="text-align: center">Ann. Vol</th>
-          <th style="text-align: center">Sharpe</th>
-          <th style="text-align: center">Max DD</th>
-          <th style="text-align: center">Calmar</th>
-          <th style="text-align: center">Win Rate</th>
-      </tr>
-  </thead>
-  <tbody>
-      <tr>
-          <td><strong>TopK (pure)</strong></td>
-          <td style="text-align: center"><strong>19.84%</strong></td>
-          <td style="text-align: center">12.83%</td>
-          <td style="text-align: center"><strong>1.547</strong></td>
-          <td style="text-align: center">-10.77%</td>
-          <td style="text-align: center">1.843</td>
-          <td style="text-align: center">70.6%</td>
-      </tr>
-      <tr>
-          <td><strong>TopK8-Def25 (balanced)</strong></td>
-          <td style="text-align: center"><strong>17.94%</strong></td>
-          <td style="text-align: center">10.50%</td>
-          <td style="text-align: center"><strong>1.708</strong></td>
-          <td style="text-align: center">-7.90%</td>
-          <td style="text-align: center">2.270</td>
-          <td style="text-align: center">67.6%</td>
-      </tr>
-      <tr>
-          <td><strong>TopK-Def30 (defensive)</strong></td>
-          <td style="text-align: center"><strong>17.18%</strong></td>
-          <td style="text-align: center">9.45%</td>
-          <td style="text-align: center"><strong>1.819</strong></td>
-          <td style="text-align: center">-6.36%</td>
-          <td style="text-align: center">2.700</td>
-          <td style="text-align: center">70.6%</td>
-      </tr>
-      <tr>
-          <td><em>Equal-Weight Benchmark</em></td>
-          <td style="text-align: center"><em>9.24%</em></td>
-          <td style="text-align: center"><em>9.23%</em></td>
-          <td style="text-align: center"><em>1.001</em></td>
-          <td style="text-align: center"><em>-10.93%</em></td>
-          <td style="text-align: center"><em>0.846</em></td>
-          <td style="text-align: center"><em>63.2%</em></td>
-      </tr>
-      <tr>
-          <td><em>JSE Top 40 (avg)</em></td>
-          <td style="text-align: center"><em>10.75%</em></td>
-          <td style="text-align: center"><em>13.83%</em></td>
-          <td style="text-align: center"><em>0.777</em></td>
-          <td style="text-align: center"><em>-12.60%</em></td>
-          <td style="text-align: center"><em>0.853</em></td>
-          <td style="text-align: center"><em>61.8%</em></td>
-      </tr>
-  </tbody>
-</table>
-<p>All three configurations dominate both benchmarks across every metric
-that matters:</p>
-<ul>
-<li>vs JSE Top 40: pipeline wins by <strong>+6.4 to +9.1pp</strong> annualized;
-Sharpe is roughly 2 to 2.4x higher; max drawdown is half or less.</li>
-<li>vs Equal-Weight Benchmark: pipeline wins by <strong>+7.9 to +10.6pp</strong> on
-return; Sharpe ratios are 1.5 to 1.8x higher.</li>
-</ul>
-<p>After 23 quarterly rebalances, the pipeline crushed the JSE Top 40 so hard it probably owes it therapy. Annualized returns are +6.4 to +9.1 percentage points higher, Sharpe ratios are double, and drawdowns are half. Compounded, that&rsquo;s turning R1 into R2.46&ndash;R2.79 while the Top 40 limps to R1.78. Translation: my &ldquo;passive investing&rdquo; looks suspiciously like active wizardry.</p>
-<h3 id="the-return-drawdown-trade-off">The return-drawdown trade-off</h3>
-<figure>
-<img src="figures/fig_02_tradeoff.png" style="width:100.0%" alt="Return vs max drawdown with iso-Calmar lines" />
-<figcaption aria-hidden="true">Return vs max drawdown with iso-Calmar lines</figcaption>
-</figure>
-<p>The chart shows the choice cleanly. The diagonal lines are iso-Calmar:
+risk-adjusted return.</li></ol><h2 id=results>Results</h2><p>After 23 quarterly rebalances (68 months out of sample, September 2020
+to April 2026):</p><figure><img src=figures/fig_01_cumret.png style=width:100% alt="Cumulative returns and drawdowns vs benchmarks"><figcaption aria-hidden=true>Cumulative returns and drawdowns vs benchmarks</figcaption></figure><table><thead><tr><th>Strategy</th><th style=text-align:center>Ann. Return</th><th style=text-align:center>Ann. Vol</th><th style=text-align:center>Sharpe</th><th style=text-align:center>Max DD</th><th style=text-align:center>Calmar</th><th style=text-align:center>Win Rate</th></tr></thead><tbody><tr><td><strong>TopK (pure)</strong></td><td style=text-align:center><strong>19.84%</strong></td><td style=text-align:center>12.83%</td><td style=text-align:center><strong>1.547</strong></td><td style=text-align:center>-10.77%</td><td style=text-align:center>1.843</td><td style=text-align:center>70.6%</td></tr><tr><td><strong>TopK8-Def25 (balanced)</strong></td><td style=text-align:center><strong>17.94%</strong></td><td style=text-align:center>10.50%</td><td style=text-align:center><strong>1.708</strong></td><td style=text-align:center>-7.90%</td><td style=text-align:center>2.270</td><td style=text-align:center>67.6%</td></tr><tr><td><strong>TopK-Def30 (defensive)</strong></td><td style=text-align:center><strong>17.18%</strong></td><td style=text-align:center>9.45%</td><td style=text-align:center><strong>1.819</strong></td><td style=text-align:center>-6.36%</td><td style=text-align:center>2.700</td><td style=text-align:center>70.6%</td></tr><tr><td><em>Equal-Weight Benchmark</em></td><td style=text-align:center><em>9.24%</em></td><td style=text-align:center><em>9.23%</em></td><td style=text-align:center><em>1.001</em></td><td style=text-align:center><em>-10.93%</em></td><td style=text-align:center><em>0.846</em></td><td style=text-align:center><em>63.2%</em></td></tr><tr><td><em>JSE Top 40 (avg)</em></td><td style=text-align:center><em>10.75%</em></td><td style=text-align:center><em>13.83%</em></td><td style=text-align:center><em>0.777</em></td><td style=text-align:center><em>-12.60%</em></td><td style=text-align:center><em>0.853</em></td><td style=text-align:center><em>61.8%</em></td></tr></tbody></table><p>All three configurations dominate both benchmarks across every metric
+that matters:</p><ul><li>vs JSE Top 40: pipeline wins by <strong>+6.4 to +9.1pp</strong> annualized;
+Sharpe is roughly 2 to 2.4x higher; max drawdown is half or less.</li><li>vs Equal-Weight Benchmark: pipeline wins by <strong>+7.9 to +10.6pp</strong> on
+return; Sharpe ratios are 1.5 to 1.8x higher.</li></ul><p>After 23 quarterly rebalances, the pipeline crushed the JSE Top 40 so hard it probably owes it therapy. Annualized returns are +6.4 to +9.1 percentage points higher, Sharpe ratios are double, and drawdowns are half. Compounded, that&rsquo;s turning R1 into R2.46&ndash;R2.79 while the Top 40 limps to R1.78. Translation: my &ldquo;passive investing&rdquo; looks suspiciously like active wizardry.</p><h3 id=the-return-drawdown-trade-off>The return-drawdown trade-off</h3><figure><img src=figures/fig_02_tradeoff.png style=width:100% alt="Return vs max drawdown with iso-Calmar lines"><figcaption aria-hidden=true>Return vs max drawdown with iso-Calmar lines</figcaption></figure><p>The chart shows the choice cleanly. The diagonal lines are iso-Calmar:
 points sitting on the same line have proportionally the same
 return-per-drawdown trade-off. The Top 40 sits at Calmar = 0.85. <strong>All
 three of my configurations are above Calmar = 1.8</strong> &mdash; the defensive
 configuration reaches 2.70, which is roughly 3.2x more return per unit
-of drawdown risk than the benchmark.</p>
-<p>The pure TopK gives up some Calmar (1.84) to chase return &mdash; but the
+of drawdown risk than the benchmark.</p><p>The pure TopK gives up some Calmar (1.84) to chase return &mdash; but the
 absolute return advantage is +9.1pp over the Top 40 and +10.6pp over
-the Equal-Weight Benchmark.</p>
-<h3 id="performance-vs-jse-top-40">Performance vs JSE Top 40</h3>
-<figure>
-<img src="figures/fig_04_vs_top40.png" style="width:100.0%" alt="All three configurations vs JSE Top 40" />
-<figcaption aria-hidden="true">All three configurations vs JSE Top 40</figcaption>
-</figure>
-<p>The active-return chart in the bottom panel shows cumulative
+the Equal-Weight Benchmark.</p><h3 id=performance-vs-jse-top-40>Performance vs JSE Top 40</h3><figure><img src=figures/fig_04_vs_top40.png style=width:100% alt="All three configurations vs JSE Top 40"><figcaption aria-hidden=true>All three configurations vs JSE Top 40</figcaption></figure><p>The active-return chart in the bottom panel shows cumulative
 outperformance vs Top 40 across the OOS window. All three configurations
-build a substantial and persistent lead from 2021 onwards.</p>
-<p>The pipeline&rsquo;s compounding edge is most visible during stress periods:</p>
-<ul>
-<li><strong>2022 inflation-shock sell-off</strong> (Jan-Oct 2022): when Top 40 lost
+build a substantial and persistent lead from 2021 onwards.</p><p>The pipeline&rsquo;s compounding edge is most visible during stress periods:</p><ul><li><strong>2022 inflation-shock sell-off</strong> (Jan-Oct 2022): when Top 40 lost
 -7.4%, the macro-conditional defensive config lost only <strong>-1.78%</strong>,
 and the balanced config lost only -2.70%. The macro signals (rising
 rates, elevated VIX) flagged the regime change early and the model
-rotated away from interest-rate-sensitive picks.</li>
-<li><strong>Late-2024 SA-specific correction</strong> (Oct 2024-Feb 2025): when Top
+rotated away from interest-rate-sensitive picks.</li><li><strong>Late-2024 SA-specific correction</strong> (Oct 2024-Feb 2025): when Top
 40 lost -3.2%, the pipeline actually <em>gained</em> between +8.9% and
 +12.0%, because the macro signals were not flashing global risk-off
-even as SA-specific factors weighed on the index.</li>
-</ul>
-<h2 id="macro-impact--empirical-evidence">Macro impact &mdash; empirical evidence</h2>
-<p>Step 1&rsquo;s &ldquo;feature group B&rdquo; describes the <em>mechanics</em> of how macro
+even as SA-specific factors weighed on the index.</li></ul><h2 id=macro-impact--empirical-evidence>Macro impact &mdash; empirical evidence</h2><p>Step 1&rsquo;s &ldquo;feature group B&rdquo; describes the <em>mechanics</em> of how macro
 interactions enter the model. This section quantifies the
-<em>contribution</em> of those features to the final results.</p>
-<p>To isolate the macro contribution cleanly, we re-run the entire
+<em>contribution</em> of those features to the final results.</p><p>To isolate the macro contribution cleanly, we re-run the entire
 pipeline <em>without</em> the 4 macro interaction features (using only the
 5 ETF-level features) on the same 68-month OOS window. Steps 2-4 are
 identical; the only difference is which columns are in the LightGBM
-panel.</p>
-<h3 id="before-vs-after--same-oos-window">Before vs after &mdash; same OOS window</h3>
-<table>
-  <thead>
-      <tr>
-          <th>Config</th>
-          <th>Variant</th>
-          <th style="text-align: center">Ann. Return</th>
-          <th style="text-align: center">Ann. Vol</th>
-          <th style="text-align: center">Sharpe</th>
-          <th style="text-align: center">Max DD</th>
-          <th style="text-align: center">Calmar</th>
-      </tr>
-  </thead>
-  <tbody>
-      <tr>
-          <td><strong>TopK</strong></td>
-          <td>Baseline (no macro)</td>
-          <td style="text-align: center">15.88%</td>
-          <td style="text-align: center">15.31%</td>
-          <td style="text-align: center">1.037</td>
-          <td style="text-align: center">-23.47%</td>
-          <td style="text-align: center">0.677</td>
-      </tr>
-      <tr>
-          <td></td>
-          <td><strong>With macro interactions</strong></td>
-          <td style="text-align: center"><strong>19.84%</strong></td>
-          <td style="text-align: center"><strong>12.83%</strong></td>
-          <td style="text-align: center"><strong>1.547</strong></td>
-          <td style="text-align: center"><strong>-10.77%</strong></td>
-          <td style="text-align: center"><strong>1.843</strong></td>
-      </tr>
-      <tr>
-          <td></td>
-          <td>Δ</td>
-          <td style="text-align: center"><strong>+3.96pp</strong></td>
-          <td style="text-align: center">-2.48pp</td>
-          <td style="text-align: center"><strong>+0.510</strong></td>
-          <td style="text-align: center"><strong>+12.70pp</strong></td>
-          <td style="text-align: center"><strong>+1.166</strong></td>
-      </tr>
-      <tr>
-          <td><strong>TopK8-Def25</strong></td>
-          <td>Baseline (no macro)</td>
-          <td style="text-align: center">15.63%</td>
-          <td style="text-align: center">12.86%</td>
-          <td style="text-align: center">1.216</td>
-          <td style="text-align: center">-17.52%</td>
-          <td style="text-align: center">0.892</td>
-      </tr>
-      <tr>
-          <td></td>
-          <td><strong>With macro interactions</strong></td>
-          <td style="text-align: center"><strong>17.94%</strong></td>
-          <td style="text-align: center"><strong>10.50%</strong></td>
-          <td style="text-align: center"><strong>1.708</strong></td>
-          <td style="text-align: center"><strong>-7.90%</strong></td>
-          <td style="text-align: center"><strong>2.270</strong></td>
-      </tr>
-      <tr>
-          <td></td>
-          <td>Δ</td>
-          <td style="text-align: center"><strong>+2.31pp</strong></td>
-          <td style="text-align: center">-2.36pp</td>
-          <td style="text-align: center"><strong>+0.492</strong></td>
-          <td style="text-align: center"><strong>+9.62pp</strong></td>
-          <td style="text-align: center"><strong>+1.378</strong></td>
-      </tr>
-      <tr>
-          <td><strong>TopK-Def30</strong></td>
-          <td>Baseline (no macro)</td>
-          <td style="text-align: center">14.52%</td>
-          <td style="text-align: center">11.36%</td>
-          <td style="text-align: center">1.278</td>
-          <td style="text-align: center">-15.51%</td>
-          <td style="text-align: center">0.936</td>
-      </tr>
-      <tr>
-          <td></td>
-          <td><strong>With macro interactions</strong></td>
-          <td style="text-align: center"><strong>17.18%</strong></td>
-          <td style="text-align: center"><strong>9.45%</strong></td>
-          <td style="text-align: center"><strong>1.819</strong></td>
-          <td style="text-align: center"><strong>-6.36%</strong></td>
-          <td style="text-align: center"><strong>2.700</strong></td>
-      </tr>
-      <tr>
-          <td></td>
-          <td>Δ</td>
-          <td style="text-align: center"><strong>+2.66pp</strong></td>
-          <td style="text-align: center">-1.91pp</td>
-          <td style="text-align: center"><strong>+0.541</strong></td>
-          <td style="text-align: center"><strong>+9.15pp</strong></td>
-          <td style="text-align: center"><strong>+1.764</strong></td>
-      </tr>
-  </tbody>
-</table>
-<h3 id="where-the-gains-come-from--stress-regimes">Where the gains come from &mdash; stress regimes</h3>
-<p>The improvement is concentrated in stress regimes, which is exactly
-what regime-conditional features should deliver:</p>
-<table>
-  <thead>
-      <tr>
-          <th>Period</th>
-          <th style="text-align: center">TopK Baseline</th>
-          <th style="text-align: center">TopK Macro</th>
-          <th style="text-align: center">TopK8-Def25 Baseline</th>
-          <th style="text-align: center">TopK8-Def25 Macro</th>
-          <th style="text-align: center">Top 40</th>
-      </tr>
-  </thead>
-  <tbody>
-      <tr>
-          <td>2022 rate shock (Jan-Oct)</td>
-          <td style="text-align: center">-18.31%</td>
-          <td style="text-align: center"><strong>-5.60%</strong></td>
-          <td style="text-align: center">-13.29%</td>
-          <td style="text-align: center"><strong>-2.70%</strong></td>
-          <td style="text-align: center">-7.41%</td>
-      </tr>
-      <tr>
-          <td>Late 2024 SA correction (Oct-Feb)</td>
-          <td style="text-align: center">+1.71%</td>
-          <td style="text-align: center"><strong>+11.99%</strong></td>
-          <td style="text-align: center">+1.32%</td>
-          <td style="text-align: center"><strong>+10.31%</strong></td>
-          <td style="text-align: center">-3.19%</td>
-      </tr>
-  </tbody>
-</table>
-<p>The 2022 rate shock is the cleanest test. The baseline pipeline lost
+panel.</p><h3 id=before-vs-after--same-oos-window>Before vs after &mdash; same OOS window</h3><table><thead><tr><th>Config</th><th>Variant</th><th style=text-align:center>Ann. Return</th><th style=text-align:center>Ann. Vol</th><th style=text-align:center>Sharpe</th><th style=text-align:center>Max DD</th><th style=text-align:center>Calmar</th></tr></thead><tbody><tr><td><strong>TopK</strong></td><td>Baseline (no macro)</td><td style=text-align:center>15.88%</td><td style=text-align:center>15.31%</td><td style=text-align:center>1.037</td><td style=text-align:center>-23.47%</td><td style=text-align:center>0.677</td></tr><tr><td></td><td><strong>With macro interactions</strong></td><td style=text-align:center><strong>19.84%</strong></td><td style=text-align:center><strong>12.83%</strong></td><td style=text-align:center><strong>1.547</strong></td><td style=text-align:center><strong>-10.77%</strong></td><td style=text-align:center><strong>1.843</strong></td></tr><tr><td></td><td>Δ</td><td style=text-align:center><strong>+3.96pp</strong></td><td style=text-align:center>-2.48pp</td><td style=text-align:center><strong>+0.510</strong></td><td style=text-align:center><strong>+12.70pp</strong></td><td style=text-align:center><strong>+1.166</strong></td></tr><tr><td><strong>TopK8-Def25</strong></td><td>Baseline (no macro)</td><td style=text-align:center>15.63%</td><td style=text-align:center>12.86%</td><td style=text-align:center>1.216</td><td style=text-align:center>-17.52%</td><td style=text-align:center>0.892</td></tr><tr><td></td><td><strong>With macro interactions</strong></td><td style=text-align:center><strong>17.94%</strong></td><td style=text-align:center><strong>10.50%</strong></td><td style=text-align:center><strong>1.708</strong></td><td style=text-align:center><strong>-7.90%</strong></td><td style=text-align:center><strong>2.270</strong></td></tr><tr><td></td><td>Δ</td><td style=text-align:center><strong>+2.31pp</strong></td><td style=text-align:center>-2.36pp</td><td style=text-align:center><strong>+0.492</strong></td><td style=text-align:center><strong>+9.62pp</strong></td><td style=text-align:center><strong>+1.378</strong></td></tr><tr><td><strong>TopK-Def30</strong></td><td>Baseline (no macro)</td><td style=text-align:center>14.52%</td><td style=text-align:center>11.36%</td><td style=text-align:center>1.278</td><td style=text-align:center>-15.51%</td><td style=text-align:center>0.936</td></tr><tr><td></td><td><strong>With macro interactions</strong></td><td style=text-align:center><strong>17.18%</strong></td><td style=text-align:center><strong>9.45%</strong></td><td style=text-align:center><strong>1.819</strong></td><td style=text-align:center><strong>-6.36%</strong></td><td style=text-align:center><strong>2.700</strong></td></tr><tr><td></td><td>Δ</td><td style=text-align:center><strong>+2.66pp</strong></td><td style=text-align:center>-1.91pp</td><td style=text-align:center><strong>+0.541</strong></td><td style=text-align:center><strong>+9.15pp</strong></td><td style=text-align:center><strong>+1.764</strong></td></tr></tbody></table><h3 id=where-the-gains-come-from--stress-regimes>Where the gains come from &mdash; stress regimes</h3><p>The improvement is concentrated in stress regimes, which is exactly
+what regime-conditional features should deliver:</p><table><thead><tr><th>Period</th><th style=text-align:center>TopK Baseline</th><th style=text-align:center>TopK Macro</th><th style=text-align:center>TopK8-Def25 Baseline</th><th style=text-align:center>TopK8-Def25 Macro</th><th style=text-align:center>Top 40</th></tr></thead><tbody><tr><td>2022 rate shock (Jan-Oct)</td><td style=text-align:center>-18.31%</td><td style=text-align:center><strong>-5.60%</strong></td><td style=text-align:center>-13.29%</td><td style=text-align:center><strong>-2.70%</strong></td><td style=text-align:center>-7.41%</td></tr><tr><td>Late 2024 SA correction (Oct-Feb)</td><td style=text-align:center>+1.71%</td><td style=text-align:center><strong>+11.99%</strong></td><td style=text-align:center>+1.32%</td><td style=text-align:center><strong>+10.31%</strong></td><td style=text-align:center>-3.19%</td></tr></tbody></table><p>The 2022 rate shock is the cleanest test. The baseline pipeline lost
 almost three times what the JSE Top 40 lost (-18.31% vs -7.41%): its
 top-momentum picks were rate-sensitive growth ETFs that crashed when
 yields spiked. The macro version reduced these losses by 10-13
@@ -1035,386 +194,50 @@ of the rotation. The mechanism is exactly the one described in Step 1
 &mdash; rising US 10y yields produced a positive $\widetilde{\Delta\text{US10Y}}$
 z-score, which combined with positive momentum produced large positive
 $\text{mom3\_x\_us10y}$ values, which LightGBM had learned to associate
-with mean reversion.</p>
-<p>The late-2024 SA-specific correction is the inverse test. SA-only
+with mean reversion.</p><p>The late-2024 SA-specific correction is the inverse test. SA-only
 factors weighed on the JSE Top 40 (-3.19%) but global macro signals
 were <em>not</em> flashing risk-off &mdash; VIX was moderate, US rates were stable.
 The macro version correctly stayed exposed to globally-driven themes
 and <em>gained</em> between +8.88% and +11.99%, while the baseline pipeline
-captured almost none of the upside (+1.32% to +1.78%).</p>
-<h3 id="holdings--the-balanced-configuration">Holdings &mdash; the balanced configuration</h3>
-<figure>
-<img src="figures/fig_03_selection.png" style="width:100.0%" alt="TopK8-Def25 selection grid" />
-<figcaption aria-hidden="true">TopK8-Def25 selection grid</figcaption>
-</figure>
-<p>The selection grid shows the model rotating through high-conviction
+captured almost none of the upside (+1.32% to +1.78%).</p><h3 id=holdings--the-balanced-configuration>Holdings &mdash; the balanced configuration</h3><figure><img src=figures/fig_03_selection.png style=width:100% alt="TopK8-Def25 selection grid"><figcaption aria-hidden=true>TopK8-Def25 selection grid</figcaption></figure><p>The selection grid shows the model rotating through high-conviction
 themes: US Information Tech (<code>ETF5IT</code>, <code>STXNDQ</code>), Indian equity
 (<code>STXINDI</code>), South African resources (<code>STXRES</code>, <code>STXIND</code>), the 4IR
 theme (<code>SYG4IR</code>), and select South African REITs (<code>CSPROP</code>, <code>STXPRO</code>).
-STXNAM is pinned at 25% throughout.</p>
-<p>The 8 equity slots rotate substantially &mdash; typical turnover of 3-5
-holdings per quarter. The pipeline is concentrated and active.</p>
-<h2 id="why-this-works--and-what-the-trade-offs-are">Why this works &mdash; and what the trade-offs are</h2>
-<p>The architecture has a clean theoretical justification. Three steps
-of careful work to produce a robust forecast posterior.</p>
-<ul>
-<li>
-<p><strong>Why TopK works:</strong> Because sometimes the smartest move is just &ldquo;sort and slice.&rdquo; Fancy optimizers love to overcomplicate things, but in small‑data land, simple beats clever.</p>
-</li>
-<li>
-<p><strong>Why the defensive sleeve helps:</strong> STXNAM bonds are like bubble wrap for your portfolio &mdash; they cushion the falls without smothering the gains.</p>
-</li>
-<li>
-<p><strong>Why macro interactions help:</strong> A 5% rally when VIX is 15 is a victory lap; the same rally when VIX is 35 is a panic sprint. The model needs to know the difference.</p>
-</li>
-<li>
-<p><strong>Weaknesses:</strong> It&rsquo;s still equity‑tilted, so if the world goes full risk‑off, expect some bruises.</p>
-</li>
-<li>
-<p><strong>Limitations:</strong> The macro z‑scores need about six months to &ldquo;learn the vibe,&rdquo; so brand‑new regimes catch the model flat‑footed. The OOS window (Sep 2020 - Apr 2026) does NOT include the March 2020
-COVID crash. This is simply due to data limitations.</p>
-</li>
-<li>
-<p><strong>Proof it works:</strong> In the 2022 rate shock, the defensive configs lost only ~‑2% while the JSE Top 40 dropped ‑7%. That&rsquo;s not just surviving the storm &mdash; that&rsquo;s sipping coffee while the neighbors&rsquo; roof blows off.</p>
-</li>
-</ul>
-<h2 id="what-i-tested-that-didnt-make-the-cut">What I tested that didn&rsquo;t make the cut</h2>
-<p>I have spent an insane amount of hours on this as the below attempts might show. So much in fact, my PC might join a union. I do have a day job so I can&rsquo;t formally write-up everything I tried but here is the list with high-level results:</p>
-<ul>
-<li><strong>CVaR-MILP optimization</strong> &mdash; too
-conservative, gave away ~5pp of return.</li>
-<li><strong>Standalone macro features</strong> (raw levels and changes in the
+STXNAM is pinned at 25% throughout.</p><p>The 8 equity slots rotate substantially &mdash; typical turnover of 3-5
+holdings per quarter. The pipeline is concentrated and active.</p><h2 id=why-this-works--and-what-the-trade-offs-are>Why this works &mdash; and what the trade-offs are</h2><p>The architecture has a clean theoretical justification. Three steps
+of careful work to produce a robust forecast posterior.</p><ul><li><p><strong>Why TopK works:</strong> Because sometimes the smartest move is just &ldquo;sort and slice.&rdquo; Fancy optimizers love to overcomplicate things, but in small‑data land, simple beats clever.</p></li><li><p><strong>Why the defensive sleeve helps:</strong> STXNAM bonds are like bubble wrap for your portfolio &mdash; they cushion the falls without smothering the gains.</p></li><li><p><strong>Why macro interactions help:</strong> A 5% rally when VIX is 15 is a victory lap; the same rally when VIX is 35 is a panic sprint. The model needs to know the difference.</p></li><li><p><strong>Weaknesses:</strong> It&rsquo;s still equity‑tilted, so if the world goes full risk‑off, expect some bruises.</p></li><li><p><strong>Limitations:</strong> The macro z‑scores need about six months to &ldquo;learn the vibe,&rdquo; so brand‑new regimes catch the model flat‑footed. The OOS window (Sep 2020 - Apr 2026) does NOT include the March 2020
+COVID crash. This is simply due to data limitations.</p></li><li><p><strong>Proof it works:</strong> In the 2022 rate shock, the defensive configs lost only ~‑2% while the JSE Top 40 dropped ‑7%. That&rsquo;s not just surviving the storm &mdash; that&rsquo;s sipping coffee while the neighbors&rsquo; roof blows off.</p></li></ul><h2 id=what-i-tested-that-didnt-make-the-cut>What I tested that didn&rsquo;t make the cut</h2><p>I have spent an insane amount of hours on this as the below attempts might show. So much in fact, my PC might join a union. I do have a day job so I can&rsquo;t formally write-up everything I tried but here is the list with high-level results:</p><ul><li><strong>CVaR-MILP optimization</strong> &mdash; too
+conservative, gave away ~5pp of return.</li><li><strong>Standalone macro features</strong> (raw levels and changes in the
 feature panel) &mdash; <em>hurt</em> returns by 2.6-4.3pp because they&rsquo;re constant
-across ETFs and crowd out cross-sectional signals.</li>
-<li><strong>Monthly rebalancing</strong> (vs quarterly) &mdash; <em>hurt</em> returns by 0.8-1.6pp
-in choppy regimes; the whipsaw cost exceeded the rotation gain.</li>
-<li><strong>Multi-seed LightGBM ensembling</strong> &mdash; improved win rate slightly but
-cost return and drawdown.</li>
-<li><strong>Cross-sectional target demeaning</strong> &mdash; destroyed the magnitude
-signal that drives selection.</li>
-<li><strong>Volatility-targeting overlay</strong> &mdash; clean trade-off but no Sharpe gain.</li>
-<li><strong>Market trend filter</strong> (12-month) &mdash; too slow; triggered once
-un-productively.</li>
-<li><strong>Adaptive defensive sleeve</strong> (scales with realized vol) &mdash; added
-complexity without improving outcomes.</li>
-<li><strong>Different K values</strong> (number of ETFs allowed in the portfolio) &mdash; K=8 and K=10 are clear
-sweet spots; further extremes lose Sharpe without return gains.</li>
-<li><strong>Ridge / Random Forest / stacked mean-models</strong> &mdash; LightGBM is
-genuinely the right architecture for this conditional-on-regime signal.</li>
-<li><strong>Skipping Black-Litterman entirely</strong> &mdash; return drops 4-5pp; the
-Bayesian shrinkage genuinely helps.</li>
-<li><strong>Alternative defensive assets</strong> &mdash; ETFUSD (US Treasuries via ZAR)
+across ETFs and crowd out cross-sectional signals.</li><li><strong>Monthly rebalancing</strong> (vs quarterly) &mdash; <em>hurt</em> returns by 0.8-1.6pp
+in choppy regimes; the whipsaw cost exceeded the rotation gain.</li><li><strong>Multi-seed LightGBM ensembling</strong> &mdash; improved win rate slightly but
+cost return and drawdown.</li><li><strong>Cross-sectional target demeaning</strong> &mdash; destroyed the magnitude
+signal that drives selection.</li><li><strong>Volatility-targeting overlay</strong> &mdash; clean trade-off but no Sharpe gain.</li><li><strong>Market trend filter</strong> (12-month) &mdash; too slow; triggered once
+un-productively.</li><li><strong>Adaptive defensive sleeve</strong> (scales with realized vol) &mdash; added
+complexity without improving outcomes.</li><li><strong>Different K values</strong> (number of ETFs allowed in the portfolio) &mdash; K=8 and K=10 are clear
+sweet spots; further extremes lose Sharpe without return gains.</li><li><strong>Ridge / Random Forest / stacked mean-models</strong> &mdash; LightGBM is
+genuinely the right architecture for this conditional-on-regime signal.</li><li><strong>Skipping Black-Litterman entirely</strong> &mdash; return drops 4-5pp; the
+Bayesian shrinkage genuinely helps.</li><li><strong>Alternative defensive assets</strong> &mdash; ETFUSD (US Treasuries via ZAR)
 <em>hurt</em> performance significantly; INCOME (10X actively managed) was
-middling. STXNAM (Namibian bonds) was the decisive upgrade.</li>
-</ul>
-<p>The negative results are themselves informative. The architechture is at
+middling. STXNAM (Namibian bonds) was the decisive upgrade.</li></ul><p>The negative results are themselves informative. The architechture is at
 a sensible local optimum: more complexity, more features, more
-elaborate optimization, or fancier models all hurt rather than help.</p>
-<h2 id="whats-left-worth-exploring">What&rsquo;s left worth exploring</h2>
-<p>Two genuinely untested levers remain.</p>
-<ul>
-<li>
-<p><strong>Universe expansion to JSE-listed and international ETFs not just TFSA eligible ones</strong></p>
-</li>
-<li>
-<p><strong>Sector-aware concentration limits</strong></p>
-</li>
-</ul>
-<h2 id="do-i-actually-use-this">Do I actually use this?</h2>
-<p>Sort of.I have been tinkering with this idea for longer than I have had a TFSA. Quant stuff is my passion, but I don&rsquo;t worship models like they&rsquo;re crystal balls. For the past two years I&rsquo;ve used this framework as one ingredient in my ETF recipe &mdash; with a few tilts and tweaks &mdash; because blind faith belongs in religion, not portfolio construction.</p>
-</div>
-    </article>
-  </main>
-  
-    <div
-  class="
-    col-span-3 lg:col-span-1
-  "
->
-  
-  
-      
-      
-  <div
-    class="bg-white rounded-xl shadow-sm mb-4 overflow-hidden dark:bg-warmgray-900"
-  >
-    <div class="px-5 py-4 border-b border-gray-100 dark:border-warmgray-700">
-      <p
-        class="text-xs font-semibold uppercase tracking-widest text-gray-500 dark:text-gray-400"
-      >
-        Categories
-      </p>
-    </div>
-    <div class="divide-y divide-gray-100 dark:divide-warmgray-700">
-      
-        <a
-          class="flex items-center justify-between px-5 py-3 hover:bg-gray-50 dark:hover:bg-warmgray-800 transition-colors duration-150 text-sm text-gray-700 dark:text-gray-300"
-          href="http://localhost:1313//categories/banking"
-          ><span>Banking</span
-          ><span class="text-xs text-gray-400 dark:text-gray-500"
-            >1</span
-          ></a
-        >
-      
-        <a
-          class="flex items-center justify-between px-5 py-3 hover:bg-gray-50 dark:hover:bg-warmgray-800 transition-colors duration-150 text-sm text-gray-700 dark:text-gray-300"
-          href="http://localhost:1313//categories/etf"
-          ><span>Etf</span
-          ><span class="text-xs text-gray-400 dark:text-gray-500"
-            >2</span
-          ></a
-        >
-      
-        <a
-          class="flex items-center justify-between px-5 py-3 hover:bg-gray-50 dark:hover:bg-warmgray-800 transition-colors duration-150 text-sm text-gray-700 dark:text-gray-300"
-          href="http://localhost:1313//categories/finance"
-          ><span>Finance</span
-          ><span class="text-xs text-gray-400 dark:text-gray-500"
-            >2</span
-          ></a
-        >
-      
-        <a
-          class="flex items-center justify-between px-5 py-3 hover:bg-gray-50 dark:hover:bg-warmgray-800 transition-colors duration-150 text-sm text-gray-700 dark:text-gray-300"
-          href="http://localhost:1313//categories/fixed-income"
-          ><span>Fixed income</span
-          ><span class="text-xs text-gray-400 dark:text-gray-500"
-            >2</span
-          ></a
-        >
-      
-        <a
-          class="flex items-center justify-between px-5 py-3 hover:bg-gray-50 dark:hover:bg-warmgray-800 transition-colors duration-150 text-sm text-gray-700 dark:text-gray-300"
-          href="http://localhost:1313//categories/machine-learning"
-          ><span>Machine learning</span
-          ><span class="text-xs text-gray-400 dark:text-gray-500"
-            >3</span
-          ></a
-        >
-      
-        <a
-          class="flex items-center justify-between px-5 py-3 hover:bg-gray-50 dark:hover:bg-warmgray-800 transition-colors duration-150 text-sm text-gray-700 dark:text-gray-300"
-          href="http://localhost:1313//categories/optimisation-alm"
-          ><span>Optimisation alm</span
-          ><span class="text-xs text-gray-400 dark:text-gray-500"
-            >1</span
-          ></a
-        >
-      
-        <a
-          class="flex items-center justify-between px-5 py-3 hover:bg-gray-50 dark:hover:bg-warmgray-800 transition-colors duration-150 text-sm text-gray-700 dark:text-gray-300"
-          href="http://localhost:1313//categories/portfolio-optimization"
-          ><span>Portfolio optimization</span
-          ><span class="text-xs text-gray-400 dark:text-gray-500"
-            >1</span
-          ></a
-        >
-      
-        <a
-          class="flex items-center justify-between px-5 py-3 hover:bg-gray-50 dark:hover:bg-warmgray-800 transition-colors duration-150 text-sm text-gray-700 dark:text-gray-300"
-          href="http://localhost:1313//categories/quant-finance"
-          ><span>Quant finance</span
-          ><span class="text-xs text-gray-400 dark:text-gray-500"
-            >1</span
-          ></a
-        >
-      
-        <a
-          class="flex items-center justify-between px-5 py-3 hover:bg-gray-50 dark:hover:bg-warmgray-800 transition-colors duration-150 text-sm text-gray-700 dark:text-gray-300"
-          href="http://localhost:1313//categories/yield-curve"
-          ><span>Yield curve</span
-          ><span class="text-xs text-gray-400 dark:text-gray-500"
-            >2</span
-          ></a
-        >
-      
-    </div>
-  </div>
-
-
-    
-      
-      
-
-    
-      
-      
-
-  <div
-    class="bg-white rounded-xl shadow-sm mb-4 overflow-hidden dark:bg-warmgray-900"
-  >
-    <div class="px-5 py-4 border-b border-gray-100 dark:border-warmgray-700">
-      <p
-        class="text-xs font-semibold uppercase tracking-widest text-gray-500 dark:text-gray-400"
-      >
-        Recent Posts
-      </p>
-    </div>
-    <div class="divide-y divide-gray-100 dark:divide-warmgray-700">
-        <a
-          href="/posts/fc-yields-macro/"
-          class="block px-5 py-3 hover:bg-gray-50 dark:hover:bg-warmgray-800 transition-colors duration-150"
-        >
-          <p
-            class="text-sm font-medium text-gray-900 dark:text-white leading-snug mb-1"
-          >
-            Do Macro Variables Help Forecast the Yield Curve? Three Honest Experiments
-          </p>
-          <time
-            class="flex items-center text-xs text-gray-500 dark:text-gray-500 gap-1"
-            ><span
-      class="inline-flex align-middle pb-0.5 text-xs"
-      ><svg xmlns="http://www.w3.org/2000/svg" height="1em" viewBox="0 -960 960 960" width="1em" fill="currentColor"><path d="m612-292 56-56-148-148v-184h-80v216l172 172ZM480-80q-83 0-156-31.5T197-197q-54-54-85.5-127T80-480q0-83 31.5-156T197-763q54-54 127-85.5T480-880q83 0 156 31.5T763-763q54 54 85.5 127T880-480q0 83-31.5 156T763-197q-54 54-127 85.5T480-80Zm0-400Zm0 320q133 0 226.5-93.5T800-480q0-133-93.5-226.5T480-800q-133 0-226.5 93.5T160-480q0 133 93.5 226.5T480-160Z"/></svg></span
-    ></span
->
-2026/06/11</time
-          >
-        </a>
-        <a
-          href="/posts/ee-etf-tracker/"
-          class="block px-5 py-3 hover:bg-gray-50 dark:hover:bg-warmgray-800 transition-colors duration-150"
-        >
-          <p
-            class="text-sm font-medium text-gray-900 dark:text-white leading-snug mb-1"
-          >
-            Easy Equities TFSA ETF Analytics
-          </p>
-          <time
-            class="flex items-center text-xs text-gray-500 dark:text-gray-500 gap-1"
-            ><span
-      class="inline-flex align-middle pb-0.5 text-xs"
-      ><svg xmlns="http://www.w3.org/2000/svg" height="1em" viewBox="0 -960 960 960" width="1em" fill="currentColor"><path d="m612-292 56-56-148-148v-184h-80v216l172 172ZM480-80q-83 0-156-31.5T197-197q-54-54-85.5-127T80-480q0-83 31.5-156T197-763q54-54 127-85.5T480-880q83 0 156 31.5T763-763q54 54 85.5 127T880-480q0 83-31.5 156T763-197q-54 54-127 85.5T480-80Zm0-400Zm0 320q133 0 226.5-93.5T800-480q0-133-93.5-226.5T480-800q-133 0-226.5 93.5T160-480q0 133 93.5 226.5T480-160Z"/></svg></span
-    ></span
->
-2026/05/31</time
-          >
-        </a>
-        <a
-          href="/posts/fc-yields/"
-          class="block px-5 py-3 hover:bg-gray-50 dark:hover:bg-warmgray-800 transition-colors duration-150"
-        >
-          <p
-            class="text-sm font-medium text-gray-900 dark:text-white leading-snug mb-1"
-          >
-            Forecasting South African Government Bond Yields
-          </p>
-          <time
-            class="flex items-center text-xs text-gray-500 dark:text-gray-500 gap-1"
-            ><span
-      class="inline-flex align-middle pb-0.5 text-xs"
-      ><svg xmlns="http://www.w3.org/2000/svg" height="1em" viewBox="0 -960 960 960" width="1em" fill="currentColor"><path d="m612-292 56-56-148-148v-184h-80v216l172 172ZM480-80q-83 0-156-31.5T197-197q-54-54-85.5-127T80-480q0-83 31.5-156T197-763q54-54 127-85.5T480-880q83 0 156 31.5T763-763q54 54 85.5 127T880-480q0 83-31.5 156T763-197q-54 54-127 85.5T480-80Zm0-400Zm0 320q133 0 226.5-93.5T800-480q0-133-93.5-226.5T480-800q-133 0-226.5 93.5T160-480q0 133 93.5 226.5T480-160Z"/></svg></span
-    ></span
->
-2026/05/31</time
-          >
-        </a>
-        <a
-          href="/posts/etf-optim/"
-          class="block px-5 py-3 hover:bg-gray-50 dark:hover:bg-warmgray-800 transition-colors duration-150"
-        >
-          <p
-            class="text-sm font-medium text-gray-900 dark:text-white leading-snug mb-1"
-          >
-            ML-Driven TFSA ETF Portfolio Optimization for EE
-          </p>
-          <time
-            class="flex items-center text-xs text-gray-500 dark:text-gray-500 gap-1"
-            ><span
-      class="inline-flex align-middle pb-0.5 text-xs"
-      ><svg xmlns="http://www.w3.org/2000/svg" height="1em" viewBox="0 -960 960 960" width="1em" fill="currentColor"><path d="m612-292 56-56-148-148v-184h-80v216l172 172ZM480-80q-83 0-156-31.5T197-197q-54-54-85.5-127T80-480q0-83 31.5-156T197-763q54-54 127-85.5T480-880q83 0 156 31.5T763-763q54 54 85.5 127T880-480q0 83-31.5 156T763-197q-54 54-127 85.5T480-80Zm0-400Zm0 320q133 0 226.5-93.5T800-480q0-133-93.5-226.5T480-800q-133 0-226.5 93.5T160-480q0 133 93.5 226.5T480-160Z"/></svg></span
-    ></span
->
-2026/05/17</time
-          >
-        </a>
-        <a
-          href="/posts/alm-optim/"
-          class="block px-5 py-3 hover:bg-gray-50 dark:hover:bg-warmgray-800 transition-colors duration-150"
-        >
-          <p
-            class="text-sm font-medium text-gray-900 dark:text-white leading-snug mb-1"
-          >
-            Balance Sheet Optimisation Under South African Regulatory Constraints
-          </p>
-          <time
-            class="flex items-center text-xs text-gray-500 dark:text-gray-500 gap-1"
-            ><span
-      class="inline-flex align-middle pb-0.5 text-xs"
-      ><svg xmlns="http://www.w3.org/2000/svg" height="1em" viewBox="0 -960 960 960" width="1em" fill="currentColor"><path d="m612-292 56-56-148-148v-184h-80v216l172 172ZM480-80q-83 0-156-31.5T197-197q-54-54-85.5-127T80-480q0-83 31.5-156T197-763q54-54 127-85.5T480-880q83 0 156 31.5T763-763q54 54 85.5 127T880-480q0 83-31.5 156T763-197q-54 54-127 85.5T480-80Zm0-400Zm0 320q133 0 226.5-93.5T800-480q0-133-93.5-226.5T480-800q-133 0-226.5 93.5T160-480q0 133 93.5 226.5T480-160Z"/></svg></span
-    ></span
->
-2025/12/22</time
-          >
-        </a>
-    </div>
-  </div>
-
-    
-  
-</div>
-
-  
-</div>
-</div>
-      </div><footer class="bg-gray-800 text-white p-6">
-  
-  <div class="container max-w-7xl mr-auto ml-auto">
-    <p>
-      &copy;
-      2026
-      <a href="http://localhost:1313/" class="duration-200 hover:opacity-50"
-        >Rossouw van Jaarsveld | Overfit and Chill</a
-      >
-    </p>
-    <p>
-      Powered by
-      <a href="https://gohugo.io/" class="duration-200 hover:opacity-50">Hugo</a
-      >, Theme
-      <a
-        href="https://github.com/opera7133/Blonde"
-        class="duration-200 hover:opacity-50"
-        >Blonde</a
-      >.
-    </p>
-  </div>
-  
-  <script>
-    function setDarkModeIcons(isDark) {
-      var moonIcon1 = document.getElementById("icon-moon");
-      var sunIcon1 = document.getElementById("icon-sun");
-      var moonIcon2 = document.getElementById("icon2-moon");
-      var sunIcon2 = document.getElementById("icon2-sun");
-      if (moonIcon1) moonIcon1.classList.toggle("hidden", isDark);
-      if (sunIcon1) sunIcon1.classList.toggle("hidden", !isDark);
-      if (moonIcon2) moonIcon2.classList.toggle("hidden", isDark);
-      if (sunIcon2) sunIcon2.classList.toggle("hidden", !isDark);
-    }
-    
-    if (
-      document.documentElement.classList.contains("dark") ||
-      localStorage.theme === "dark" ||
-      (!("theme" in localStorage) &&
-        window.matchMedia("(prefers-color-scheme: dark)").matches)
-    ) {
-      setDarkModeIcons(true);
-      document.documentElement.classList.add("dark");
-    } else {
-      setDarkModeIcons(false);
-      document.documentElement.classList.remove("dark");
-    }
-    function toggleDarkMode() {
-      if (document.documentElement.classList.contains("dark")) {
-        setDarkModeIcons(false);
-        document.documentElement.classList.remove("dark");
-        localStorage.theme = "light";
-      } else {
-        setDarkModeIcons(true);
-        document.documentElement.classList.add("dark");
-        localStorage.theme = "dark";
-      }
-    }
-  </script>
-</footer>
-</div>
-  </body>
-</html>
+elaborate optimization, or fancier models all hurt rather than help.</p><h2 id=whats-left-worth-exploring>What&rsquo;s left worth exploring</h2><p>Two genuinely untested levers remain.</p><ul><li><p><strong>Universe expansion to JSE-listed and international ETFs not just TFSA eligible ones</strong></p></li><li><p><strong>Sector-aware concentration limits</strong></p></li></ul><h2 id=do-i-actually-use-this>Do I actually use this?</h2><p>Sort of.I have been tinkering with this idea for longer than I have had a TFSA. Quant stuff is my passion, but I don&rsquo;t worship models like they&rsquo;re crystal balls. For the past two years I&rsquo;ve used this framework as one ingredient in my ETF recipe &mdash; with a few tilts and tweaks &mdash; because blind faith belongs in religion, not portfolio construction.</p></div></article></main><div class="col-span-3 lg:col-span-1"><div class="bg-white rounded-xl shadow-sm mb-4 overflow-hidden dark:bg-warmgray-900"><div class="px-5 py-4 border-b border-gray-100 dark:border-warmgray-700"><p class="text-xs font-semibold uppercase tracking-widest text-gray-500 dark:text-gray-400">Categories</p></div><div class="divide-y divide-gray-100 dark:divide-warmgray-700"><a class="flex items-center justify-between px-5 py-3 hover:bg-gray-50 dark:hover:bg-warmgray-800 transition-colors duration-150 text-sm text-gray-700 dark:text-gray-300" href=https://overfitandchill.co.za//categories/banking><span>Banking</span><span class="text-xs text-gray-400 dark:text-gray-500">1</span></a>
+<a class="flex items-center justify-between px-5 py-3 hover:bg-gray-50 dark:hover:bg-warmgray-800 transition-colors duration-150 text-sm text-gray-700 dark:text-gray-300" href=https://overfitandchill.co.za//categories/etf><span>Etf</span><span class="text-xs text-gray-400 dark:text-gray-500">2</span></a>
+<a class="flex items-center justify-between px-5 py-3 hover:bg-gray-50 dark:hover:bg-warmgray-800 transition-colors duration-150 text-sm text-gray-700 dark:text-gray-300" href=https://overfitandchill.co.za//categories/finance><span>Finance</span><span class="text-xs text-gray-400 dark:text-gray-500">2</span></a>
+<a class="flex items-center justify-between px-5 py-3 hover:bg-gray-50 dark:hover:bg-warmgray-800 transition-colors duration-150 text-sm text-gray-700 dark:text-gray-300" href=https://overfitandchill.co.za//categories/fixed-income><span>Fixed income</span><span class="text-xs text-gray-400 dark:text-gray-500">1</span></a>
+<a class="flex items-center justify-between px-5 py-3 hover:bg-gray-50 dark:hover:bg-warmgray-800 transition-colors duration-150 text-sm text-gray-700 dark:text-gray-300" href=https://overfitandchill.co.za//categories/machine-learning><span>Machine learning</span><span class="text-xs text-gray-400 dark:text-gray-500">2</span></a>
+<a class="flex items-center justify-between px-5 py-3 hover:bg-gray-50 dark:hover:bg-warmgray-800 transition-colors duration-150 text-sm text-gray-700 dark:text-gray-300" href=https://overfitandchill.co.za//categories/optimisation-alm><span>Optimisation alm</span><span class="text-xs text-gray-400 dark:text-gray-500">1</span></a>
+<a class="flex items-center justify-between px-5 py-3 hover:bg-gray-50 dark:hover:bg-warmgray-800 transition-colors duration-150 text-sm text-gray-700 dark:text-gray-300" href=https://overfitandchill.co.za//categories/portfolio-optimization><span>Portfolio optimization</span><span class="text-xs text-gray-400 dark:text-gray-500">1</span></a>
+<a class="flex items-center justify-between px-5 py-3 hover:bg-gray-50 dark:hover:bg-warmgray-800 transition-colors duration-150 text-sm text-gray-700 dark:text-gray-300" href=https://overfitandchill.co.za//categories/quant-finance><span>Quant finance</span><span class="text-xs text-gray-400 dark:text-gray-500">1</span></a>
+<a class="flex items-center justify-between px-5 py-3 hover:bg-gray-50 dark:hover:bg-warmgray-800 transition-colors duration-150 text-sm text-gray-700 dark:text-gray-300" href=https://overfitandchill.co.za//categories/yield-curve><span>Yield curve</span><span class="text-xs text-gray-400 dark:text-gray-500">1</span></a></div></div><div class="bg-white rounded-xl shadow-sm mb-4 overflow-hidden dark:bg-warmgray-900"><div class="px-5 py-4 border-b border-gray-100 dark:border-warmgray-700"><p class="text-xs font-semibold uppercase tracking-widest text-gray-500 dark:text-gray-400">Recent Posts</p></div><div class="divide-y divide-gray-100 dark:divide-warmgray-700"><a href=/posts/ee-etf-tracker/ class="block px-5 py-3 hover:bg-gray-50 dark:hover:bg-warmgray-800 transition-colors duration-150"><p class="text-sm font-medium text-gray-900 dark:text-white leading-snug mb-1">Easy Equities TFSA ETF Analytics</p><time class="flex items-center text-xs text-gray-500 dark:text-gray-500 gap-1"><span class="inline-flex align-middle pb-0.5 text-xs"><svg height="1em" viewBox="0 -960 960 960" width="1em" fill="currentColor"><path d="m612-292 56-56-148-148v-184h-80v216l172 172zM480-80q-83 0-156-31.5T197-197t-85.5-127T80-480t31.5-156T197-763t127-85.5T480-880t156 31.5T763-763t85.5 127T880-480t-31.5 156T763-197t-127 85.5T480-80zm0-4e2zm0 320q133 0 226.5-93.5T8e2-480t-93.5-226.5T480-8e2t-226.5 93.5T160-480t93.5 226.5T480-160z"/></svg></span></span>
+2026/05/31</time>
+</a><a href=/posts/fc-yields/ class="block px-5 py-3 hover:bg-gray-50 dark:hover:bg-warmgray-800 transition-colors duration-150"><p class="text-sm font-medium text-gray-900 dark:text-white leading-snug mb-1">Forecasting South African Government Bond Yields</p><time class="flex items-center text-xs text-gray-500 dark:text-gray-500 gap-1"><span class="inline-flex align-middle pb-0.5 text-xs"><svg height="1em" viewBox="0 -960 960 960" width="1em" fill="currentColor"><path d="m612-292 56-56-148-148v-184h-80v216l172 172zM480-80q-83 0-156-31.5T197-197t-85.5-127T80-480t31.5-156T197-763t127-85.5T480-880t156 31.5T763-763t85.5 127T880-480t-31.5 156T763-197t-127 85.5T480-80zm0-4e2zm0 320q133 0 226.5-93.5T8e2-480t-93.5-226.5T480-8e2t-226.5 93.5T160-480t93.5 226.5T480-160z"/></svg></span></span>
+2026/05/31</time>
+</a><a href=/posts/etf-optim/ class="block px-5 py-3 hover:bg-gray-50 dark:hover:bg-warmgray-800 transition-colors duration-150"><p class="text-sm font-medium text-gray-900 dark:text-white leading-snug mb-1">ML-Driven TFSA ETF Portfolio Optimization for EE</p><time class="flex items-center text-xs text-gray-500 dark:text-gray-500 gap-1"><span class="inline-flex align-middle pb-0.5 text-xs"><svg height="1em" viewBox="0 -960 960 960" width="1em" fill="currentColor"><path d="m612-292 56-56-148-148v-184h-80v216l172 172zM480-80q-83 0-156-31.5T197-197t-85.5-127T80-480t31.5-156T197-763t127-85.5T480-880t156 31.5T763-763t85.5 127T880-480t-31.5 156T763-197t-127 85.5T480-80zm0-4e2zm0 320q133 0 226.5-93.5T8e2-480t-93.5-226.5T480-8e2t-226.5 93.5T160-480t93.5 226.5T480-160z"/></svg></span></span>
+2026/05/17</time>
+</a><a href=/posts/alm-optim/ class="block px-5 py-3 hover:bg-gray-50 dark:hover:bg-warmgray-800 transition-colors duration-150"><p class="text-sm font-medium text-gray-900 dark:text-white leading-snug mb-1">Balance Sheet Optimisation Under South African Regulatory Constraints</p><time class="flex items-center text-xs text-gray-500 dark:text-gray-500 gap-1"><span class="inline-flex align-middle pb-0.5 text-xs"><svg height="1em" viewBox="0 -960 960 960" width="1em" fill="currentColor"><path d="m612-292 56-56-148-148v-184h-80v216l172 172zM480-80q-83 0-156-31.5T197-197t-85.5-127T80-480t31.5-156T197-763t127-85.5T480-880t156 31.5T763-763t85.5 127T880-480t-31.5 156T763-197t-127 85.5T480-80zm0-4e2zm0 320q133 0 226.5-93.5T8e2-480t-93.5-226.5T480-8e2t-226.5 93.5T160-480t93.5 226.5T480-160z"/></svg></span></span>
+2025/12/22</time></a></div></div></div></div></div></div><footer class="bg-gray-800 text-white p-6"><div class="container max-w-7xl mr-auto ml-auto"><p>&copy;
+2026
+<a href=https://overfitandchill.co.za/ class="duration-200 hover:opacity-50">Rossouw van Jaarsveld | Overfit and Chill</a></p><p>Powered by
+<a href=https://gohugo.io/ class="duration-200 hover:opacity-50">Hugo</a>, Theme
+<a href=https://github.com/opera7133/Blonde class="duration-200 hover:opacity-50">Blonde</a>.</p></div><script>function setDarkModeIcons(e){var t=document.getElementById("icon-moon"),n=document.getElementById("icon-sun"),s=document.getElementById("icon2-moon"),o=document.getElementById("icon2-sun");t&&t.classList.toggle("hidden",e),n&&n.classList.toggle("hidden",!e),s&&s.classList.toggle("hidden",e),o&&o.classList.toggle("hidden",!e)}document.documentElement.classList.contains("dark")||localStorage.theme==="dark"||!("theme"in localStorage)&&window.matchMedia("(prefers-color-scheme: dark)").matches?(setDarkModeIcons(!0),document.documentElement.classList.add("dark")):(setDarkModeIcons(!1),document.documentElement.classList.remove("dark"));function toggleDarkMode(){document.documentElement.classList.contains("dark")?(setDarkModeIcons(!1),document.documentElement.classList.remove("dark"),localStorage.theme="light"):(setDarkModeIcons(!0),document.documentElement.classList.add("dark"),localStorage.theme="dark")}</script></footer></div></body></html>
