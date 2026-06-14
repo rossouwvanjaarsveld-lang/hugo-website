@@ -2,7 +2,7 @@
 title: "Do Macro Variables Help Forecast the Yield Curve? Three Honest Experiments"
 date: "2026-06-14"
 draft: false
-summary: "A follow-up to the yield-curve forecasting post. I add inflation, the repo rate, the rand and the VIX to the forecasts in three ways - lagged, forecasted, and with perfect foresight - to find out whether macro data actually helps. It does, but only if you can see the future."
+summary: "A follow-up to the yield-curve forecasting post. I add inflation, the repo rate, the rand and the VIX to the forecasts in three ways - lagged, forecasted, and with perfect foresight - to find out whether macro data actually helps. It does, but not the way you might think."
 categories: [yield curve, machine learning, fixed income]
 description: "Augmenting SA government bond yield forecasts with macro variables (repo rate, CPI, USD/ZAR, VIX) under three inclusion schemes: lagged carry-forward, model-forecasted, and perfect foresight. Perfect-foresight macro beats the no-macro baseline by 12-16% and dips below the best model from the first post, but realistic schemes capture almost none of that because the macro variables are themselves nearly as hard to forecast as the yields."
 image: /posts/fc-yields-macro/thumbnail.png
