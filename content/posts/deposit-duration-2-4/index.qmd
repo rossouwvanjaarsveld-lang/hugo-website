@@ -1,10 +1,10 @@
 ---
 title: "Banking on Deposits That Can Leave"
-summary: "Post 1/4 of the No Gut Feelings Bank series. How much maturity transformation does an SA deposit base license, and is the
+summary: "Post 2/4 of the No Gut Feelings Bank series. How much maturity transformation does an SA deposit base license, and is the
 behavioural haircut real? Franchise duration for No Gut Feelings Bank from Post 1 betas and survival: the licence is 1–7 years per rand, the
 haircut is zero, and the residual risk lives on the uninsured-share axis,
 where duration cannot see it."
-date: 2026-07-12
+date: 2026-07-18
 draft: false
 categories: [NGFB, ALM, deposits, IRRBB]
 description: "How much maturity transformation does an SA deposit base license, and is the
@@ -32,12 +32,12 @@ nocite: |
 ```
 
 {{< summary trader="Your deposit book is a rates position that pays you when rates rise. That is
-a licence for maturity transformation &mdash; not an exemption from rate risk:
+a licence for maturity transformation but not an exemption from rate risk:
 set against SA&rsquo;s mostly prime-linked, floating asset book, the
 franchise&rsquo;s negative duration stands alone and the bank is short rate
-<em>cuts</em> until the structural hedge takes the licence up. Licence size:
-&minus;1 to &minus;7 years per rand, on one judgement &mdash; how much of the
-book is permanent. In rand: +200bp is worth R2bn&ndash;R14.5bn per R100bn of deposits".
+cuts until the structural hedge takes the licence up. Licence size:
+1 to 7 years per rand, on one judgement - how much of the
+book is permanent. In rand: +200bp is worth R2bn&ndash;R14.5bn per R100bn of deposits."
 loremaster="We value the franchise as the PV of spreads on Post 1's surviving balances
 and differentiate straight through the simulator. The intended headline - the
 analytic-vs-behavioural duration gap - dies on real data: permanent balances
@@ -78,8 +78,15 @@ on the axis is directly computable: transforming only what the cohort schedule
 admits sits at $\phi = \mathrm{RD}_{\text{coh}}/\mathrm{RD}_{\text{gc}}$ =
 0.95 / 7.26 ≈ 0.13 (both durations computed below).
 **Uninsured share $u$** is the fraction of franchise value (by rand, not by
-headcount) sitting above the CODI R100k cover - the part that can leave and is not covered in a bank run. The break-even frontier between them is not one line: it depends on the deposit beta, which is a pricing *choice*, so we draw two - SA's observed low-beta franchise and a high-beta counterfactual that pays up to shrink
-its runnable base.
+headcount) sitting above the CODI R100k cover - the part that can leave and is not covered in a bank run. The break-even frontier between them is not one line: it depends on the deposit
+beta, which is a pricing *choice*, so we draw two. One is SA's observed
+low-beta franchise. The other is a high-beta counterfactual we call
+*Citi-like*, after the worked contrast in DSSW's own paper: in March 2023
+Citigroup carried an uninsured share comparable to SVB's, but priced its
+largely institutional and corporate deposit base at or near market - an
+effective beta near the top of the US large-bank range - leaving little
+franchise value per rand at risk of running. Same $u$, opposite book, because
+beta is a choice.
 
 ```{=html}
 <div style="display:flex;align-items:flex-start;gap:14px;border:1px solid #1d3a55;border-left:4px solid #38bdf8;border-radius:8px;background:#0d1d30;padding:16px 20px;margin:1.5rem 0;font-size:.95rem;line-height:1.55;color:#d9e6f2;">
@@ -87,16 +94,16 @@ its runnable base.
   <div>
     <div style="font-size:.78rem;font-weight:600;letter-spacing:.08em;text-transform:uppercase;color:#38bdf8;margin-bottom:5px;">Hedge vs transformation</div>
     <div>A hedge is a position you <em>add</em> to strip a risk. The franchise is not
-added &mdash; it <em>is</em> the balance sheet. What it does is <strong>license
+added - it <em>is</em> the balance sheet. What it does is <strong>license
 maturity transformation</strong>: funding long <em>fixed-rate</em> assets with
 contractually short money while bearing little going-concern rate risk, because
 the franchise&rsquo;s negative duration <em>offsets</em> the assets&rsquo;
-positive duration. DSS&rsquo;s phrase &mdash; maturity transformation
-<em>without</em> interest rate risk &mdash; describes US banks that actually
+positive duration. DSS&rsquo;s phrase - maturity transformation
+<em>without</em> interest rate risk - describes US banks that actually
 make that match on the asset side. It is a licence, not an exemption: an SA
 book that lends mostly at prime (floating, near-zero duration) leaves the
 licence unexercised, the franchise&rsquo;s negative duration standing alone,
-and the bank short rate <em>cuts</em> &mdash; the familiar endowment exposure.
+and the bank short rate <em>cuts</em> - the familiar endowment exposure.
 Exercising the licence is precisely the structural hedge&rsquo;s job, which
 makes &phi; on the plane the fraction of the licence actually taken up. In this
 series, <em>transformation</em> is the decision, <em>offset</em> is the
@@ -301,9 +308,9 @@ ggplot() +
   scale_linetype_manual(values = c("break-even - SA low-beta" = "solid",
                                    "break-even - high-beta (Citi-like)" = "dashed")) +
   labs(x = "uninsured franchise share  u  (by value)",
-       y = "maturity transformation φ (0 = matched-funded·1 = full transformation)",
+       y = "maturity transformation φ (0 = matched-funded. 1 = full transformation)",
        title = "The maturity-transformation plane",
-       caption = "φ anchored by real duration · u-axis & frontiers still synthetic") +
+       caption = "φ anchored by real duration. u-axis & frontiers synthetic") +
   coord_cartesian(xlim = c(0.05, 0.95), ylim = c(0, 1)) + theme_ngfb()
 ```
 
@@ -312,7 +319,7 @@ ggplot() +
   <span style="font-size:1.2rem;flex-shrink:0;margin-top:1px;">&#128506;&#65039;</span>
   <div>
     <div style="font-size:.78rem;font-weight:600;letter-spacing:.08em;text-transform:uppercase;color:#38bdf8;margin-bottom:5px;">Why publish an uncalibrated map</div>
-    <div>This plane is not a DSSW figure &mdash; it is their capital condition
+    <div>This plane is not a DSSW figure - it is their capital condition
 translated into the variable ALCO actually turns. DSSW solve for the equity
 that makes a given balance sheet run-proof; a committee takes capital as
 quarterly-given and chooses the asset profile, so the same trade-off is
@@ -363,12 +370,13 @@ prices like
 Citi, which is the entire argument for treating $\beta$ as a lever rather than a
 fact.
 
-The single sentence is in the chart title: **at the same uninsured share, low
-betas and high betas prescribe opposite books.** SVB was uninsured *and*
-low-beta (a valuable, runnable franchise), which is what exposed it; Citi held as
-much uninsured money but paid the market, so there was little franchise to run
-from. SA's transaction book resembles the former. **⚠ The $u$-axis and frontiers
-are still synthetic** - they need the public-data build and the bridge.
+The single sentence is in the chart title: **at the same uninsured share, low betas and high betas prescribe opposite books.** The pairing is DSSW's, not
+ours: SVB was uninsured *and* low-beta - business transaction accounts paying
+close to nothing, a maximal runnable franchise - which is what exposed it;
+Citi, at a comparable uninsured share, paid the market and had little franchise
+to run from. SA's transaction book resembles the former. **⚠ The $u$-axis and
+frontiers are still synthetic** - they need the public-data build and the
+bridge.
 
 ## The thesis
 
@@ -403,13 +411,13 @@ is structural while $\beta$ is a lever.
   <span style="font-size:1.2rem;flex-shrink:0;margin-top:1px;">&#129689;</span>
   <div>
     <div style="font-size:.78rem;font-weight:600;letter-spacing:.08em;text-transform:uppercase;color:#38bdf8;margin-bottom:5px;">In rand</div>
-    <div>NGFB&rsquo;s cheque-type book pays about 5.7% while repo is 6.75% &mdash;
+    <div>NGFB&rsquo;s cheque-type book pays about 5.7% while repo is 6.75% -
 the bank earns roughly <strong>R1.04 a year per R100</strong> of such deposits.
 Now repo goes to 8.75%: pass-through is 0.46, so the deposit rate drifts up to
 only 6.6%, and the earn roughly <strong>doubles to R2.12</strong>. An asset
 whose income <em>rises</em> when rates rise is the mirror image of a bond
-&mdash; that is all &ldquo;negative duration&rdquo; means. Bonds fall when
-rates rise; this thing climbs &mdash; the most cheerful thing anyone has said
+- that is all &ldquo;negative duration&rdquo; means. Bonds fall when
+rates rise; this thing climbs - the most cheerful thing anyone has said
 about a cheque account.</div>
   </div>
 </div>
@@ -614,11 +622,11 @@ knitr::kable(within(dur_df, rm(col)), digits = 2,
   <div>
     <div style="font-size:.78rem;font-weight:600;letter-spacing:.08em;text-transform:uppercase;color:#38bdf8;margin-bottom:5px;">What &minus;7.3y buys you</div>
     <div>Rand duration of &minus;7.3 years means +100bp of repo adds about
-<strong>7.3% of the deposit base</strong> in franchise value &mdash; roughly
+<strong>7.3% of the deposit base</strong> in franchise value - roughly
 <strong>R7.3bn per R100bn</strong> of NMDs, or R14.5bn for the standard +200bp
 shock. On the cohort basis it is nearer R0.9bn per 100bp. The width of that
-range is not model noise; it is one question &mdash; <em>how much of the book
-do you treat as permanent?</em> &mdash; which is a governance decision wearing
+range is not model noise; it is one question - <em>how much of the book
+do you treat as permanent?</em> - which is a governance decision wearing
 a parameter&rsquo;s clothing. The betas are well-pinned; the permanence split
 is the lever.</div>
   </div>
@@ -677,7 +685,7 @@ simplification.
 <div class="plain"><span class="tag">speedometer, wall</span>
 Duration is a speedometer: it tells you how value changes as rates <em>glide</em>.
 A run is hitting a wall. The gap result says the SA speedometer needs no
-behavioural recalibration &mdash; and says nothing whatsoever about walls. That is
+behavioural recalibration - and says nothing whatsoever about walls. That is
 why the rest of the post is about <em>u</em>.</div>
 ```
 
@@ -795,11 +803,11 @@ knitr::kable(val_df, caption = "Franchise value and duration by category (going-
   <div>
     <div style="font-size:.78rem;font-weight:600;letter-spacing:.08em;text-transform:uppercase;color:#38bdf8;margin-bottom:5px;">Negative value, strongest offset</div>
     <div>Per R100 in a term deposit the bank pays about R8.54 while repo earns
-R6.75 &mdash; <strong>R1.79 of negative carry</strong> before servicing.
+R6.75 - <strong>R1.79 of negative carry</strong> before servicing.
 Crediting a term premium of ~15bp/yr on a 1.5&ndash;2 year book claws back only
 25&ndash;30 cents of that; the rest is real. So why hold it? <em>Slope, not
 level.</em> With &beta; = 0.245 the term rate barely moves when repo does, so
-the gap swings almost 0.755-for-1 with rates &mdash; the strongest rates-up
+the gap swings almost 0.755-for-1 with rates - the strongest rates-up
 offset on the liability side. An instrument can be a money-loser at
 today&rsquo;s level and still be your best insurance against rate rises. Both
 are true at once, and confusing the two is how funding decisions quietly
@@ -855,11 +863,11 @@ they are.
 ## Decision rules for ALCO
 
 Findings are only worth their weight in changed decisions. Five rules follow
-from the results - each tagged **[robust now]** if it rides on sign and ordering
-(which the survival assumption cannot flip) or **[priced by the bridge]** if the
+from the results - each tagged **robust now** if it rides on sign and ordering
+(which the survival assumption cannot flip) or **priced by the bridge** if the
 threshold needs the next post's numbers.
 
-**1 · Size the structural hedge off the analytic duration; skip the behavioural haircut. [robust now]** The structural hedge can be sized off the analytic franchise duration
+**1. Size the structural hedge off the analytic duration; skip the behavioural haircut. (robust now)** The structural hedge can be sized off the analytic franchise duration
 as-is. The data says there is no going-concern rate-chasing to correct for -
 padding it for behavioural runoff would be correcting for a channel
 Post 1 measured as inert. Redirect that modelling budget to the run overlay,
@@ -869,19 +877,19 @@ shows gross churn repricing at market, apply it as a $\Delta\beta$ uplift to the
 analytic duration (the churn exhibit is the exchange rate), not as a behavioural
 feedback.
 
-**2 · The transformation notional is a permanence decision, not a beta decision. [robust now]** Betas are well-pinned; what moves NGFB's duration from 1y to 7.3y is
+**2. The transformation notional is a permanence decision, not a beta decision. (robust now)** Betas are well-pinned; what moves NGFB's duration from 1y to 7.3y is
 how much of the book is treated as permanent. That core/non-core split should be
 governed explicitly - owned, documented, revisited - not buried inside a model
 parameter. It is also precisely the dial Post 3's ladder design will turn.
 
-**3 · Price every funding-mix change as a rates trade. [robust now]** Because
+**3. Price every funding-mix change as a rates trade. (robust now)** Because
 term is simultaneously the most expensive funding *and* the strongest rates-up
 offset, any shift out of term sells duration. The funding desk and the rates desk
 are running one book whether they meet or not: a term-book reduction lengthens
 the bank, and the swap desk inherits a pay-fixed need it did not originate. The
 vignette below puts rand on this.
 
-**4 · Buy run-robustness on axes that don't strip the offset. [priced by the bridge]** Shortening the asset book below the going-concern optimum leaves the
+**4. Buy run-robustness on axes that don't strip the offset. (priced by the bridge)** Shortening the asset book below the going-concern optimum leaves the
 franchise's negative duration unoffset on the downside - leg 2 of the bridge is a *cost*,
 not a saving. Before paying it, exhaust the levers that move the *frontier*
 rather than the bank: price up the runnable uninsured slice specifically (the
@@ -890,7 +898,7 @@ share under the R100k cap, convert demand balances to contractual notice, and
 pre-position liquidity (Post 4's buffer). Blunt duration-shortening is the last
 resort, not the first.
 
-**5 · Read your position off the plane, then spend the marginal risk-rand accordingly. [priced by the bridge]** Low $u$: run the full transformation; carry
+**5. Read your position off the plane, then spend the marginal risk-rand accordingly. (priced by the bridge)** Low $u$: run the full transformation; carry
 rules. High $u$ with SA-typical low betas: you are in the over-extended region -
 the next rand of risk budget goes to run defences, not more duration. High $u$
 with high betas: hold; there is little franchise to run from. The
@@ -978,9 +986,9 @@ limitation.
 #| label: tbl-bridge
 #| echo: false
 bridge <- data.frame(
-  leg = c("1 · carry given up by shortening below the going-concern optimum",
-          "2 · going-concern EVE-vol delta (sign-corrected)",
-          "3 · run-fragility avoided (Post 4 buffer cost saved)",
+  leg = c("1. carry given up by shortening below the going-concern optimum",
+          "2. going-concern EVE-vol delta (sign-corrected)",
+          "3. run-fragility avoided (Post 4 buffer cost saved)",
           "NET  =  Leg 3 − Leg 1 − Leg 2"),
   sign = c("cost (−)", "cost (−)*", "benefit (+)", "vs uninsured share u"),
   bps  = c("TODO", "TODO", "TODO", "TODO"))
@@ -992,39 +1000,4 @@ The net is positive when the uninsured-at-risk franchise is large. Computing it
 needs the bridge calculation, buffer cost, and desk inputs - the next
 post's job.
 
-## Data manifest - what is wired, what remains
-
-### 1 · Wired in 
-
-```{r}
-#| label: tbl-manifest
-#| echo: false
-man <- data.frame(
-  field = c("beta_level","alpha","survival","weight","repo","decay_rate_sens"),
-  value = c("op 0.46 · notice 0.63 · term 0.25 (cell means)",
-            "op 2.58% · notice 2.93% · term 6.89%",
-            "cohort 16.4/16.6/24.4 mo; level permanent",
-            "0.239 / 0.089 / 0.234 / 0.437",
-            "6.75%",
-            "prior tight at 0 in-sample; external tail"),
-  source = c("results$betas (cleaned names)",
-             "d_now − beta·repo from D$RATE tail (EVE-consistent)",
-             "results$dur_cohort, results$uc",
-             "results$composition$pi_ngfb",
-             "results$eve$repo_now",
-             "justified by null coupling (corr 0.012); not estimated by Post 1"))
-knitr::kable(man, col.names = c("interface field","real value used","Post 1 source"))
-```
-
-Savings beta/intercept are proxied on operational (no savings rate series).
-`decay_rate_sens` (γ) is `NA` from Post 1 by design - supplied here as a
-two-regime prior; do not back-fill it.
-
-### 2 · Still synthetic - the uninsured-share axis
-
-Not a Post 1 output. Build $u$ from CODI covered-deposit disclosures, the BA900
-sector split on the `*TOTAL*` denominator, and the LCR stable-versus-wholesale
-cut. The high-beta counterfactual frontier wants an LCR-stressed wholesale beta.
-Until then the plane's $u$-axis and frontiers are illustrative; the $\phi$
-position is anchored by the real duration.
 

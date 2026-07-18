@@ -1,1 +1,65 @@
+<<<<<<< HEAD
 <?xml version="1.0" encoding="utf-8" standalone="yes"?><rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom"><channel><title>Posts on Rossouw van Jaarsveld | Overfit and Chill</title><link>https://overfitandchill.co.za/posts/</link><description>Recent content in Posts on Rossouw van Jaarsveld | Overfit and Chill</description><generator>Hugo</generator><language>en</language><lastBuildDate>Sun, 12 Jul 2026 00:00:00 +0000</lastBuildDate><atom:link href="https://overfitandchill.co.za/posts/index.xml" rel="self" type="application/rss+xml"/><item><title>Banking on Deposits That Can Leave</title><link>https://overfitandchill.co.za/posts/deposit-duration-2-4/</link><pubDate>Sun, 12 Jul 2026 00:00:00 +0000</pubDate><guid>https://overfitandchill.co.za/posts/deposit-duration-2-4/</guid><description>Post 1/4 of the No Gut Feelings Bank series. How much maturity transformation does an SA deposit base license, and is the behavioural haircut real? Franchise duration for No Gut Feelings Bank from real Post 1 betas and survival: the licence is 1–7 years per rand, the haircut is zero, and the residual risk lives on the uninsured-share axis, where duration cannot see it.</description></item><item><title>What Is a Deposit Actually Worth When Rates Move?</title><link>https://overfitandchill.co.za/posts/deposit-beta-1-4/</link><pubDate>Fri, 19 Jun 2026 00:00:00 +0000</pubDate><guid>https://overfitandchill.co.za/posts/deposit-beta-1-4/</guid><description>Post 1/4 of the No Gut Feelings Bank series. I build a behavioural model of non-maturing deposits - current accounts, notice, fixed - from public SARB data, and ask the question every treasury desk worries about: how much of a repo move does a bank pass through to depositors, does it bend with the rate level, and what does getting it wrong cost you? The answer is not in next month&amp;rsquo;s margin. It is in how badly a constant-beta assumption mismeasures the bank&amp;rsquo;s interest-rate risk - about a third of a percent of the deposit base under a standard ±200bp shock, in a direction that makes the franchise quietly optionable.</description></item><item><title>Do Macro Variables Help Forecast the Yield Curve? Three Honest Experiments</title><link>https://overfitandchill.co.za/posts/fc-yields-macro/</link><pubDate>Sun, 14 Jun 2026 00:00:00 +0000</pubDate><guid>https://overfitandchill.co.za/posts/fc-yields-macro/</guid><description>A follow-up to the yield-curve forecasting post. I add inflation, the repo rate, the rand and the VIX to the forecasts in three ways - lagged, forecasted, and with perfect foresight - to find out whether macro data actually helps. It does, but only if you can see the future.</description></item><item><title>Easy Equities TFSA ETF Analytics</title><link>https://overfitandchill.co.za/posts/ee-etf-tracker/</link><pubDate>Sun, 31 May 2026 00:00:00 +0000</pubDate><guid>https://overfitandchill.co.za/posts/ee-etf-tracker/</guid><description>Interactive leaderboards, price history, risk metrics, top holdings and index rules for every ETF available on the Easy Equities TFSA.</description></item><item><title>Forecasting South African Government Bond Yields</title><link>https://overfitandchill.co.za/posts/fc-yields/</link><pubDate>Sun, 31 May 2026 00:00:00 +0000</pubDate><guid>https://overfitandchill.co.za/posts/fc-yields/</guid><description>I raced about twenty forecasting models against each other on SA government bond yield buckets, and the humble random walk turned out to be really difficult to beat. The only thing that reliably helps is averaging two simple models. Sophistication is not the same thing as accuracy.</description></item><item><title>ML-Driven TFSA ETF Portfolio Optimization for EE</title><link>https://overfitandchill.co.za/posts/etf-optim/</link><pubDate>Sun, 17 May 2026 00:00:00 +0000</pubDate><guid>https://overfitandchill.co.za/posts/etf-optim/</guid><description>I built a LightGBM pipeline to pick ETFs for my EE TFSA and it beats the JSE Top 40 by 6–9% annualised. Over-engineered retirement planning? Guilty.</description></item><item><title>Balance Sheet Optimisation Under South African Regulatory Constraints</title><link>https://overfitandchill.co.za/posts/alm-optim/</link><pubDate>Mon, 22 Dec 2025 00:00:00 +0000</pubDate><guid>https://overfitandchill.co.za/posts/alm-optim/</guid><description>A worked Linear Programming example for the bank treasury function using SARB Basel III requirements (LCR, NSFR, CET1). Includes full LP formulation, step-by-step Simplex solution, shadow price interpretation, and how the solver works mathematically. No actual treasury departments were harmed in the making of this post, though a few may feel personally attacked.</description></item></channel></rss>
+=======
+<?xml version="1.0" encoding="utf-8" standalone="yes"?>
+<rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom">
+  <channel>
+    <title>Posts on Rossouw van Jaarsveld | Overfit and Chill</title>
+    <link>http://localhost:1313/posts/</link>
+    <description>Recent content in Posts on Rossouw van Jaarsveld | Overfit and Chill</description>
+    <generator>Hugo</generator>
+    <language>en</language>
+    <lastBuildDate>Sat, 18 Jul 2026 00:00:00 +0000</lastBuildDate>
+    <atom:link href="http://localhost:1313/posts/index.xml" rel="self" type="application/rss+xml" />
+    <item>
+      <title>Banking on Deposits That Can Leave</title>
+      <link>http://localhost:1313/posts/deposit-duration-2-4/</link>
+      <pubDate>Sat, 18 Jul 2026 00:00:00 +0000</pubDate>
+      <guid>http://localhost:1313/posts/deposit-duration-2-4/</guid>
+      <description>Post 2/4 of the No Gut Feelings Bank series. How much maturity transformation does an SA deposit base license, and is the behavioural haircut real? Franchise duration for No Gut Feelings Bank from Post 1 betas and survival: the licence is 1–7 years per rand, the haircut is zero, and the residual risk lives on the uninsured-share axis, where duration cannot see it.</description>
+    </item>
+    <item>
+      <title>What Is a Deposit Actually Worth When Rates Move?</title>
+      <link>http://localhost:1313/posts/deposit-beta-1-4/</link>
+      <pubDate>Fri, 19 Jun 2026 00:00:00 +0000</pubDate>
+      <guid>http://localhost:1313/posts/deposit-beta-1-4/</guid>
+      <description>Post 1/4 of the No Gut Feelings Bank series. I build a behavioural model of non-maturing deposits - current accounts, notice, fixed - from public SARB data, and ask the question every treasury desk worries about: how much of a repo move does a bank pass through to depositors, does it bend with the rate level, and what does getting it wrong cost you? The answer is not in next month&amp;rsquo;s margin. It is in how badly a constant-beta assumption mismeasures the bank&amp;rsquo;s interest-rate risk - about a third of a percent of the deposit base under a standard ±200bp shock, in a direction that makes the franchise quietly optionable.</description>
+    </item>
+    <item>
+      <title>Do Macro Variables Help Forecast the Yield Curve? Three Honest Experiments</title>
+      <link>http://localhost:1313/posts/fc-yields-macro/</link>
+      <pubDate>Sun, 14 Jun 2026 00:00:00 +0000</pubDate>
+      <guid>http://localhost:1313/posts/fc-yields-macro/</guid>
+      <description>A follow-up to the yield-curve forecasting post. I add inflation, the repo rate, the rand and the VIX to the forecasts in three ways - lagged, forecasted, and with perfect foresight - to find out whether macro data actually helps. It does, but only if you can see the future.</description>
+    </item>
+    <item>
+      <title>Easy Equities TFSA ETF Analytics</title>
+      <link>http://localhost:1313/posts/ee-etf-tracker/</link>
+      <pubDate>Sun, 31 May 2026 00:00:00 +0000</pubDate>
+      <guid>http://localhost:1313/posts/ee-etf-tracker/</guid>
+      <description>Interactive leaderboards, price history, risk metrics, top holdings and index rules for every ETF available on the Easy Equities TFSA.</description>
+    </item>
+    <item>
+      <title>Forecasting South African Government Bond Yields</title>
+      <link>http://localhost:1313/posts/fc-yields/</link>
+      <pubDate>Sun, 31 May 2026 00:00:00 +0000</pubDate>
+      <guid>http://localhost:1313/posts/fc-yields/</guid>
+      <description>I raced about twenty forecasting models against each other on SA government bond yield buckets, and the humble random walk turned out to be really difficult to beat. The only thing that reliably helps is averaging two simple models. Sophistication is not the same thing as accuracy.</description>
+    </item>
+    <item>
+      <title>ML-Driven TFSA ETF Portfolio Optimization for EE</title>
+      <link>http://localhost:1313/posts/etf-optim/</link>
+      <pubDate>Sun, 17 May 2026 00:00:00 +0000</pubDate>
+      <guid>http://localhost:1313/posts/etf-optim/</guid>
+      <description>I built a LightGBM pipeline to pick ETFs for my EE TFSA and it beats the JSE Top 40 by 6–9% annualised. Over-engineered retirement planning? Guilty.</description>
+    </item>
+    <item>
+      <title>Balance Sheet Optimisation Under South African Regulatory Constraints</title>
+      <link>http://localhost:1313/posts/alm-optim/</link>
+      <pubDate>Mon, 22 Dec 2025 00:00:00 +0000</pubDate>
+      <guid>http://localhost:1313/posts/alm-optim/</guid>
+      <description>A worked Linear Programming example for the bank treasury function using SARB Basel III requirements (LCR, NSFR, CET1). Includes full LP formulation, step-by-step Simplex solution, shadow price interpretation, and how the solver works mathematically. No actual treasury departments were harmed in the making of this post, though a few may feel personally attacked.</description>
+    </item>
+  </channel>
+</rss>
+>>>>>>> 856d8c2 (thumbnail and text updates)
