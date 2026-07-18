@@ -1,51 +1,68 @@
-<?xml version="1.0" encoding="utf-8" standalone="yes"?><rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom"><channel><title>Rossouw van Jaarsveld | Overfit and Chill</title><link>https://overfitandchill.co.za/</link><description>Recent content on Rossouw van Jaarsveld | Overfit and Chill</description><generator>Hugo</generator><language>en</language><lastBuildDate>Fri, 19 Jun 2026 00:00:00 +0000</lastBuildDate><atom:link href="https://overfitandchill.co.za/index.xml" rel="self" type="application/rss+xml"/><item><title>What Is a Deposit Actually Worth When Rates Move?</title><link>https://overfitandchill.co.za/posts/deposit-beta-1-4/</link><pubDate>Fri, 19 Jun 2026 00:00:00 +0000</pubDate><guid>https://overfitandchill.co.za/posts/deposit-beta-1-4/</guid><description>Post 1/4 of the No Gut Feelings Bank series. I build a behavioural model of non-maturing deposits - current accounts, notice, fixed - from public SARB data, and ask the question every treasury desk worries about: how much of a repo move does a bank pass through to depositors, does it bend with the rate level, and what does getting it wrong cost you? The answer is not in next month&amp;rsquo;s margin. It is in how badly a constant-beta assumption mismeasures the bank&amp;rsquo;s interest-rate risk - about a third of a percent of the deposit base under a standard ±200bp shock, in a direction that makes the franchise quietly optionable.</description></item><item><title>Do Macro Variables Help Forecast the Yield Curve? Three Honest Experiments</title><link>https://overfitandchill.co.za/posts/fc-yields-macro/</link><pubDate>Sun, 14 Jun 2026 00:00:00 +0000</pubDate><guid>https://overfitandchill.co.za/posts/fc-yields-macro/</guid><description>A follow-up to the yield-curve forecasting post. I add inflation, the repo rate, the rand and the VIX to the forecasts in three ways - lagged, forecasted, and with perfect foresight - to find out whether macro data actually helps. It does, but only if you can see the future.</description></item><item><title>Easy Equities TFSA ETF Analytics</title><link>https://overfitandchill.co.za/posts/ee-etf-tracker/</link><pubDate>Sun, 31 May 2026 00:00:00 +0000</pubDate><guid>https://overfitandchill.co.za/posts/ee-etf-tracker/</guid><description>Interactive leaderboards, price history, risk metrics, top holdings and index rules for every ETF available on the Easy Equities TFSA.</description></item><item><title>Forecasting South African Government Bond Yields</title><link>https://overfitandchill.co.za/posts/fc-yields/</link><pubDate>Sun, 31 May 2026 00:00:00 +0000</pubDate><guid>https://overfitandchill.co.za/posts/fc-yields/</guid><description>I raced about twenty forecasting models against each other on SA government bond yield buckets, and the humble random walk turned out to be really difficult to beat. The only thing that reliably helps is averaging two simple models. Sophistication is not the same thing as accuracy.</description></item><item><title>ML-Driven TFSA ETF Portfolio Optimization for EE</title><link>https://overfitandchill.co.za/posts/etf-optim/</link><pubDate>Sun, 17 May 2026 00:00:00 +0000</pubDate><guid>https://overfitandchill.co.za/posts/etf-optim/</guid><description>I built a LightGBM pipeline to pick ETFs for my EE TFSA and it beats the JSE Top 40 by 6–9% annualised. Over-engineered retirement planning? Guilty.</description></item><item><title>Balance Sheet Optimisation Under South African Regulatory Constraints</title><link>https://overfitandchill.co.za/posts/alm-optim/</link><pubDate>Mon, 22 Dec 2025 00:00:00 +0000</pubDate><guid>https://overfitandchill.co.za/posts/alm-optim/</guid><description>A worked Linear Programming example for the bank treasury function using SARB Basel III requirements (LCR, NSFR, CET1). Includes full LP formulation, step-by-step Simplex solution, shadow price interpretation, and how the solver works mathematically. No actual treasury departments were harmed in the making of this post, though a few may feel personally attacked.</description></item><item><title>About</title><link>https://overfitandchill.co.za/about/</link><pubDate>Wed, 01 Jan 2025 00:00:00 +0000</pubDate><guid>https://overfitandchill.co.za/about/</guid><description>&lt;div style="text-align: center; margin-bottom: 2rem;"&gt;
- &lt;img src="https://overfitandchill.co.za/about_pic.jpeg" alt="Rossouw van Jaarsveld"
- style="width: 280px; height: 280px; object-fit: cover; border-radius: 0px; display: block; margin: 0 auto;" /&gt;
-&lt;/div&gt;
-&lt;h2 id="hi-im-rossouw-van-jaarsveld"&gt;Hi, I&amp;rsquo;m Rossouw van Jaarsveld&lt;/h2&gt;
-&lt;p&gt;I&amp;rsquo;m a guy that loves to do things with data. My main application areas are banking and financial markets.&lt;/p&gt;
-&lt;h2 id="what-youll-find-here"&gt;What You&amp;rsquo;ll Find Here&lt;/h2&gt;
-&lt;ul&gt;
-&lt;li&gt;&lt;strong&gt;Exploratory analysis&lt;/strong&gt; of South African financial markets&lt;/li&gt;
-&lt;li&gt;&lt;strong&gt;Econometrics and machine learning&lt;/strong&gt;, hopefully, a few of the approaches will be interesting&lt;/li&gt;
-&lt;li&gt;&lt;strong&gt;Opinions&lt;/strong&gt; — My posts &lt;strong&gt;does not reflect the opinions of my employer or any institution I have ever worked for&lt;/strong&gt;&lt;/li&gt;
-&lt;/ul&gt;
-&lt;h2 id="tools-i-use"&gt;Tools I Use&lt;/h2&gt;
-&lt;ul&gt;
-&lt;li&gt;&lt;strong&gt;R&lt;/strong&gt;&lt;/li&gt;
-&lt;li&gt;&lt;strong&gt;Python&lt;/strong&gt;&lt;/li&gt;
-&lt;li&gt;&lt;strong&gt;Quarto&lt;/strong&gt;&lt;/li&gt;
-&lt;li&gt;&lt;strong&gt;Hugo&lt;/strong&gt;&lt;/li&gt;
-&lt;/ul&gt;
-&lt;div style="text-align: center; margin: 1.5rem 0; display: flex; justify-content: center; gap: 16px; flex-wrap: wrap;"&gt;
- &lt;a href="https://www.linkedin.com/in/rossouw-van-jaarsveld-bb5a23128"
- style="
- display: inline-block;
- padding: 10px 24px;
- border: 1px solid #a8d4f5;
- border-radius: 6px;
- color: #a8d4f5;
- text-decoration: none;
- font-size: 0.9rem;
- letter-spacing: 0.05em;
- "
- onmouseover="this.style.background='#a8d4f5';this.style.color='#1c1c1c'"
- onmouseout="this.style.background='transparent';this.style.color='#a8d4f5'"&gt;
- 🔗 &amp;nbsp;Connect on LinkedIn
- &lt;/a&gt;
- &lt;a href="https://github.com/rossouwvanjaarsveld-lang"
- style="
- display: inline-block;
- padding: 10px 24px;
- border: 1px solid #a8d4f5;
- border-radius: 6px;
- color: #a8d4f5;
- text-decoration: none;
- font-size: 0.9rem;
- letter-spacing: 0.05em;
- "
- onmouseover="this.style.background='#a8d4f5';this.style.color='#1c1c1c'"
- onmouseout="this.style.background='transparent';this.style.color='#a8d4f5'"&gt;
- 🐙 &amp;nbsp;View on GitHub
- &lt;/a&gt;
-&lt;/div&gt;</description></item></channel></rss>
+<?xml version="1.0" encoding="utf-8" standalone="yes"?>
+<rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom">
+  <channel>
+    <title>Rossouw van Jaarsveld | Overfit and Chill</title>
+    <link>http://localhost:1313/</link>
+    <description>Recent content on Rossouw van Jaarsveld | Overfit and Chill</description>
+    <generator>Hugo</generator>
+    <language>en</language>
+    <lastBuildDate>Sun, 12 Jul 2026 00:00:00 +0000</lastBuildDate>
+    <atom:link href="http://localhost:1313/index.xml" rel="self" type="application/rss+xml" />
+    <item>
+      <title>Banking on Deposits That Can Leave</title>
+      <link>http://localhost:1313/posts/deposit-duration-2-4/</link>
+      <pubDate>Sun, 12 Jul 2026 00:00:00 +0000</pubDate>
+      <guid>http://localhost:1313/posts/deposit-duration-2-4/</guid>
+      <description>Post 1/4 of the No Gut Feelings Bank series. How much maturity transformation does an SA deposit base license, and is the behavioural haircut real? Franchise duration for No Gut Feelings Bank from real Post 1 betas and survival: the licence is 1–7 years per rand, the haircut is zero, and the residual risk lives on the uninsured-share axis, where duration cannot see it.</description>
+    </item>
+    <item>
+      <title>What Is a Deposit Actually Worth When Rates Move?</title>
+      <link>http://localhost:1313/posts/deposit-beta-1-4/</link>
+      <pubDate>Fri, 19 Jun 2026 00:00:00 +0000</pubDate>
+      <guid>http://localhost:1313/posts/deposit-beta-1-4/</guid>
+      <description>Post 1/4 of the No Gut Feelings Bank series. I build a behavioural model of non-maturing deposits - current accounts, notice, fixed - from public SARB data, and ask the question every treasury desk worries about: how much of a repo move does a bank pass through to depositors, does it bend with the rate level, and what does getting it wrong cost you? The answer is not in next month&amp;rsquo;s margin. It is in how badly a constant-beta assumption mismeasures the bank&amp;rsquo;s interest-rate risk - about a third of a percent of the deposit base under a standard ±200bp shock, in a direction that makes the franchise quietly optionable.</description>
+    </item>
+    <item>
+      <title>Do Macro Variables Help Forecast the Yield Curve? Three Honest Experiments</title>
+      <link>http://localhost:1313/posts/fc-yields-macro/</link>
+      <pubDate>Sun, 14 Jun 2026 00:00:00 +0000</pubDate>
+      <guid>http://localhost:1313/posts/fc-yields-macro/</guid>
+      <description>A follow-up to the yield-curve forecasting post. I add inflation, the repo rate, the rand and the VIX to the forecasts in three ways - lagged, forecasted, and with perfect foresight - to find out whether macro data actually helps. It does, but only if you can see the future.</description>
+    </item>
+    <item>
+      <title>Easy Equities TFSA ETF Analytics</title>
+      <link>http://localhost:1313/posts/ee-etf-tracker/</link>
+      <pubDate>Sun, 31 May 2026 00:00:00 +0000</pubDate>
+      <guid>http://localhost:1313/posts/ee-etf-tracker/</guid>
+      <description>Interactive leaderboards, price history, risk metrics, top holdings and index rules for every ETF available on the Easy Equities TFSA.</description>
+    </item>
+    <item>
+      <title>Forecasting South African Government Bond Yields</title>
+      <link>http://localhost:1313/posts/fc-yields/</link>
+      <pubDate>Sun, 31 May 2026 00:00:00 +0000</pubDate>
+      <guid>http://localhost:1313/posts/fc-yields/</guid>
+      <description>I raced about twenty forecasting models against each other on SA government bond yield buckets, and the humble random walk turned out to be really difficult to beat. The only thing that reliably helps is averaging two simple models. Sophistication is not the same thing as accuracy.</description>
+    </item>
+    <item>
+      <title>ML-Driven TFSA ETF Portfolio Optimization for EE</title>
+      <link>http://localhost:1313/posts/etf-optim/</link>
+      <pubDate>Sun, 17 May 2026 00:00:00 +0000</pubDate>
+      <guid>http://localhost:1313/posts/etf-optim/</guid>
+      <description>I built a LightGBM pipeline to pick ETFs for my EE TFSA and it beats the JSE Top 40 by 6–9% annualised. Over-engineered retirement planning? Guilty.</description>
+    </item>
+    <item>
+      <title>Balance Sheet Optimisation Under South African Regulatory Constraints</title>
+      <link>http://localhost:1313/posts/alm-optim/</link>
+      <pubDate>Mon, 22 Dec 2025 00:00:00 +0000</pubDate>
+      <guid>http://localhost:1313/posts/alm-optim/</guid>
+      <description>A worked Linear Programming example for the bank treasury function using SARB Basel III requirements (LCR, NSFR, CET1). Includes full LP formulation, step-by-step Simplex solution, shadow price interpretation, and how the solver works mathematically. No actual treasury departments were harmed in the making of this post, though a few may feel personally attacked.</description>
+    </item>
+    <item>
+      <title>About</title>
+      <link>http://localhost:1313/about/</link>
+      <pubDate>Wed, 01 Jan 2025 00:00:00 +0000</pubDate>
+      <guid>http://localhost:1313/about/</guid>
+      <description>&lt;div style=&#34;text-align: center; margin-bottom: 2rem;&#34;&gt;&#xD;&#xA;  &lt;img src=&#34;http://localhost:1313/about_pic.jpeg&#34; alt=&#34;Rossouw van Jaarsveld&#34;&#xD;&#xA;    style=&#34;width: 280px; height: 280px; object-fit: cover; border-radius: 0px; display: block; margin: 0 auto;&#34; /&gt;&#xD;&#xA;&lt;/div&gt;&#xD;&#xA;&lt;h2 id=&#34;hi-im-rossouw-van-jaarsveld&#34;&gt;Hi, I&amp;rsquo;m Rossouw van Jaarsveld&lt;/h2&gt;&#xA;&lt;p&gt;I&amp;rsquo;m a guy that loves to do things with data. My main application areas are banking and financial markets.&lt;/p&gt;&#xA;&lt;h2 id=&#34;what-youll-find-here&#34;&gt;What You&amp;rsquo;ll Find Here&lt;/h2&gt;&#xA;&lt;ul&gt;&#xA;&lt;li&gt;&lt;strong&gt;Exploratory analysis&lt;/strong&gt; of South African financial markets&lt;/li&gt;&#xA;&lt;li&gt;&lt;strong&gt;Econometrics and machine learning&lt;/strong&gt;, hopefully, a few of the approaches will be interesting&lt;/li&gt;&#xA;&lt;li&gt;&lt;strong&gt;Opinions&lt;/strong&gt; — My posts &lt;strong&gt;does not reflect the opinions of my employer or any institution I have ever worked for&lt;/strong&gt;&lt;/li&gt;&#xA;&lt;/ul&gt;&#xA;&lt;h2 id=&#34;tools-i-use&#34;&gt;Tools I Use&lt;/h2&gt;&#xA;&lt;ul&gt;&#xA;&lt;li&gt;&lt;strong&gt;R&lt;/strong&gt;&lt;/li&gt;&#xA;&lt;li&gt;&lt;strong&gt;Python&lt;/strong&gt;&lt;/li&gt;&#xA;&lt;li&gt;&lt;strong&gt;Quarto&lt;/strong&gt;&lt;/li&gt;&#xA;&lt;li&gt;&lt;strong&gt;Hugo&lt;/strong&gt;&lt;/li&gt;&#xA;&lt;/ul&gt;&#xA;&lt;div style=&#34;text-align: center; margin: 1.5rem 0; display: flex; justify-content: center; gap: 16px; flex-wrap: wrap;&#34;&gt;&#xD;&#xA;  &lt;a href=&#34;https://www.linkedin.com/in/rossouw-van-jaarsveld-bb5a23128&#34;&#xD;&#xA;     style=&#34;&#xD;&#xA;       display: inline-block;&#xD;&#xA;       padding: 10px 24px;&#xD;&#xA;       border: 1px solid #a8d4f5;&#xD;&#xA;       border-radius: 6px;&#xD;&#xA;       color: #a8d4f5;&#xD;&#xA;       text-decoration: none;&#xD;&#xA;       font-size: 0.9rem;&#xD;&#xA;       letter-spacing: 0.05em;&#xD;&#xA;     &#34;&#xD;&#xA;     onmouseover=&#34;this.style.background=&#39;#a8d4f5&#39;;this.style.color=&#39;#1c1c1c&#39;&#34;&#xD;&#xA;     onmouseout=&#34;this.style.background=&#39;transparent&#39;;this.style.color=&#39;#a8d4f5&#39;&#34;&gt;&#xD;&#xA;    🔗 &amp;nbsp;Connect on LinkedIn&#xD;&#xA;  &lt;/a&gt;&#xD;&#xA;  &lt;a href=&#34;https://github.com/rossouwvanjaarsveld-lang&#34;&#xD;&#xA;     style=&#34;&#xD;&#xA;       display: inline-block;&#xD;&#xA;       padding: 10px 24px;&#xD;&#xA;       border: 1px solid #a8d4f5;&#xD;&#xA;       border-radius: 6px;&#xD;&#xA;       color: #a8d4f5;&#xD;&#xA;       text-decoration: none;&#xD;&#xA;       font-size: 0.9rem;&#xD;&#xA;       letter-spacing: 0.05em;&#xD;&#xA;     &#34;&#xD;&#xA;     onmouseover=&#34;this.style.background=&#39;#a8d4f5&#39;;this.style.color=&#39;#1c1c1c&#39;&#34;&#xD;&#xA;     onmouseout=&#34;this.style.background=&#39;transparent&#39;;this.style.color=&#39;#a8d4f5&#39;&#34;&gt;&#xD;&#xA;    🐙 &amp;nbsp;View on GitHub&#xD;&#xA;  &lt;/a&gt;&#xD;&#xA;&lt;/div&gt;</description>
+    </item>
+  </channel>
+</rss>

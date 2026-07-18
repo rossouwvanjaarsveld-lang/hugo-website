@@ -1,42 +1,872 @@
-<!doctype html><html lang=en><head><title>Easy Equities TFSA ETF Analytics | Rossouw van Jaarsveld | Overfit and Chill</title><meta charset=utf-8><meta name=viewport content="width=device-width,initial-scale=1,minimum-scale=1"><link rel=apple-touch-icon sizes=180x180 href=/favicon/apple-touch-icon.png><link rel=icon type=image/png sizes=32x32 href=/favicon/favicon-32x32.png><link rel=icon type=image/png sizes=16x16 href=/favicon/favicon-16x16.png><link rel=manifest href=/favicon/site.webmanifest><link rel=mask-icon href=/favicon/safari-pinned-tab.svg color=#5bbad5><link rel="shortcut icon" href=/favicon/favicon.ico><meta name=theme-color content="#ffffff"><meta property="og:title" content="Easy Equities TFSA ETF Analytics"><link rel=stylesheet href=/css/style.1e16d89dad87c3bdeff841b56131a59871132b7ea5df5111ae8fd3b602b61deb.css integrity="sha256-HhbYna2Hw73v+EG1YTGlmHETK36l31ERro/TtgK2Hes=" crossorigin=anonymous><meta name=description content="Interactive leaderboards, price history, risk metrics, top holdings and index rules for every ETF available on the Easy Equities TFSA."><meta property="og:site_name" content="Rossouw van Jaarsveld | Overfit and Chill"><meta property="og:description" content="Interactive leaderboards, price history, risk metrics, top holdings and index rules for every ETF available on the Easy Equities TFSA."><meta property="og:url" content="https://overfitandchill.co.za/posts/ee-etf-tracker/"><meta property="og:type" content="website"><meta property="og:locale" content="en_US"><meta name=twitter:card content="summary_large_image"><meta name=twitter:site content><link rel=canonical href=https://overfitandchill.co.za/posts/ee-etf-tracker/><meta name=twitter:description content="Interactive leaderboards, price history, risk metrics, top holdings and index rules for every ETF available on the Easy Equities TFSA."><meta property="article:published_time" content="2026-05-31T00:00:00+00:00"><meta property="article:updated_time" content="2026-05-31T00:00:00+00:00"><meta property="og:image" content="https://overfitandchill.co.za/posts/ee-etf-tracker/ee_tfsa_tracker.JPG"><meta property="og:image:url" content="https://overfitandchill.co.za/posts/ee-etf-tracker/ee_tfsa_tracker.JPG"><link rel=stylesheet href=https://cdn.jsdelivr.net/npm/katex@0.16.11/dist/katex.min.css><script defer src=https://cdn.jsdelivr.net/npm/katex@0.16.11/dist/katex.min.js></script><script defer src=https://cdn.jsdelivr.net/npm/katex@0.16.11/dist/contrib/auto-render.min.js onload='renderMathInElement(document.body,{delimiters:[{left:"$$",right:"$$",display:!0},{left:"$",right:"$",display:!1},{left:"\\(",right:"\\)",display:!1},{left:"\\[",right:"\\]",display:!0}],throwOnError:!1})'></script><i class="dark hidden"></i></head><style>.katex-display{overflow-x:auto;overflow-y:hidden;padding:4px 0}</style><i class="dark hidden"></i></head><body class=font-sans><div class="min-h-screen flex flex-col bg-gray-100 dark:bg-warmgray-800"><div class="bg-gray-800 shadow-sm"><div class="container max-w-7xl mr-auto ml-auto"><nav class="flex items-center justify-between flex-wrap px-6 py-4"><div class="flex items-center flex-no-shrink text-white mr-6"><a href=https://overfitandchill.co.za/><span class="font-semibold text-xl tracking-tight">Rossouw van Jaarsveld | Overfit and Chill</span></a></div><div class="flex md:hidden"><div class=py-2><button onclick=toggleDarkMode() class="focus-visible:outline-none mr-1 text-white/80 hover:text-white transition-colors duration-200 cursor-pointer" aria-label="Darkmode Toggle Button">
-<span id=icon-moon><span class="inline-flex align-middle pb-0.5 text-lg"><svg height="1em" viewBox="0 -960 960 960" width="1em" fill="currentColor"><path d="M484-80q-84 0-157.5-32t-128-86.5-86.5-128T80-484q0-146 93-257.5T410-880q-18 99 11 193.5T521-521t165.5 1e2T880-410q-26 144-138 237T484-80z"/></svg></span></span>
-</span><span id=icon-sun class=hidden><span class="inline-flex align-middle pb-0.5 text-lg"><svg height="1em" viewBox="0 -960 960 960" width="1em" fill="currentColor"><path d="M440-760v-160h80v160h-80zm266 110-55-55 112-115 56 57-113 113zm54 210v-80h160v80H760zM440-40v-160h80v160h-80zM254-652 140-763l57-56 113 113-56 54zm508 512L651-255l54-54 114 110-57 59zM40-440v-80h160v80H40zm157 3e2-56-57 112-112 29 27 29 28-114 114zm113-170q-70-70-70-170t70-170 170-70 170 70 70 170-70 170-170 70-170-70z"/></svg></span></span>
-</span></button>
-<span class=text-white>|</span></div><button id=hamburgerbtn class="flex items-center px-3 py-2 text-white/80 hover:text-white transition-colors duration-200" aria-label="Hamburger Button">
-<span class="inline-flex align-middle pb-0.5 text-2xl"><svg height="1em" viewBox="0 -960 960 960" width="1em" fill="currentColor"><path d="M120-240v-80h720v80H120zm0-2e2v-80h720v80H120zm0-2e2v-80h720v80H120z"/></svg></span></span></button></div><div class="hidden w-full md:flex md:flex-row sm:items-center md:w-auto" id=mobileMenu><div class="text-sm lg:grow"></div><div class="flex flex-col md:flex-row gap-2"><a href=/ class="no-underline font-medium text-sm block sm:inline-block sm:mt-0 text-white/80 hover:text-white mr-4 py-2 sm:py-0 transition-colors duration-200">Home
-</a><a href=/about/ class="no-underline font-medium text-sm block sm:inline-block sm:mt-0 text-white/80 hover:text-white mr-4 py-2 sm:py-0 transition-colors duration-200">About</a></div><div class="text-white hidden md:block"><span>|</span>
-<button onclick=toggleDarkMode() class="focus-visible:outline-none hover:opacity-50 duration-200 ml-2 cursor-pointer" aria-label="Darkmode Toggle Button">
-<span id=icon2-moon><span class="inline-flex align-middle pb-0.5 text-lg"><svg height="1em" viewBox="0 -960 960 960" width="1em" fill="currentColor"><path d="M484-80q-84 0-157.5-32t-128-86.5-86.5-128T80-484q0-146 93-257.5T410-880q-18 99 11 193.5T521-521t165.5 1e2T880-410q-26 144-138 237T484-80z"/></svg></span></span>
-</span><span id=icon2-sun class=hidden><span class="inline-flex align-middle pb-0.5 text-lg"><svg height="1em" viewBox="0 -960 960 960" width="1em" fill="currentColor"><path d="M440-760v-160h80v160h-80zm266 110-55-55 112-115 56 57-113 113zm54 210v-80h160v80H760zM440-40v-160h80v160h-80zM254-652 140-763l57-56 113 113-56 54zm508 512L651-255l54-54 114 110-57 59zM40-440v-80h160v80H40zm157 3e2-56-57 112-112 29 27 29 28-114 114zm113-170q-70-70-70-170t70-170 170-70 170 70 70 170-70 170-170 70-170-70z"/></svg></span></span></span></button></div></div></nav></div></div><style>.active{display:block}</style><script>let hamburger=document.getElementById("hamburgerbtn"),mobileMenu=document.getElementById("mobileMenu");hamburger.addEventListener("click",function(){mobileMenu.classList.toggle("active")})</script><div class="container max-w-7xl mx-auto mt-4 grow px-5 lg:px-0" id=content><div class=lg:mx-5><div class="grid grid-cols-3 gap-4"><main class="col-span-3 lg:col-span-2"><article class="bg-white dark:bg-warmgray-900 dark:text-white rounded-xl shadow-sm p-6 my-4"><h1 class="title text-4xl font-bold mb-2">Easy Equities TFSA ETF Analytics</h1><div class="content prose md:prose-base lg:prose-lg max-w-none dark:prose-invert py-1"><script type=module src=index_files/libs/quarto-ojs/quarto-ojs-runtime.js></script><link href=index_files/libs/quarto-ojs/quarto-ojs.css rel=stylesheet><style>input[type=text],input[type=search],input:not([type]){background-color:#1c1c1c!important;border:1.5px solid #5a7fa8!important;color:#fff!important;border-radius:6px;padding:6px 12px;width:100%}input:focus{border-color:#a8d4f5!important;outline:none!important;box-shadow:0 0 0 3px rgba(168,212,245,.2)!important}select{background-color:#1c1c1c!important;border:1.5px solid #5a7fa8!important;color:#fff!important;border-radius:6px;padding:6px 12px;min-width:200px}select:focus{border-color:#a8d4f5!important;outline:none!important;box-shadow:0 0 0 3px rgba(168,212,245,.2)!important}</style><div class=cell><div class="cell-output cell-output-display"><div id=ojs-cell-1-1></div></div><div class="cell-output cell-output-display"><div id=ojs-cell-1-2></div></div><div class="cell-output cell-output-display"><div id=ojs-cell-1-3></div></div><div class="cell-output cell-output-display"><div id=ojs-cell-1-4></div></div><div class="cell-output cell-output-display"><div id=ojs-cell-1-5></div></div><div class="cell-output cell-output-display"><div id=ojs-cell-1-6></div></div><div class="cell-output cell-output-display"><div id=ojs-cell-1-7></div></div><div class="cell-output cell-output-display"><div id=ojs-cell-1-8></div></div><div class="cell-output cell-output-display"><div id=ojs-cell-1-9></div></div><div class="cell-output cell-output-display"><div id=ojs-cell-1-10></div></div><div class="cell-output cell-output-display"><div id=ojs-cell-1-11></div></div></div><hr><h2 id=-leaderboard--top-etf-per-metric>🏆 Leaderboard &mdash; Top ETF Per Metric</h2><div class=cell><div class="cell-output cell-output-display"><div id=ojs-cell-2-1></div></div><div class="cell-output cell-output-display"><div id=ojs-cell-2-2></div></div><div class="cell-output cell-output-display"><div id=ojs-cell-2-3></div></div></div><hr><h2 id=-find-your-etf>🎯 Find Your ETF</h2><div class=cell><div class="cell-output cell-output-display"><div id=ojs-cell-3></div></div></div><div class=cell><div class="cell-output cell-output-display"><div id=ojs-cell-4-1></div></div><div class="cell-output cell-output-display"><div id=ojs-cell-4-2></div></div><div class="cell-output cell-output-display"><div id=ojs-cell-4-3></div></div></div><div class=cell><div class="cell-output cell-output-display"><div id=ojs-cell-5></div></div></div><div class=cell><div class="cell-output cell-output-display"><div id=ojs-cell-6></div></div></div><div class=cell><div class="cell-output cell-output-display"><div id=ojs-cell-7></div></div></div><div class=cell><div class="cell-output cell-output-display"><div id=ojs-cell-8></div></div></div><hr><div class=cell><div class="cell-output cell-output-display"><div id=ojs-cell-9></div></div></div><div class=cell><div class="cell-output cell-output-display"><div id=ojs-cell-10-1></div></div><div class="cell-output cell-output-display"><div id=ojs-cell-10-2></div></div><div class="cell-output cell-output-display"><div id=ojs-cell-10-3></div></div><div class="cell-output cell-output-display"><div id=ojs-cell-10-4></div></div><div class="cell-output cell-output-display"><div id=ojs-cell-10-5></div></div><div class="cell-output cell-output-display"><div id=ojs-cell-10-6></div></div><div class="cell-output cell-output-display"><div id=ojs-cell-10-7></div></div><div class="cell-output cell-output-display"><div id=ojs-cell-10-8></div></div></div><div class=cell><div class="cell-output cell-output-display"><div id=ojs-cell-11></div></div></div><div class=cell><div class="cell-output cell-output-display"><div id=ojs-cell-12></div></div></div><div class=cell><div class="cell-output cell-output-display"><div id=ojs-cell-13></div></div></div><div class=cell><div class="cell-output cell-output-display"><div id=ojs-cell-14-1></div></div><div class="cell-output cell-output-display"><div id=ojs-cell-14-2></div></div></div><div class=cell><div class="cell-output cell-output-display"><div id=ojs-cell-15></div></div></div><div class=cell><div class="cell-output cell-output-display"><div id=ojs-cell-16></div></div></div><div class=cell><div class="cell-output cell-output-display"><div id=ojs-cell-17></div></div></div><div class=cell><div class="cell-output cell-output-display"><div id=ojs-cell-18></div></div></div><div class=cell><div class="cell-output cell-output-display"><div id=ojs-cell-19></div></div></div><div class=cell><div class="cell-output cell-output-display"><div id=ojs-cell-20></div></div></div><div class=cell><div class="cell-output cell-output-display"><div id=ojs-cell-21></div></div></div><div class=cell><div class="cell-output cell-output-display"><div id=ojs-cell-22></div></div></div><div class=cell><div class="cell-output cell-output-display"><div id=ojs-cell-23></div></div></div><div class=cell><div class="cell-output cell-output-display"><div id=ojs-cell-24></div></div></div><div class=cell><div class="cell-output cell-output-display"><div id=ojs-cell-25></div></div></div><div class=cell><div class="cell-output cell-output-display"><div id=ojs-cell-26></div></div></div><div class=cell><div class="cell-output cell-output-display"><div id=ojs-cell-27></div></div></div><hr><div class=cell><div class="cell-output cell-output-display"><div id=ojs-cell-28></div></div></div><div class=cell><div class="cell-output cell-output-display"><div id=ojs-cell-29-1></div></div><div class="cell-output cell-output-display"><div id=ojs-cell-29-2></div></div><div class="cell-output cell-output-display"><div id=ojs-cell-29-3></div></div><div class="cell-output cell-output-display"><div id=ojs-cell-29-4></div></div><div class="cell-output cell-output-display"><div id=ojs-cell-29-5></div></div></div><hr><div class=cell><div class="cell-output cell-output-display"><div id=ojs-cell-30></div></div></div><hr><h2 id=full-etf-comparison-table>Full ETF Comparison Table</h2><div class=cell><div class="cell-output cell-output-display"><div id=ojs-cell-31></div></div></div><div class=cell><div class="cell-output cell-output-display"><div id=ojs-cell-32></div></div></div><div class=cell><div class="cell-output cell-output-display"><div id=ojs-cell-33-1></div></div><div class="cell-output cell-output-display"><div id=ojs-cell-33-2></div></div><div class="cell-output cell-output-display"><div id=ojs-cell-33-3></div></div></div><hr><blockquote><p><strong>Note</strong></p><p><strong>Data sources:</strong> Prices from Yahoo Finance (with Stooq fallback). Holdings, benchmarks and descriptions scraped from <a href=https://justonelap.com/etfdatabase/>Just One Lap</a>, which aggregates Minimum Disclosure Documents &mdash; the regulatory monthly fact sheets every JSE-listed ETF must publish. Risk-free rate: SA repo rate (~6.75% p.a.). <strong>For educational purposes only &mdash; not financial advice.</strong></p></blockquote><script type=ojs-module-contents>
+<!doctype html>
+<html lang="en"><head><script src="/livereload.js?mindelay=10&amp;v=2&amp;port=1313&amp;path=livereload" data-no-instant defer></script>
+<title>Easy Equities TFSA ETF Analytics | Rossouw van Jaarsveld | Overfit and Chill</title>
+  <meta charset="utf-8" />
+  <meta
+    name="viewport"
+    content="width=device-width, initial-scale=1, minimum-scale=1"
+  />
+  <link
+    rel="apple-touch-icon"
+    sizes="180x180"
+    href="/favicon/apple-touch-icon.png"
+  />
+  <link
+    rel="icon"
+    type="image/png"
+    sizes="32x32"
+    href="/favicon/favicon-32x32.png"
+  />
+  <link
+    rel="icon"
+    type="image/png"
+    sizes="16x16"
+    href="/favicon/favicon-16x16.png"
+  />
+  <link rel="manifest" href="/favicon/site.webmanifest" />
+  <link
+    rel="mask-icon"
+    href=" /favicon/safari-pinned-tab.svg"
+    color="#5bbad5"
+  />
+  <link rel="shortcut icon" href="/favicon/favicon.ico" />
+  <meta name="theme-color" content="#ffffff" />
+  <meta
+    property="og:title"
+    content="Easy Equities TFSA ETF Analytics"
+  />
+  
+    
+    
+      
+        <link rel="stylesheet" href="/css/style.css" />
+      
+    
+  
+  
+
+
+
+<meta name="description" content="Interactive leaderboards, price history, risk metrics, top holdings and index rules for every ETF available on the Easy Equities TFSA." />
+<meta property="og:site_name" content="Rossouw van Jaarsveld | Overfit and Chill" />
+<meta property="og:description" content="Interactive leaderboards, price history, risk metrics, top holdings and index rules for every ETF available on the Easy Equities TFSA." />
+<meta property="og:url" content="http://localhost:1313/posts/ee-etf-tracker/" />
+<meta property="og:type" content="website" />
+<meta property="og:locale" content="en_US" />
+<meta name="twitter:card" content="summary_large_image" />
+<meta name="twitter:site" content="" />
+
+  <link rel="canonical" href="http://localhost:1313/posts/ee-etf-tracker/" />
+
+<meta name="twitter:description" content="Interactive leaderboards, price history, risk metrics, top holdings and index rules for every ETF available on the Easy Equities TFSA." />
+<meta property="article:published_time" content="2026-05-31T00:00:00&#43;00:00" />
+  <meta property="article:updated_time" content="2026-05-31T00:00:00&#43;00:00" />
+
+
+
+
+
+
+  
+    <meta property="og:image" content="http://localhost:1313/posts/ee-etf-tracker/ee_tfsa_tracker.JPG" />
+    <meta property="og:image:url" content="http://localhost:1313/posts/ee-etf-tracker/ee_tfsa_tracker.JPG" />
+  
+
+
+  
+
+  
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/katex@0.16.11/dist/katex.min.css">
+  <script defer src="https://cdn.jsdelivr.net/npm/katex@0.16.11/dist/katex.min.js"></script>
+  <script defer src="https://cdn.jsdelivr.net/npm/katex@0.16.11/dist/contrib/auto-render.min.js"
+    onload="renderMathInElement(document.body, {
+      delimiters: [
+        {left: '$$', right: '$$', display: true},
+        {left: '$',  right: '$',  display: false},
+        {left: '\\(', right: '\\)', display: false},
+        {left: '\\[', right: '\\]', display: true}
+      ],
+      throwOnError: false
+    });"></script>
+
+  <i class="dark hidden"></i>
+</head>
+
+
+  <style>
+    .katex-display {
+      overflow-x: auto;
+      overflow-y: hidden;
+      padding: 4px 0;
+    }
+  </style>
+
+  <i class="dark hidden"></i>
+</head><body class="font-sans">
+    <div class="min-h-screen flex flex-col bg-gray-100 dark:bg-warmgray-800"><div class="bg-gray-800 shadow-sm">
+  <div class="container max-w-7xl mr-auto ml-auto">
+    <nav class="flex items-center justify-between flex-wrap px-6 py-4">
+      <div class="flex items-center flex-no-shrink text-white mr-6">
+        <a href="http://localhost:1313/"
+          >
+            <span class="font-semibold text-xl tracking-tight"
+              >Rossouw van Jaarsveld | Overfit and Chill</span
+            >
+          </a
+        >
+      </div>
+      <div class="flex md:hidden">
+        <div class="py-2">
+          <button
+            onclick="toggleDarkMode()"
+            class="focus-visible:outline-none mr-1 text-white/80 hover:text-white transition-colors duration-200 cursor-pointer"
+            aria-label="Darkmode Toggle Button"
+          >
+            <span id="icon-moon"
+              ><span
+      class="inline-flex align-middle pb-0.5 text-lg"
+      ><svg xmlns="http://www.w3.org/2000/svg" height="1em" viewBox="0 -960 960 960" width="1em" fill="currentColor"><path d="M484-80q-84 0-157.5-32t-128-86.5Q144-253 112-326.5T80-484q0-146 93-257.5T410-880q-18 99 11 193.5T521-521q71 71 165.5 100T880-410q-26 144-138 237T484-80Z"/></svg></span
+    ></span
+>
+</span
+            >
+            <span id="icon-sun" class="hidden"
+              ><span
+      class="inline-flex align-middle pb-0.5 text-lg"
+      ><svg xmlns="http://www.w3.org/2000/svg" height="1em" viewBox="0 -960 960 960" width="1em" fill="currentColor"><path d="M440-760v-160h80v160h-80Zm266 110-55-55 112-115 56 57-113 113Zm54 210v-80h160v80H760ZM440-40v-160h80v160h-80ZM254-652 140-763l57-56 113 113-56 54Zm508 512L651-255l54-54 114 110-57 59ZM40-440v-80h160v80H40Zm157 300-56-57 112-112 29 27 29 28-114 114Zm113-170q-70-70-70-170t70-170q70-70 170-70t170 70q70 70 70 170t-70 170q-70 70-170 70t-170-70Z"/></svg></span
+    ></span
+>
+</span
+            >
+          </button>
+          <span class="text-white">|</span>
+        </div>
+        <button
+          id="hamburgerbtn"
+          class="flex items-center px-3 py-2 text-white/80 hover:text-white transition-colors duration-200"
+          aria-label="Hamburger Button"
+        >
+          <span
+      class="inline-flex align-middle pb-0.5 text-2xl"
+      ><svg xmlns="http://www.w3.org/2000/svg" height="1em" viewBox="0 -960 960 960" width="1em" fill="currentColor"><path d="M120-240v-80h720v80H120Zm0-200v-80h720v80H120Zm0-200v-80h720v80H120Z"/></svg></span
+    ></span
+>
+
+        </button>
+      </div>
+      <div
+        class="hidden w-full md:flex md:flex-row sm:items-center md:w-auto"
+        id="mobileMenu"
+      >
+        <div class="text-sm lg:grow"></div>
+        <div class="flex flex-col md:flex-row gap-2">
+          
+            <a
+              href="/"
+              class="no-underline font-medium text-sm block sm:inline-block sm:mt-0 text-white/80 hover:text-white mr-4 py-2 sm:py-0 transition-colors duration-200"
+            >
+              Home
+            </a>
+          
+            <a
+              href="/about/"
+              class="no-underline font-medium text-sm block sm:inline-block sm:mt-0 text-white/80 hover:text-white mr-4 py-2 sm:py-0 transition-colors duration-200"
+            >
+              About
+            </a>
+          
+        </div>
+        <div class="text-white hidden md:block">
+          <span>|</span>
+          <button
+            onclick="toggleDarkMode()"
+            class="focus-visible:outline-none hover:opacity-50 duration-200 ml-2 cursor-pointer"
+            aria-label="Darkmode Toggle Button"
+          >
+            <span id="icon2-moon"
+              ><span
+      class="inline-flex align-middle pb-0.5 text-lg"
+      ><svg xmlns="http://www.w3.org/2000/svg" height="1em" viewBox="0 -960 960 960" width="1em" fill="currentColor"><path d="M484-80q-84 0-157.5-32t-128-86.5Q144-253 112-326.5T80-484q0-146 93-257.5T410-880q-18 99 11 193.5T521-521q71 71 165.5 100T880-410q-26 144-138 237T484-80Z"/></svg></span
+    ></span
+>
+</span
+            >
+            <span id="icon2-sun" class="hidden"
+              ><span
+      class="inline-flex align-middle pb-0.5 text-lg"
+      ><svg xmlns="http://www.w3.org/2000/svg" height="1em" viewBox="0 -960 960 960" width="1em" fill="currentColor"><path d="M440-760v-160h80v160h-80Zm266 110-55-55 112-115 56 57-113 113Zm54 210v-80h160v80H760ZM440-40v-160h80v160h-80ZM254-652 140-763l57-56 113 113-56 54Zm508 512L651-255l54-54 114 110-57 59ZM40-440v-80h160v80H40Zm157 300-56-57 112-112 29 27 29 28-114 114Zm113-170q-70-70-70-170t70-170q70-70 170-70t170 70q70 70 70 170t-70 170q-70 70-170 70t-170-70Z"/></svg></span
+    ></span
+>
+</span
+            >
+          </button>
+        </div>
+      </div>
+    </nav>
+  </div>
+</div>
+<style>
+  .active {
+    display: block;
+  }
+</style>
+
+<script>
+  let hamburger = document.getElementById("hamburgerbtn");
+
+  let mobileMenu = document.getElementById("mobileMenu");
+
+  hamburger.addEventListener("click", function () {
+    mobileMenu.classList.toggle("active");
+  });
+</script>
+<div
+        class="container max-w-7xl mx-auto mt-4 grow px-5 lg:px-0"
+        id="content"
+      >
+        <div class="lg:mx-5">
+<div class="grid grid-cols-3 gap-4">
+  
+  <main class="col-span-3 lg:col-span-2">
+  
+    <article class="bg-white dark:bg-warmgray-900 dark:text-white rounded-xl shadow-sm p-6 my-4">
+      <h1 class="title text-4xl font-bold mb-2">Easy Equities TFSA ETF Analytics</h1>
+      <div class="content prose md:prose-base lg:prose-lg max-w-none dark:prose-invert py-1"><script type="module" src="index_files/libs/quarto-ojs/quarto-ojs-runtime.js"></script>
+<link  href="index_files/libs/quarto-ojs/quarto-ojs.css" rel="stylesheet" />
+<style>
+input[type="text"], input[type="search"], input:not([type]) {
+  background-color: #1c1c1c !important;
+  border: 1.5px solid #5a7fa8 !important;
+  color: #ffffff !important;
+  border-radius: 6px;
+  padding: 6px 12px;
+  width: 100%;
+}
+
+input:focus {
+  border-color: #a8d4f5 !important;
+  outline: none !important;
+  box-shadow: 0 0 0 3px rgba(168, 212, 245, 0.2) !important;
+}
+
+select {
+  background-color: #1c1c1c !important;
+  border: 1.5px solid #5a7fa8 !important;
+  color: #ffffff !important;
+  border-radius: 6px;
+  padding: 6px 12px;
+  min-width: 200px;
+}
+
+select:focus {
+  border-color: #a8d4f5 !important;
+  outline: none !important;
+  box-shadow: 0 0 0 3px rgba(168, 212, 245, 0.2) !important;
+}
+</style>
+<div class="cell">
+<div class="cell-output cell-output-display">
+<div id="ojs-cell-1-1"></div>
+</div>
+<div class="cell-output cell-output-display">
+<div id="ojs-cell-1-2"></div>
+</div>
+<div class="cell-output cell-output-display">
+<div id="ojs-cell-1-3"></div>
+</div>
+<div class="cell-output cell-output-display">
+<div id="ojs-cell-1-4"></div>
+</div>
+<div class="cell-output cell-output-display">
+<div id="ojs-cell-1-5"></div>
+</div>
+<div class="cell-output cell-output-display">
+<div id="ojs-cell-1-6"></div>
+</div>
+<div class="cell-output cell-output-display">
+<div id="ojs-cell-1-7"></div>
+</div>
+<div class="cell-output cell-output-display">
+<div id="ojs-cell-1-8"></div>
+</div>
+<div class="cell-output cell-output-display">
+<div id="ojs-cell-1-9"></div>
+</div>
+<div class="cell-output cell-output-display">
+<div id="ojs-cell-1-10"></div>
+</div>
+<div class="cell-output cell-output-display">
+<div id="ojs-cell-1-11"></div>
+</div>
+</div>
+<hr>
+<h2 id="-leaderboard--top-etf-per-metric">🏆 Leaderboard &mdash; Top ETF Per Metric</h2>
+<div class="cell">
+<div class="cell-output cell-output-display">
+<div id="ojs-cell-2-1"></div>
+</div>
+<div class="cell-output cell-output-display">
+<div id="ojs-cell-2-2"></div>
+</div>
+<div class="cell-output cell-output-display">
+<div id="ojs-cell-2-3"></div>
+</div>
+</div>
+<hr>
+<h2 id="-find-your-etf">🎯 Find Your ETF</h2>
+<div class="cell">
+<div class="cell-output cell-output-display">
+<div id="ojs-cell-3"></div>
+</div>
+</div>
+<div class="cell">
+<div class="cell-output cell-output-display">
+<div id="ojs-cell-4-1"></div>
+</div>
+<div class="cell-output cell-output-display">
+<div id="ojs-cell-4-2"></div>
+</div>
+<div class="cell-output cell-output-display">
+<div id="ojs-cell-4-3"></div>
+</div>
+</div>
+<div class="cell">
+<div class="cell-output cell-output-display">
+<div id="ojs-cell-5"></div>
+</div>
+</div>
+<div class="cell">
+<div class="cell-output cell-output-display">
+<div id="ojs-cell-6"></div>
+</div>
+</div>
+<div class="cell">
+<div class="cell-output cell-output-display">
+<div id="ojs-cell-7"></div>
+</div>
+</div>
+<div class="cell">
+<div class="cell-output cell-output-display">
+<div id="ojs-cell-8"></div>
+</div>
+</div>
+<hr>
+<div class="cell">
+<div class="cell-output cell-output-display">
+<div id="ojs-cell-9"></div>
+</div>
+</div>
+<div class="cell">
+<div class="cell-output cell-output-display">
+<div id="ojs-cell-10-1"></div>
+</div>
+<div class="cell-output cell-output-display">
+<div id="ojs-cell-10-2"></div>
+</div>
+<div class="cell-output cell-output-display">
+<div id="ojs-cell-10-3"></div>
+</div>
+<div class="cell-output cell-output-display">
+<div id="ojs-cell-10-4"></div>
+</div>
+<div class="cell-output cell-output-display">
+<div id="ojs-cell-10-5"></div>
+</div>
+<div class="cell-output cell-output-display">
+<div id="ojs-cell-10-6"></div>
+</div>
+<div class="cell-output cell-output-display">
+<div id="ojs-cell-10-7"></div>
+</div>
+<div class="cell-output cell-output-display">
+<div id="ojs-cell-10-8"></div>
+</div>
+</div>
+<div class="cell">
+<div class="cell-output cell-output-display">
+<div id="ojs-cell-11"></div>
+</div>
+</div>
+<div class="cell">
+<div class="cell-output cell-output-display">
+<div id="ojs-cell-12"></div>
+</div>
+</div>
+<div class="cell">
+<div class="cell-output cell-output-display">
+<div id="ojs-cell-13"></div>
+</div>
+</div>
+<div class="cell">
+<div class="cell-output cell-output-display">
+<div id="ojs-cell-14-1"></div>
+</div>
+<div class="cell-output cell-output-display">
+<div id="ojs-cell-14-2"></div>
+</div>
+</div>
+<div class="cell">
+<div class="cell-output cell-output-display">
+<div id="ojs-cell-15"></div>
+</div>
+</div>
+<div class="cell">
+<div class="cell-output cell-output-display">
+<div id="ojs-cell-16"></div>
+</div>
+</div>
+<div class="cell">
+<div class="cell-output cell-output-display">
+<div id="ojs-cell-17"></div>
+</div>
+</div>
+<div class="cell">
+<div class="cell-output cell-output-display">
+<div id="ojs-cell-18"></div>
+</div>
+</div>
+<div class="cell">
+<div class="cell-output cell-output-display">
+<div id="ojs-cell-19"></div>
+</div>
+</div>
+<div class="cell">
+<div class="cell-output cell-output-display">
+<div id="ojs-cell-20"></div>
+</div>
+</div>
+<div class="cell">
+<div class="cell-output cell-output-display">
+<div id="ojs-cell-21"></div>
+</div>
+</div>
+<div class="cell">
+<div class="cell-output cell-output-display">
+<div id="ojs-cell-22"></div>
+</div>
+</div>
+<div class="cell">
+<div class="cell-output cell-output-display">
+<div id="ojs-cell-23"></div>
+</div>
+</div>
+<div class="cell">
+<div class="cell-output cell-output-display">
+<div id="ojs-cell-24"></div>
+</div>
+</div>
+<div class="cell">
+<div class="cell-output cell-output-display">
+<div id="ojs-cell-25"></div>
+</div>
+</div>
+<div class="cell">
+<div class="cell-output cell-output-display">
+<div id="ojs-cell-26"></div>
+</div>
+</div>
+<div class="cell">
+<div class="cell-output cell-output-display">
+<div id="ojs-cell-27"></div>
+</div>
+</div>
+<hr>
+<div class="cell">
+<div class="cell-output cell-output-display">
+<div id="ojs-cell-28"></div>
+</div>
+</div>
+<div class="cell">
+<div class="cell-output cell-output-display">
+<div id="ojs-cell-29-1"></div>
+</div>
+<div class="cell-output cell-output-display">
+<div id="ojs-cell-29-2"></div>
+</div>
+<div class="cell-output cell-output-display">
+<div id="ojs-cell-29-3"></div>
+</div>
+<div class="cell-output cell-output-display">
+<div id="ojs-cell-29-4"></div>
+</div>
+<div class="cell-output cell-output-display">
+<div id="ojs-cell-29-5"></div>
+</div>
+</div>
+<hr>
+<div class="cell">
+<div class="cell-output cell-output-display">
+<div id="ojs-cell-30"></div>
+</div>
+</div>
+<hr>
+<h2 id="full-etf-comparison-table">Full ETF Comparison Table</h2>
+<div class="cell">
+<div class="cell-output cell-output-display">
+<div id="ojs-cell-31"></div>
+</div>
+</div>
+<div class="cell">
+<div class="cell-output cell-output-display">
+<div id="ojs-cell-32"></div>
+</div>
+</div>
+<div class="cell">
+<div class="cell-output cell-output-display">
+<div id="ojs-cell-33-1"></div>
+</div>
+<div class="cell-output cell-output-display">
+<div id="ojs-cell-33-2"></div>
+</div>
+<div class="cell-output cell-output-display">
+<div id="ojs-cell-33-3"></div>
+</div>
+</div>
+<hr>
+<blockquote>
+<p><strong>Note</strong></p>
+<p><strong>Data sources:</strong> Prices from Yahoo Finance (with Stooq fallback). Holdings, benchmarks and descriptions scraped from <a href="https://justonelap.com/etfdatabase/">Just One Lap</a>, which aggregates Minimum Disclosure Documents &mdash; the regulatory monthly fact sheets every JSE-listed ETF must publish. Risk-free rate: SA repo rate (~6.75% p.a.). <strong>For educational purposes only &mdash; not financial advice.</strong></p>
+</blockquote>
+<script type="ojs-module-contents">
 eyJjb250ZW50cyI6W3sibWV0aG9kTmFtZSI6ImludGVycHJldCIsImNlbGxOYW1lIjoib2pzLWNlbGwtMSIsImlubGluZSI6ZmFsc2UsInNvdXJjZSI6IlxuZXRmX2xpc3RfciA9IGF3YWl0IGZldGNoKCcvcG9zdHMvZWUtZXRmLXRyYWNrZXIvZGF0YS9ldGZfbGlzdC5qc29uJykudGhlbihyID0+IHIuanNvbigpKVxuc3VtbWFyeV9yICA9IGF3YWl0IGZldGNoKCcvcG9zdHMvZWUtZXRmLXRyYWNrZXIvZGF0YS9zdW1tYXJ5Lmpzb24nKS50aGVuKHIgPT4gci5qc29uKCkpXG5cbl90aWNrZXJzICAgPSBldGZfbGlzdF9yLm1hcChkID0+IGQudGlja2VyKVxuX2V0Zl9maWxlcyA9IGF3YWl0IFByb21pc2UuYWxsKF90aWNrZXJzLm1hcCh0ID0+XG4gIGZldGNoKGAvcG9zdHMvZWUtZXRmLXRyYWNrZXIvZGF0YS8ke3R9Lmpzb25gKS50aGVuKHIgPT4gci5qc29uKCkpLmNhdGNoKCgpID0+IG51bGwpXG4pKVxuYWxsX2V0ZnNfciA9IE9iamVjdC5mcm9tRW50cmllcyhcbiAgX3RpY2tlcnMubWFwKCh0LCBpKSA9PiBbdCwgX2V0Zl9maWxlc1tpXV0pLmZpbHRlcigoWywgdl0pID0+IHYgIT09IG51bGwpXG4pXG5cbmV0Zl9saXN0ICAgPSBldGZfbGlzdF9yXG5zdW1tYXJ5X2RmID0gc3VtbWFyeV9yXG5ldGZfbG9va3VwID0gT2JqZWN0LmZyb21FbnRyaWVzKFxuICBPYmplY3QuZW50cmllcyhhbGxfZXRmc19yKS5tYXAoKFt0LCBwXSkgPT4gW3QsIHBdKVxuKVxuXG4vLyDilIDilIAgRm9ybWF0dGluZyBoZWxwZXJzIOKUgOKUgOKUgOKUgOKUgOKUgOKUgOKUgOKUgOKUgOKUgOKUgOKUgOKUgOKUgOKUgOKUgOKUgOKUgOKUgOKUgOKUgOKUgOKUgOKUgOKUgOKUgOKUgOKUgOKUgOKUgOKUgOKUgOKUgOKUgOKUgOKUgOKUgOKUgOKUgOKUgOKUgOKUgOKUgOKUgOKUgOKUgOKUgOKUgOKUgOKUgOKUgOKUgOKUgFxuZnVuY3Rpb24gcGN0KHYsIGRlYyA9IDEpIHtcbiAgaWYgKHYgPT0gbnVsbCB8fCBpc05hTih2KSB8fCAhaXNGaW5pdGUodikpIHJldHVybiBcIuKAlFwiXG4gIGNvbnN0IHMgPSAodiAqIDEwMCkudG9GaXhlZChkZWMpICsgXCIlXCJcbiAgcmV0dXJuIHYgPj0gMCA/IFwiK1wiICsgcyA6IHNcbn1cbmZ1bmN0aW9uIG51bSh2LCBkZWMgPSAyKSB7XG4gIHJldHVybiAodiA9PSBudWxsIHx8IGlzTmFOKHYpIHx8ICFpc0Zpbml0ZSh2KSkgPyBcIuKAlFwiIDogdi50b0ZpeGVkKGRlYylcbn1cbmZ1bmN0aW9uIHBvcyh2KSB7XG4gIGlmICh2ID09IG51bGwgfHwgaXNOYU4odikgfHwgIWlzRmluaXRlKHYpKSByZXR1cm4gXCIjODg4XCJcbiAgcmV0dXJuIHYgPj0gMCA/IFwiIzZmY2ZhMFwiIDogXCIjZTA3MDcwXCJcbn1cbiJ9LHsibWV0aG9kTmFtZSI6ImludGVycHJldCIsImNlbGxOYW1lIjoib2pzLWNlbGwtMiIsImlubGluZSI6ZmFsc2UsInNvdXJjZSI6IlxuZnVuY3Rpb24gYmVzdEJ5KG1ldHJpYywgaGlnaGVyID0gdHJ1ZSkge1xuICBjb25zdCB2YWxpZCA9IHN1bW1hcnlfZGYuZmlsdGVyKGQgPT5cbiAgICBkW21ldHJpY10gIT0gbnVsbCAmJiAhaXNOYU4oZFttZXRyaWNdKSAmJiBpc0Zpbml0ZShkW21ldHJpY10pXG4gIClcbiAgaWYgKCF2YWxpZC5sZW5ndGgpIHJldHVybiBudWxsXG4gIHJldHVybiB2YWxpZC5yZWR1Y2UoKGEsIGIpID0+XG4gICAgaGlnaGVyID8gKGJbbWV0cmljXSA+IGFbbWV0cmljXSA/IGIgOiBhKSA6IChiW21ldHJpY10gPCBhW21ldHJpY10gPyBiIDogYSlcbiAgKVxufVxuXG5sZWFkZXJzID0gW1xuICB7IGxhYmVsOiBcIkJlc3QgQ0FHUlwiLCAgICAgICAgICAgICBpY29uOiBcIvCfk4hcIiwgbWV0cmljOiBcImNhZ3JcIiwgICAgICAgICBmbXQ6IHBjdCwgIGhpZ2hlcjogdHJ1ZSB9LFxuICB7IGxhYmVsOiBcIkhpZ2hlc3QgU2hhcnBlXCIsICAgICAgICBpY29uOiBcIuKaoVwiLCBtZXRyaWM6IFwic2hhcnBlXCIsICAgICAgIGZtdDogbnVtLCAgaGlnaGVyOiB0cnVlIH0sXG4gIHsgbGFiZWw6IFwiSGlnaGVzdCBTb3J0aW5vXCIsICAgICAgIGljb246IFwi8J+boe+4j1wiLCBtZXRyaWM6IFwic29ydGlub1wiLCAgICAgIGZtdDogbnVtLCAgaGlnaGVyOiB0cnVlIH0sXG4gIHsgbGFiZWw6IFwiSGlnaGVzdCBDYWxtYXJcIiwgICAgICAgIGljb246IFwi8J+Or1wiLCBtZXRyaWM6IFwiY2FsbWFyXCIsICAgICAgIGZtdDogbnVtLCAgaGlnaGVyOiB0cnVlIH0sXG4gIHsgbGFiZWw6IFwiQmVzdCBZVERcIiwgICAgICAgICAgICAgIGljb246IFwi8J+Xk++4j1wiLCBtZXRyaWM6IFwieXRkX3JldHVyblwiLCAgIGZtdDogcGN0LCAgaGlnaGVyOiB0cnVlIH0sXG4gIHsgbGFiZWw6IFwiQmVzdCAxLVllYXJcIiwgICAgICAgICAgIGljb246IFwi8J+agFwiLCBtZXRyaWM6IFwicmV0dXJuXzF5XCIsICAgIGZtdDogcGN0LCAgaGlnaGVyOiB0cnVlIH0sXG4gIHsgbGFiZWw6IFwiQmVzdCAzLVllYXJcIiwgICAgICAgICAgIGljb246IFwi8J+MsVwiLCBtZXRyaWM6IFwicmV0dXJuXzN5XCIsICAgIGZtdDogcGN0LCAgaGlnaGVyOiB0cnVlIH0sXG4gIHsgbGFiZWw6IFwiTG93ZXN0IFZvbGF0aWxpdHlcIiwgICAgIGljb246IFwi8J+YjFwiLCBtZXRyaWM6IFwiYW5uX3ZvbFwiLCAgICAgIGZtdDogcGN0LCAgaGlnaGVyOiBmYWxzZSB9LFxuICB7IGxhYmVsOiBcIlNtYWxsZXN0IE1heCBEcmF3ZG93blwiLCBpY29uOiBcIvCfkqpcIiwgbWV0cmljOiBcIm1heF9kcmF3ZG93blwiLCBmbXQ6IHBjdCwgIGhpZ2hlcjogdHJ1ZSB9LFxuICB7IGxhYmVsOiBcIkJlc3QgVmFSIDk1JVwiLCAgICAgICAgICBpY29uOiBcIvCflJJcIiwgbWV0cmljOiBcInZhcl85NVwiLCAgICAgICBmbXQ6IHBjdCwgIGhpZ2hlcjogdHJ1ZSB9LFxuICB7IGxhYmVsOiBcIkxvd2VzdCBURVJcIiwgICAgICAgICAgICBpY29uOiBcIvCfkrBcIiwgbWV0cmljOiBcInRlclwiLFxuICAgIGZtdDogdiA9PiAodiA9PSBudWxsID8gXCLigJRcIiA6ICh2KjEwMCkudG9GaXhlZCgyKSArIFwiJVwiKSwgaGlnaGVyOiBmYWxzZSB9LFxuXVxuXG4vLyBCdWlsZCBsZWFkZXJib2FyZCB2aWEgRE9NIEFQSSByYXRoZXIgdGhhbiBodG1sYGAgdGVtcGxhdGUgdGFncyBzbyB0aGF0XG4vLyBldmVudCBoYW5kbGVycyBhbmQgc3R5bGVzIGF0dGFjaCByZWxpYWJseS4gSW5saW5lIG9uKiBhdHRyaWJ1dGVzIGluc2lkZVxuLy8gb2JzZXJ2YWJsZSdzIGh0bCB0ZW5kIHRvIGxlYWsgYXMgdGV4dCB3aGVuIGNvbXBsZXggSlMgaXMgZW1iZWRkZWQuXG5sZWFkZXJib2FyZF9ub2RlID0gKCgpID0+IHtcbiAgY29uc3QgZ3JpZCA9IGRvY3VtZW50LmNyZWF0ZUVsZW1lbnQoXCJkaXZcIilcbiAgZ3JpZC5zdHlsZS5jc3NUZXh0ID1cbiAgICBcImRpc3BsYXk6Z3JpZDtncmlkLXRlbXBsYXRlLWNvbHVtbnM6cmVwZWF0KGF1dG8tZmlsbCxtaW5tYXgoMjAwcHgsMWZyKSk7XCIgK1xuICAgIFwiZ2FwOjEycHg7bWFyZ2luLWJvdHRvbToycmVtXCJcblxuICBmb3IgKGNvbnN0IGwgb2YgbGVhZGVycykge1xuICAgIGNvbnN0IHdpbm5lciA9IGJlc3RCeShsLm1ldHJpYywgbC5oaWdoZXIpXG4gICAgaWYgKCF3aW5uZXIpIHsgZ3JpZC5hcHBlbmRDaGlsZChkb2N1bWVudC5jcmVhdGVFbGVtZW50KFwiZGl2XCIpKTsgY29udGludWUgfVxuXG4gICAgY29uc3QgdmFsICAgICA9IHdpbm5lcltsLm1ldHJpY11cbiAgICBjb25zdCBkaXNwbGF5ID0gbC5mbXQodmFsKVxuICAgIGNvbnN0IGNvbCAgICAgPSAobC5tZXRyaWMgPT09IFwiYW5uX3ZvbFwiIHx8IGwubWV0cmljID09PSBcInRlclwiIHx8IGwubWV0cmljID09PSBcInZhcl85NVwiKVxuICAgICAgPyBcIiNhOGQ0ZjVcIiA6IHBvcyh2YWwpXG5cbiAgICBjb25zdCBjYXJkID0gZG9jdW1lbnQuY3JlYXRlRWxlbWVudChcImRpdlwiKVxuICAgIGNhcmQuc3R5bGUuY3NzVGV4dCA9XG4gICAgICBcImJhY2tncm91bmQ6IzFjMWMxYztib3JkZXI6MXB4IHNvbGlkICMyYTJhMmE7Ym9yZGVyLXJhZGl1czoxMHB4O1wiICtcbiAgICAgIFwicGFkZGluZzoxNHB4IDE2cHg7Y3Vyc29yOnBvaW50ZXI7dHJhbnNpdGlvbjphbGwgMC4xNXNcIlxuXG4gICAgY2FyZC5pbm5lckhUTUwgPSBgXG4gICAgICA8ZGl2IHN0eWxlPVwiZm9udC1zaXplOjEuM3JlbTttYXJnaW4tYm90dG9tOjRweFwiPiR7bC5pY29ufTwvZGl2PlxuICAgICAgPGRpdiBzdHlsZT1cImZvbnQtc2l6ZTowLjY4cmVtO2NvbG9yOiM4ODg7dGV4dC10cmFuc2Zvcm06dXBwZXJjYXNlO2xldHRlci1zcGFjaW5nOi4wNWVtO21hcmdpbi1ib3R0b206NHB4XCI+XG4gICAgICAgICR7bC5sYWJlbH1cbiAgICAgIDwvZGl2PlxuICAgICAgPGRpdiBzdHlsZT1cImZvbnQtc2l6ZToxLjA1cmVtO2ZvbnQtd2VpZ2h0OjcwMDtjb2xvcjoke2NvbH07bWFyZ2luLWJvdHRvbTo0cHhcIj5cbiAgICAgICAgJHtkaXNwbGF5fVxuICAgICAgPC9kaXY+XG4gICAgICA8ZGl2IHN0eWxlPVwiZm9udC1zaXplOjAuNzhyZW07Y29sb3I6I2E4ZDRmNTtmb250LXdlaWdodDo2MDBcIj4ke3dpbm5lci50aWNrZXJ9PC9kaXY+XG4gICAgICA8ZGl2IHN0eWxlPVwiZm9udC1zaXplOjAuNzByZW07Y29sb3I6IzY2Njt3aGl0ZS1zcGFjZTpub3dyYXA7b3ZlcmZsb3c6aGlkZGVuO3RleHQtb3ZlcmZsb3c6ZWxsaXBzaXNcIj5cbiAgICAgICAgJHt3aW5uZXIubmFtZX1cbiAgICAgIDwvZGl2PmBcblxuICAgIGNhcmQuYWRkRXZlbnRMaXN0ZW5lcihcIm1vdXNlb3ZlclwiLCAoKSA9PiB7XG4gICAgICBjYXJkLnN0eWxlLmJvcmRlckNvbG9yID0gXCIjNGE3YWFiXCJcbiAgICAgIGNhcmQuc3R5bGUudHJhbnNmb3JtICAgPSBcInRyYW5zbGF0ZVkoLTFweClcIlxuICAgIH0pXG4gICAgY2FyZC5hZGRFdmVudExpc3RlbmVyKFwibW91c2VvdXRcIiwgKCkgPT4ge1xuICAgICAgY2FyZC5zdHlsZS5ib3JkZXJDb2xvciA9IFwiIzJhMmEyYVwiXG4gICAgICBjYXJkLnN0eWxlLnRyYW5zZm9ybSAgID0gXCJ0cmFuc2xhdGVZKDApXCJcbiAgICB9KVxuICAgIGNhcmQuYWRkRXZlbnRMaXN0ZW5lcihcImNsaWNrXCIsICgpID0+IHNldFRpY2tlcih3aW5uZXIudGlja2VyKSlcblxuICAgIGdyaWQuYXBwZW5kQ2hpbGQoY2FyZClcbiAgfVxuXG4gIGNvbnN0IHdyYXAgPSBkb2N1bWVudC5jcmVhdGVFbGVtZW50KFwiZGl2XCIpXG4gIHdyYXAuYXBwZW5kQ2hpbGQoZ3JpZClcbiAgY29uc3Qgbm90ZSA9IGRvY3VtZW50LmNyZWF0ZUVsZW1lbnQoXCJwXCIpXG4gIG5vdGUuc3R5bGUuY3NzVGV4dCA9IFwiZm9udC1zaXplOjAuNzRyZW07Y29sb3I6IzU1NTttYXJnaW4tdG9wOi04cHhcIlxuICBub3RlLnRleHRDb250ZW50ID0gXCJDbGljayBhbnkgbGVhZGVyYm9hcmQgY2FyZCB0byBsb2FkIHRoYXQgRVRGJ3MgZnVsbCBhbmFseXRpY3MgYmVsb3cuXCJcbiAgd3JhcC5hcHBlbmRDaGlsZChub3RlKVxuICByZXR1cm4gd3JhcFxufSkoKVxuIn0seyJtZXRob2ROYW1lIjoiaW50ZXJwcmV0IiwiY2VsbE5hbWUiOiJvanMtY2VsbC0zIiwiaW5saW5lIjpmYWxzZSwic291cmNlIjoiaHRtbGA8ZGl2IHN0eWxlPVwiXG4gIGJhY2tncm91bmQ6IGxpbmVhci1ncmFkaWVudCgxMzVkZWcsICMxYTJhM2QgMCUsICMxYTNkMmEgMTAwJSk7XG4gIGJvcmRlcjogMnB4IHNvbGlkICM0YTdhYWI7XG4gIGJvcmRlci1yYWRpdXM6IDEwcHg7XG4gIHBhZGRpbmc6IDE4cHggMjJweDtcbiAgbWFyZ2luLWJvdHRvbTogMS4ycmVtO1xuXCI+XG4gIDxkaXYgc3R5bGU9XCJkaXNwbGF5OmZsZXg7YWxpZ24taXRlbXM6ZmxleC1zdGFydDtnYXA6MTJweFwiPlxuICAgIDxzcGFuIHN0eWxlPVwiZm9udC1zaXplOjEuNXJlbTtmbGV4LXNocmluazowXCI+8J+UjTwvc3Bhbj5cbiAgICA8ZGl2PlxuICAgICAgPGRpdiBzdHlsZT1cImZvbnQtc2l6ZTowLjk1cmVtO2NvbG9yOiNmZmY7Zm9udC13ZWlnaHQ6NjAwO21hcmdpbi1ib3R0b206NHB4XCI+XG4gICAgICAgIFNlYXJjaCBieSB0aWNrZXIsIG5hbWUsIG9yIGhvdyBpdCBhcHBlYXJzIG9uIEVhc3kgRXF1aXRpZXNcbiAgICAgIDwvZGl2PlxuICAgICAgPGRpdiBzdHlsZT1cImZvbnQtc2l6ZTowLjc4cmVtO2NvbG9yOiNjOGQ4ZTg7bGluZS1oZWlnaHQ6MS41XCI+XG4gICAgICAgIEVhc3kgRXF1aXRpZXMgc29tZXRpbWVzIHNob3J0ZW5zIG9yIHJlcGhyYXNlcyBmdW5kIG5hbWVzIGNvbXBhcmVkIHRvIHRoZSBvZmZpY2lhbCBFYXN5Q29tcGFyZSBsaXN0aW5ncy5cbiAgICAgICAgVHlwZSBhbnkgdmFyaWF0aW9uIOKAlCBlLmcuIFwiVG9wIDQwXCIsIFwiUyZhbXA7UCA1MDBcIiwgXCJTYXRyaXggV29ybGRcIiDigJQgYW5kIG1hdGNoZXMgd2lsbCBhcHBlYXIgaW4gdGhlIGRyb3Bkb3duLlxuICAgICAgPC9kaXY+XG4gICAgPC9kaXY+XG4gIDwvZGl2PlxuPC9kaXY+YFxuIn0seyJtZXRob2ROYW1lIjoiaW50ZXJwcmV0IiwiY2VsbE5hbWUiOiJvanMtY2VsbC00IiwiaW5saW5lIjpmYWxzZSwic291cmNlIjoiXG4vLyBOb3JtYWxpc2UgZWVfYWxpYXNlcyBpbnRvIGFuIGFycmF5IHJlZ2FyZGxlc3Mgb2YgaG93IGpzb25saXRlIGVtaXR0ZWQgaXQuXG4vLyAoT2xkIEpTT04gZmlsZXMgbWF5IGhhdmUgYSBiYXJlIHN0cmluZyBmb3Igc2luZ2xlLWFsaWFzIEVURnM7IG5ldyBmaWxlc1xuLy8gYWx3YXlzIGhhdmUgYXJyYXlzLiBUaGlzIGhlbHBlciBoYW5kbGVzIGJvdGggc2hhcGVzIHBsdXMgbWlzc2luZyB2YWx1ZXMuKVxudG9BbGlhc0FycmF5ID0gZnVuY3Rpb24odikge1xuICBpZiAodiA9PSBudWxsKSByZXR1cm4gW11cbiAgaWYgKEFycmF5LmlzQXJyYXkodikpIHJldHVybiB2XG4gIGlmICh0eXBlb2YgdiA9PT0gXCJzdHJpbmdcIikgcmV0dXJuIHYubGVuZ3RoID4gMCA/IFt2XSA6IFtdXG4gIHJldHVybiBbXVxufVxuXG4vLyBCdWlsZCBhIHNlYXJjaGFibGUgc3RyaW5nIGZvciBlYWNoIEVURiBjb21iaW5pbmcgYWxsIGtub3duIG5hbWVzXG5ldGZfc2VhcmNoX2luZGV4ID0gZXRmX2xpc3QubWFwKGQgPT4ge1xuICBjb25zdCBhbGlhc2VzID0gdG9BbGlhc0FycmF5KGQuZWVfYWxpYXNlcykuam9pbihcIiBcIilcbiAgcmV0dXJuIHtcbiAgICB0aWNrZXI6IGQudGlja2VyLFxuICAgIG5hbWU6IGQubmFtZSxcbiAgICBwcm92aWRlcjogZC5wcm92aWRlcixcbiAgICBoYXlzdGFjazogYCR7ZC50aWNrZXJ9ICR7ZC5uYW1lfSAke2QucHJvdmlkZXJ9ICR7YWxpYXNlc31gLnRvTG93ZXJDYXNlKClcbiAgfVxufSlcblxudmlld29mIHNlYXJjaF9xdWVyeSA9IElucHV0cy50ZXh0KHtcbiAgbGFiZWw6IFwiU2VhcmNoXCIsXG4gIHBsYWNlaG9sZGVyOiBcImUuZy4gU1RYNDAsIFNhdHJpeCwgVG9wIDQwLCBXb3JsZCwgTmFzZGFxLi4uXCIsXG4gIHdpZHRoOiA1MjBcbn0pXG4ifSx7Im1ldGhvZE5hbWUiOiJpbnRlcnByZXQiLCJjZWxsTmFtZSI6Im9qcy1jZWxsLTUiLCJpbmxpbmUiOmZhbHNlLCJzb3VyY2UiOiJcbi8vIENvbXB1dGUgc2VhcmNoIG1hdGNoZXMgcmVhY3RpdmVseS4gRW1wdHkgcXVlcnkg4oaSIG51bGwgKGRvbid0IHJlbmRlciByZXN1bHRzKS5cbnNlYXJjaF9tYXRjaGVzID0gKCgpID0+IHtcbiAgY29uc3QgcSA9IChzZWFyY2hfcXVlcnkgfHwgXCJcIikudHJpbSgpLnRvTG93ZXJDYXNlKClcbiAgaWYgKHEubGVuZ3RoIDwgMSkgcmV0dXJuIG51bGxcbiAgY29uc3QgdG9rZW5zID0gcS5zcGxpdCgvXFxzKy8pLmZpbHRlcih0ID0+IHQubGVuZ3RoID4gMClcbiAgcmV0dXJuIGV0Zl9zZWFyY2hfaW5kZXguZmlsdGVyKGQgPT4gdG9rZW5zLmV2ZXJ5KHQgPT4gZC5oYXlzdGFjay5pbmNsdWRlcyh0KSkpXG59KSgpXG4ifSx7Im1ldGhvZE5hbWUiOiJpbnRlcnByZXQiLCJjZWxsTmFtZSI6Im9qcy1jZWxsLTYiLCJpbmxpbmUiOmZhbHNlLCJzb3VyY2UiOiJcbi8vIFJlbmRlciBzZWFyY2ggcmVzdWx0cyBhcyBjbGlja2FibGUgY2FyZHMuIFRoaXMgc2lkZXN0ZXBzIHRoZSBwcmV2aW91cyBidWdcbi8vIHdoZXJlIGZpbHRlcmluZyByZWJ1aWx0IHRoZSBkcm9wZG93biBvbiBldmVyeSBrZXlzdHJva2UgKHJlc2V0dGluZyBpdHMgdmFsdWUpLlxuLy8gTm93IHRoZSBkcm9wZG93biBzdGF5cyBzdGFibGUgYXQgYWxsIDgyIEVURnMgYW5kIHRoZSBzZWFyY2ggaGFzIGl0cyBvd24gVUkuXG5zZWFyY2hfcmVzdWx0c19ub2RlID0gKCgpID0+IHtcbiAgaWYgKHNlYXJjaF9tYXRjaGVzID09PSBudWxsKSByZXR1cm4gaHRtbGA8ZGl2PjwvZGl2PmBcblxuICBjb25zdCB3cmFwID0gZG9jdW1lbnQuY3JlYXRlRWxlbWVudChcImRpdlwiKVxuICB3cmFwLnN0eWxlLmNzc1RleHQgPSBcIm1hcmdpbi1ib3R0b206MXJlbVwiXG5cbiAgY29uc3QgY291bnRlciA9IGRvY3VtZW50LmNyZWF0ZUVsZW1lbnQoXCJkaXZcIilcbiAgY291bnRlci5zdHlsZS5jc3NUZXh0ID0gXCJmb250LXNpemU6MC43OHJlbTtjb2xvcjojODg4O21hcmdpbi1ib3R0b206OHB4XCJcbiAgY291bnRlci50ZXh0Q29udGVudCA9XG4gICAgc2VhcmNoX21hdGNoZXMubGVuZ3RoID09PSAwXG4gICAgICA/IGBObyBFVEZzIG1hdGNoIFwiJHtzZWFyY2hfcXVlcnl9XCIuIFRyeSBhIHNob3J0ZXIgb3IgZGlmZmVyZW50IHNlYXJjaC5gXG4gICAgICA6IGAke3NlYXJjaF9tYXRjaGVzLmxlbmd0aH0gbWF0Y2gke3NlYXJjaF9tYXRjaGVzLmxlbmd0aCA9PT0gMSA/IFwiXCIgOiBcImVzXCJ9IOKAlCBjbGljayB0byBsb2FkOmBcbiAgd3JhcC5hcHBlbmRDaGlsZChjb3VudGVyKVxuXG4gIGlmIChzZWFyY2hfbWF0Y2hlcy5sZW5ndGggPT09IDApIHJldHVybiB3cmFwXG5cbiAgY29uc3QgZ3JpZCA9IGRvY3VtZW50LmNyZWF0ZUVsZW1lbnQoXCJkaXZcIilcbiAgZ3JpZC5zdHlsZS5jc3NUZXh0ID1cbiAgICBcImRpc3BsYXk6Z3JpZDtncmlkLXRlbXBsYXRlLWNvbHVtbnM6cmVwZWF0KGF1dG8tZmlsbCxtaW5tYXgoMjEwcHgsMWZyKSk7Z2FwOjhweFwiXG5cbiAgZm9yIChjb25zdCBldGYgb2Ygc2VhcmNoX21hdGNoZXMuc2xpY2UoMCwgNjApKSB7XG4gICAgY29uc3QgY2FyZCA9IGRvY3VtZW50LmNyZWF0ZUVsZW1lbnQoXCJkaXZcIilcbiAgICBjYXJkLnN0eWxlLmNzc1RleHQgPVxuICAgICAgXCJiYWNrZ3JvdW5kOiMxYzFjMWM7Ym9yZGVyOjFweCBzb2xpZCAjMmEyYTJhO2JvcmRlci1yYWRpdXM6OHB4O1wiICtcbiAgICAgIFwicGFkZGluZzoxMHB4IDE0cHg7Y3Vyc29yOnBvaW50ZXI7dHJhbnNpdGlvbjphbGwgMC4xMnNcIlxuICAgIGNhcmQuaW5uZXJIVE1MID0gYFxuICAgICAgPGRpdiBzdHlsZT1cImZvbnQtd2VpZ2h0OjcwMDtjb2xvcjojYThkNGY1O2ZvbnQtc2l6ZTowLjg1cmVtXCI+JHtldGYudGlja2VyfTwvZGl2PlxuICAgICAgPGRpdiBzdHlsZT1cImNvbG9yOiNhYWE7Zm9udC1zaXplOjAuNzRyZW07d2hpdGUtc3BhY2U6bm93cmFwO292ZXJmbG93OmhpZGRlbjt0ZXh0LW92ZXJmbG93OmVsbGlwc2lzXCI+JHtldGYubmFtZX08L2Rpdj5cbiAgICAgIDxkaXYgc3R5bGU9XCJjb2xvcjojNjY2O2ZvbnQtc2l6ZTowLjY4cmVtO21hcmdpbi10b3A6MnB4XCI+JHtldGYucHJvdmlkZXJ9PC9kaXY+XG4gICAgYFxuICAgIGNhcmQuYWRkRXZlbnRMaXN0ZW5lcihcIm1vdXNlb3ZlclwiLCAoKSA9PiB7XG4gICAgICBjYXJkLnN0eWxlLmJvcmRlckNvbG9yID0gXCIjNGE3YWFiXCJcbiAgICAgIGNhcmQuc3R5bGUuYmFja2dyb3VuZCA9IFwiIzIyMlwiXG4gICAgfSlcbiAgICBjYXJkLmFkZEV2ZW50TGlzdGVuZXIoXCJtb3VzZW91dFwiLCAoKSA9PiB7XG4gICAgICBjYXJkLnN0eWxlLmJvcmRlckNvbG9yID0gXCIjMmEyYTJhXCJcbiAgICAgIGNhcmQuc3R5bGUuYmFja2dyb3VuZCA9IFwiIzFjMWMxY1wiXG4gICAgfSlcbiAgICBjYXJkLmFkZEV2ZW50TGlzdGVuZXIoXCJjbGlja1wiLCAoKSA9PiBzZXRUaWNrZXIoZXRmLnRpY2tlcikpXG4gICAgZ3JpZC5hcHBlbmRDaGlsZChjYXJkKVxuICB9XG4gIHdyYXAuYXBwZW5kQ2hpbGQoZ3JpZClcbiAgcmV0dXJuIHdyYXBcbn0pKClcbiJ9LHsibWV0aG9kTmFtZSI6ImludGVycHJldCIsImNlbGxOYW1lIjoib2pzLWNlbGwtNyIsImlubGluZSI6ZmFsc2UsInNvdXJjZSI6IlxuLy8gVGhlIGRyb3Bkb3duIEFMV0FZUyBzaG93cyB0aGUgZnVsbCB1bml2ZXJzZSDigJQgaXQncyBhIHN0YWJsZSBcImJyb3dzZSBhbGxcIlxuLy8gYWx0ZXJuYXRpdmUgdG8gdHlwaW5nLiBUeXBlLWFoZWFkIGluc2lkZSB0aGUgbmF0aXZlIDxzZWxlY3Q+IHN0aWxsIHdvcmtzLFxuLy8gc28gdXNlcnMgY2FuIHByZXNzIGEgbGV0dGVyIHRvIGp1bXAgdG8gdGhhdCBzZWN0aW9uLlxudmlld29mIHNlbGVjdGVkX3RpY2tlciA9IElucHV0cy5zZWxlY3QoXG4gIGV0Zl9saXN0Lm1hcChkID0+IGQudGlja2VyKSxcbiAge1xuICAgIGxhYmVsOiBcIk9yIGJyb3dzZSBhbGxcIixcbiAgICBmb3JtYXQ6IHQgPT4ge1xuICAgICAgY29uc3QgaSA9IGV0Zl9saXN0LmZpbmQoZCA9PiBkLnRpY2tlciA9PT0gdClcbiAgICAgIHJldHVybiBpID8gYCR7dH0gIOKAlCAgJHtpLm5hbWV9YCA6IHRcbiAgICB9LFxuICAgIHZhbHVlOiBldGZfbGlzdFswXT8udGlja2VyXG4gIH1cbilcbiJ9LHsibWV0aG9kTmFtZSI6ImludGVycHJldCIsImNlbGxOYW1lIjoib2pzLWNlbGwtOCIsImlubGluZSI6ZmFsc2UsInNvdXJjZSI6IlxuLy8gSGVscGVyIGZvciBwcm9ncmFtbWF0aWMgdGlja2VyIHN3aXRjaGluZyBmcm9tIGxlYWRlcmJvYXJkIC8gdGFibGUgL1xuLy8gc2VhcmNoLXJlc3VsdCBjbGlja3MuXG5zZXRUaWNrZXIgPSBmdW5jdGlvbih0aWNrZXIpIHtcbiAgLy8gQ2xlYXIgdGhlIHNlYXJjaCBib3ggc28gdGhlIHVzZXIgY2FuIHNlZSB0aGUgcmVzdWx0IGxvYWRlZFxuICBjb25zdCBzZWFyY2ggPSB2aWV3b2Ygc2VhcmNoX3F1ZXJ5XG4gIGlmIChzZWFyY2gudmFsdWUgIT09IFwiXCIpIHtcbiAgICBzZWFyY2gudmFsdWUgPSBcIlwiXG4gICAgc2VhcmNoLmRpc3BhdGNoRXZlbnQobmV3IEV2ZW50KCdpbnB1dCcsIHtidWJibGVzOiB0cnVlfSkpXG4gIH1cbiAgLy8gVXBkYXRlIHRoZSBkcm9wZG93blxuICBjb25zdCBzZWwgPSB2aWV3b2Ygc2VsZWN0ZWRfdGlja2VyXG4gIHNlbC52YWx1ZSA9IHRpY2tlclxuICBzZWwuZGlzcGF0Y2hFdmVudChuZXcgRXZlbnQoJ2lucHV0Jywge2J1YmJsZXM6IHRydWV9KSlcbiAgLy8gU21vb3RoLXNjcm9sbCB0byB0aGUgYW5hbHl0aWNzIHNlY3Rpb25cbiAgY29uc3QgdGFyZ2V0ID0gZG9jdW1lbnQuZ2V0RWxlbWVudEJ5SWQoJ2V0Zi1kZXRhaWwtYW5jaG9yJylcbiAgaWYgKHRhcmdldCkgdGFyZ2V0LnNjcm9sbEludG9WaWV3KHtiZWhhdmlvcjogJ3Ntb290aCcsIGJsb2NrOiAnc3RhcnQnfSlcbn1cbiJ9LHsibWV0aG9kTmFtZSI6ImludGVycHJldCIsImNlbGxOYW1lIjoib2pzLWNlbGwtOSIsImlubGluZSI6ZmFsc2UsInNvdXJjZSI6Imh0bWxgPGRpdiBpZD1cImV0Zi1kZXRhaWwtYW5jaG9yXCIgc3R5bGU9XCJoZWlnaHQ6MXB4XCI+PC9kaXY+YFxuIn0seyJtZXRob2ROYW1lIjoiaW50ZXJwcmV0IiwiY2VsbE5hbWUiOiJvanMtY2VsbC0xMCIsImlubGluZSI6ZmFsc2UsInNvdXJjZSI6IlxuZXRmICAgICAgPSBldGZfbG9va3VwW3NlbGVjdGVkX3RpY2tlcl1cbmluZm8gICAgID0gZXRmX2xpc3QuZmluZChkID0+IGQudGlja2VyID09PSBzZWxlY3RlZF90aWNrZXIpXG5oYXNfZGF0YSA9IGV0ZiAmJiBldGYuaGFzX3ByaWNlX2RhdGEgIT09IGZhbHNlICYmIGV0Zi5wcmljZXMgJiYgZXRmLnByaWNlcy5sZW5ndGggPiAwXG5cbnByaWNlcyAgID0gaGFzX2RhdGEgPyBldGYucHJpY2VzLm1hcChkID0+ICh7Li4uZCwgZGF0ZTogbmV3IERhdGUoZC5kYXRlKX0pKSA6IFtdXG5tb250aGx5ICA9IGhhc19kYXRhICYmIGV0Zi5tb250aGx5X3JldHVybnMgPyBldGYubW9udGhseV9yZXR1cm5zIDogW11cbnJvbGxpbmcgID0gaGFzX2RhdGEgJiYgZXRmLnJvbGxpbmdfdm9sID8gZXRmLnJvbGxpbmdfdm9sLm1hcChkID0+ICh7Li4uZCwgZGF0ZTogbmV3IERhdGUoZC5kYXRlKX0pKSA6IFtdXG5kZF9kYXRhICA9IGhhc19kYXRhICYmIGV0Zi5kcmF3ZG93biA/IGV0Zi5kcmF3ZG93blxuICAgICAgICAgICAgICAubWFwKGQgPT4gKHsuLi5kLCBkYXRlOiBuZXcgRGF0ZShkLmRhdGUpfSkpXG4gICAgICAgICAgICAgIC5maWx0ZXIoZCA9PiBkLmRyYXdkb3duICE9IG51bGwgJiYgaXNGaW5pdGUoZC5kcmF3ZG93bikpIDogW11cbm0gICAgICAgID0gaGFzX2RhdGEgJiYgZXRmLm1ldHJpY3MgPyBldGYubWV0cmljcyA6IG51bGxcbiJ9LHsibWV0aG9kTmFtZSI6ImludGVycHJldCIsImNlbGxOYW1lIjoib2pzLWNlbGwtMTEiLCJpbmxpbmUiOmZhbHNlLCJzb3VyY2UiOiJcbi8vIER5bmFtaWMgaGVhZGVyIHJlbmRlcmVkIHZpYSBPSlMgKG1hcmtkb3duIGhlYWRlcnMgZG9uJ3QgaW50ZXJwb2xhdGUpXG5odG1sYDxoMiBzdHlsZT1cIm1hcmdpbi10b3A6MS41cmVtO21hcmdpbi1ib3R0b206MC42cmVtO2NvbG9yOiNhOGQ0ZjU7Ym9yZGVyLWJvdHRvbToxcHggc29saWQgIzJhMmEyYTtwYWRkaW5nLWJvdHRvbTowLjVyZW1cIj5cbiAgJHtzZWxlY3RlZF90aWNrZXJ9IOKAlCAke2V0Zi5uYW1lfVxuPC9oMj5cbjxkaXYgc3R5bGU9XCJkaXNwbGF5OmZsZXg7Z2FwOjEwcHg7ZmxleC13cmFwOndyYXA7bWFyZ2luLWJvdHRvbToxcmVtXCI+XG4gICR7ZXRmLmNhdGVnb3J5ID8gaHRtbGA8c3BhbiBzdHlsZT1cImJhY2tncm91bmQ6IzFhMzM1MDtjb2xvcjojYThkNGY1O3BhZGRpbmc6NXB4IDE0cHg7Ym9yZGVyLXJhZGl1czoyMHB4O2ZvbnQtc2l6ZTowLjgycmVtO2ZvbnQtd2VpZ2h0OjYwMFwiPlxuICAgICR7ZXRmLmNhdGVnb3J5fVxuICA8L3NwYW4+YCA6IFwiXCJ9XG4gICR7ZXRmLnRlciAhPSBudWxsID8gaHRtbGA8c3BhbiBzdHlsZT1cImJhY2tncm91bmQ6IzFhMmUxYTtjb2xvcjojNmZjZmEwO3BhZGRpbmc6NXB4IDE0cHg7Ym9yZGVyLXJhZGl1czoyMHB4O2ZvbnQtc2l6ZTowLjgycmVtO2ZvbnQtd2VpZ2h0OjYwMFwiPlxuICAgIFRFUiAkeyhldGYudGVyKjEwMCkudG9GaXhlZCgyKX0lXG4gIDwvc3Bhbj5gIDogXCJcIn1cbiAgPHNwYW4gc3R5bGU9XCJiYWNrZ3JvdW5kOiMyYTJhMWE7Y29sb3I6I2Q0Yzg2YTtwYWRkaW5nOjVweCAxNHB4O2JvcmRlci1yYWRpdXM6MjBweDtmb250LXNpemU6MC44MnJlbVwiPlxuICAgICR7ZXRmLnByb3ZpZGVyfVxuICA8L3NwYW4+XG4gICR7ZXRmLmRpc3RyaWJ1dGlvbiA/IGh0bWxgPHNwYW4gc3R5bGU9XCJiYWNrZ3JvdW5kOiMyMjI7Y29sb3I6Izg4ODtwYWRkaW5nOjVweCAxNHB4O2JvcmRlci1yYWRpdXM6MjBweDtmb250LXNpemU6MC44MnJlbVwiPlxuICAgIPCfkrggJHtldGYuZGlzdHJpYnV0aW9ufVxuICA8L3NwYW4+YCA6IFwiXCJ9XG4gICR7ZXRmLmZ1bmRfdHlwZSA/IGh0bWxgPHNwYW4gc3R5bGU9XCJiYWNrZ3JvdW5kOiMyYTFhMmE7Y29sb3I6I2M4YThkNDtwYWRkaW5nOjVweCAxNHB4O2JvcmRlci1yYWRpdXM6MjBweDtmb250LXNpemU6MC44MnJlbVwiPlxuICAgICR7ZXRmLmZ1bmRfdHlwZX1cbiAgPC9zcGFuPmAgOiBcIlwifVxuICAke2hhc19kYXRhXG4gICAgPyBodG1sYDxzcGFuIHN0eWxlPVwiYmFja2dyb3VuZDojMjIyO2NvbG9yOiM4ODg7cGFkZGluZzo1cHggMTRweDtib3JkZXItcmFkaXVzOjIwcHg7Zm9udC1zaXplOjAuODJyZW1cIj5cbiAgICAgICAgJHttLm5fdHJhZGluZ19kYXlzfSBkYXlzIMK3ICR7bS5zdGFydF9kYXRlfSDihpIgJHttLmVuZF9kYXRlfVxuICAgICAgPC9zcGFuPmBcbiAgICA6IGh0bWxgPHNwYW4gc3R5bGU9XCJiYWNrZ3JvdW5kOiMzZDJhMWE7Y29sb3I6I2U4YTg2YTtwYWRkaW5nOjVweCAxNHB4O2JvcmRlci1yYWRpdXM6MjBweDtmb250LXNpemU6MC44MnJlbTtmb250LXdlaWdodDo2MDBcIj5cbiAgICAgICAg4pqgIFByaWNlIGRhdGEgdW5hdmFpbGFibGVcbiAgICAgIDwvc3Bhbj5gXG4gIH1cbjwvZGl2PlxuJHsoKCkgPT4ge1xuICBjb25zdCBhID0gdG9BbGlhc0FycmF5KGV0Zi5lZV9hbGlhc2VzKVxuICByZXR1cm4gYS5sZW5ndGggPiAwID8gaHRtbGA8ZGl2IHN0eWxlPVwiZm9udC1zaXplOjAuNzhyZW07Y29sb3I6Izg4ODttYXJnaW4tYm90dG9tOjEuNHJlbTtwYWRkaW5nOjZweCAxMnB4O2JhY2tncm91bmQ6IzE2MTYxNjtib3JkZXItcmFkaXVzOjZweDtkaXNwbGF5OmlubGluZS1ibG9ja1wiPlxuICAgIDxzdHJvbmcgc3R5bGU9XCJjb2xvcjojYWFhXCI+QWxzbyBrbm93biBhcyBvbiBFYXN5IEVxdWl0aWVzOjwvc3Ryb25nPlxuICAgICR7YS5qb2luKFwiIMK3IFwiKX1cbiAgPC9kaXY+YCA6IFwiXCJcbn0pKCl9YFxuIn0seyJtZXRob2ROYW1lIjoiaW50ZXJwcmV0IiwiY2VsbE5hbWUiOiJvanMtY2VsbC0xMiIsImlubGluZSI6ZmFsc2UsInNvdXJjZSI6IiFoYXNfZGF0YVxuICA/IGh0bWxgPGRpdiBzdHlsZT1cIlxuICAgICAgYmFja2dyb3VuZDojMmExZjFhO1xuICAgICAgYm9yZGVyLWxlZnQ6M3B4IHNvbGlkICNlOGE4NmE7XG4gICAgICBib3JkZXItcmFkaXVzOjhweDtcbiAgICAgIHBhZGRpbmc6MThweCAyMnB4O1xuICAgICAgbWFyZ2luLWJvdHRvbToxLjVyZW07XG4gICAgICBjb2xvcjojZGRkO1xuICAgICAgZm9udC1zaXplOjAuOTJyZW07XG4gICAgICBsaW5lLWhlaWdodDoxLjY7XG4gICAgXCI+XG4gICAgICA8c3Ryb25nIHN0eWxlPVwiY29sb3I6I2U4YTg2YVwiPk5vIHByaWNlIGhpc3RvcnkgYXZhaWxhYmxlPC9zdHJvbmc+IGZvciB0aGlzIEVURiBvbiBZYWhvbyBGaW5hbmNlIG9yIFN0b29xLlxuICAgICAgVGhpcyB0eXBpY2FsbHkgYWZmZWN0cyBuZXdlciBFVEZzLCB0aG9zZSB3aXRoIHZlcnkgbG93IHRyYWRpbmcgdm9sdW1lLCBvciBhY3RpdmVseS1tYW5hZ2VkIEVURnMgd2l0aCB0aGluIGNvdmVyYWdlLlxuICAgICAgWW91IGNhbiBzdGlsbCB2aWV3IGl0cyBpbmRleCBydWxlcyBhbmQgdG9wIGhvbGRpbmdzIGJlbG93IOKAlCBhbmQgZmluZCBsaXZlIHByaWNlcyBvbiB0aGVcbiAgICAgIDxhIGhyZWY9XCJodHRwczovL3d3dy5lYXN5ZXF1aXRpZXMuY28uemFcIiBzdHlsZT1cImNvbG9yOiNhOGQ0ZjVcIj5FYXN5IEVxdWl0aWVzPC9hPiBwbGF0Zm9ybSBkaXJlY3RseS5cbiAgICA8L2Rpdj5gXG4gIDogbnVsbFxuIn0seyJtZXRob2ROYW1lIjoiaW50ZXJwcmV0IiwiY2VsbE5hbWUiOiJvanMtY2VsbC0xMyIsImlubGluZSI6ZmFsc2UsInNvdXJjZSI6Imhhc19kYXRhID8gaHRtbGA8aDMgc3R5bGU9XCJtYXJnaW4tdG9wOjFyZW07Y29sb3I6I2NjY1wiPktleSBNZXRyaWNzPC9oMz5gIDogbnVsbFxuIn0seyJtZXRob2ROYW1lIjoiaW50ZXJwcmV0IiwiY2VsbE5hbWUiOiJvanMtY2VsbC0xNCIsImlubGluZSI6ZmFsc2UsInNvdXJjZSI6Im1ldHJpY19jYXJkcyA9ICFoYXNfZGF0YSA/IFtdIDogW1xuICB7IGxhYmVsOiBcIkNBR1JcIiwgICAgICAgICAgICB2YWx1ZTogcGN0KG0uY2FnciksICAgICAgICAgIGNvbG9yOiBwb3MobS5jYWdyKSB9LFxuICB7IGxhYmVsOiBcIkFubi4gVm9sYXRpbGl0eVwiLCB2YWx1ZTogcGN0KG0uYW5uX3ZvbCksICAgICAgICBjb2xvcjogXCIjYWFjNGUwXCIgfSxcbiAgeyBsYWJlbDogXCJTaGFycGUgUmF0aW9cIiwgICAgdmFsdWU6IG51bShtLnNoYXJwZSksICAgICAgICAgY29sb3I6IHBvcyhtLnNoYXJwZSkgfSxcbiAgeyBsYWJlbDogXCJTb3J0aW5vIFJhdGlvXCIsICAgdmFsdWU6IG51bShtLnNvcnRpbm8pLCAgICAgICAgY29sb3I6IHBvcyhtLnNvcnRpbm8pIH0sXG4gIHsgbGFiZWw6IFwiQ2FsbWFyIFJhdGlvXCIsICAgIHZhbHVlOiBudW0obS5jYWxtYXIpLCAgICAgICAgIGNvbG9yOiBwb3MobS5jYWxtYXIpIH0sXG4gIHsgbGFiZWw6IFwiT21lZ2EgUmF0aW9cIiwgICAgIHZhbHVlOiBudW0obS5vbWVnYSksICAgICAgICAgIGNvbG9yOiBwb3MobS5vbWVnYSkgfSxcbiAgeyBsYWJlbDogXCJNYXggRHJhd2Rvd25cIiwgICAgdmFsdWU6IHBjdChtLm1heF9kcmF3ZG93biksICAgY29sb3I6IFwiI2UwNzA3MFwiIH0sXG4gIHsgbGFiZWw6IFwiVmFSIDk1JVwiLCAgICAgICAgIHZhbHVlOiBwY3QobS52YXJfOTUpLCAgICAgICAgIGNvbG9yOiBcIiNlMDcwNzBcIiB9LFxuICB7IGxhYmVsOiBcIkNWYVIgOTUlXCIsICAgICAgICB2YWx1ZTogcGN0KG0uY3Zhcl85NSksICAgICAgICBjb2xvcjogXCIjZTA3MDcwXCIgfSxcbiAgeyBsYWJlbDogXCJZVEQgUmV0dXJuXCIsICAgICAgdmFsdWU6IHBjdChtLnl0ZF9yZXR1cm4pLCAgICAgY29sb3I6IHBvcyhtLnl0ZF9yZXR1cm4pIH0sXG4gIHsgbGFiZWw6IFwiMS1Nb250aFwiLCAgICAgICAgIHZhbHVlOiBwY3QobS5yZXR1cm5fMW0pLCAgICAgIGNvbG9yOiBwb3MobS5yZXR1cm5fMW0pIH0sXG4gIHsgbGFiZWw6IFwiMy1Nb250aFwiLCAgICAgICAgIHZhbHVlOiBwY3QobS5yZXR1cm5fM20pLCAgICAgIGNvbG9yOiBwb3MobS5yZXR1cm5fM20pIH0sXG4gIHsgbGFiZWw6IFwiNi1Nb250aFwiLCAgICAgICAgIHZhbHVlOiBwY3QobS5yZXR1cm5fNm0pLCAgICAgIGNvbG9yOiBwb3MobS5yZXR1cm5fNm0pIH0sXG4gIHsgbGFiZWw6IFwiMS1ZZWFyXCIsICAgICAgICAgIHZhbHVlOiBwY3QobS5yZXR1cm5fMXkpLCAgICAgIGNvbG9yOiBwb3MobS5yZXR1cm5fMXkpIH0sXG4gIHsgbGFiZWw6IFwiMy1ZZWFyICh0b3RhbClcIiwgIHZhbHVlOiBwY3QobS5yZXR1cm5fM3kpLCAgICAgIGNvbG9yOiBwb3MobS5yZXR1cm5fM3kpIH0sXG5dXG5cbmh0bWxgJHttZXRyaWNfY2FyZHMubGVuZ3RoID09PSAwID8gXCJcIiA6IGh0bWxgPGRpdiBzdHlsZT1cIlxuICBkaXNwbGF5OmdyaWQ7XG4gIGdyaWQtdGVtcGxhdGUtY29sdW1uczpyZXBlYXQoYXV0by1maWxsLG1pbm1heCgxNDVweCwxZnIpKTtcbiAgZ2FwOjEwcHg7XG4gIG1hcmdpbi1ib3R0b206MnJlbVxuXCI+XG4gICR7bWV0cmljX2NhcmRzLm1hcChjID0+IGh0bWxgXG4gICAgPGRpdiBzdHlsZT1cImJhY2tncm91bmQ6IzFjMWMxYztib3JkZXI6MXB4IHNvbGlkICMyYTJhMmE7Ym9yZGVyLXJhZGl1czo4cHg7cGFkZGluZzoxMnB4IDE0cHg7ZGlzcGxheTpmbGV4O2ZsZXgtZGlyZWN0aW9uOmNvbHVtbjtnYXA6M3B4XCI+XG4gICAgICA8c3BhbiBzdHlsZT1cImZvbnQtc2l6ZTowLjY4cmVtO2NvbG9yOiM3Nzc7dGV4dC10cmFuc2Zvcm06dXBwZXJjYXNlO2xldHRlci1zcGFjaW5nOi4wNWVtXCI+XG4gICAgICAgICR7Yy5sYWJlbH1cbiAgICAgIDwvc3Bhbj5cbiAgICAgIDxzcGFuIHN0eWxlPVwiZm9udC1zaXplOjEuMnJlbTtmb250LXdlaWdodDo3MDA7Y29sb3I6JHtjLmNvbG9yfVwiPlxuICAgICAgICAke2MudmFsdWV9XG4gICAgICA8L3NwYW4+XG4gICAgPC9kaXY+XG4gIGApfVxuPC9kaXY+YH1gXG4ifSx7Im1ldGhvZE5hbWUiOiJpbnRlcnByZXQiLCJjZWxsTmFtZSI6Im9qcy1jZWxsLTE1IiwiaW5saW5lIjpmYWxzZSwic291cmNlIjoiaGFzX2RhdGEgPyBodG1sYDxoMyBzdHlsZT1cIm1hcmdpbi10b3A6MS41cmVtO2NvbG9yOiNjY2NcIj5DdW11bGF0aXZlIFJldHVybjwvaDM+YCA6IG51bGxcbiJ9LHsibWV0aG9kTmFtZSI6ImludGVycHJldCIsImNlbGxOYW1lIjoib2pzLWNlbGwtMTYiLCJpbmxpbmUiOmZhbHNlLCJzb3VyY2UiOiIhaGFzX2RhdGEgPyBudWxsIDogUGxvdC5wbG90KHtcbiAgaGVpZ2h0OiAyODAsIG1hcmdpbkxlZnQ6IDY1LFxuICBzdHlsZTogeyBiYWNrZ3JvdW5kOiBcInRyYW5zcGFyZW50XCIsIGNvbG9yOiBcIiNjY2NcIiwgZm9udFNpemU6IDEyIH0sXG4gIHg6IHsgdHlwZTogXCJ0aW1lXCIsIGxhYmVsOiBudWxsIH0sXG4gIHk6IHsgbGFiZWw6IFwiQ3VtdWxhdGl2ZSBSZXR1cm5cIiwgdGlja0Zvcm1hdDogZCA9PiAoZCoxMDApLnRvRml4ZWQoMCkrXCIlXCIsIGdyaWQ6IHRydWUgfSxcbiAgbWFya3M6IFtcbiAgICBQbG90LnJ1bGVZKFswXSwgeyBzdHJva2U6IFwiIzQ0NFwiIH0pLFxuICAgIFBsb3QuYXJlYVkocHJpY2VzLCB7IHg6XCJkYXRlXCIsIHk6XCJjdW1fcmV0dXJuXCIsXG4gICAgICBmaWxsOiBkID0+IGQuY3VtX3JldHVybiA+PSAwID8gXCIjMWUzZDJhXCIgOiBcIiMzZDFlMWVcIiwgb3BhY2l0eTogMC41IH0pLFxuICAgIFBsb3QubGluZVkocHJpY2VzLCB7IHg6XCJkYXRlXCIsIHk6XCJjdW1fcmV0dXJuXCIsXG4gICAgICBzdHJva2U6IGQgPT4gZC5jdW1fcmV0dXJuID49IDAgPyBcIiM2ZmNmYTBcIiA6IFwiI2UwNzA3MFwiLCBzdHJva2VXaWR0aDogMS44IH0pLFxuICAgIFBsb3QudGlwKHByaWNlcywgUGxvdC5wb2ludGVyWCh7IHg6XCJkYXRlXCIsIHk6XCJjdW1fcmV0dXJuXCIsXG4gICAgICB0aXRsZTogZCA9PiBgJHtkLmRhdGUudG9Mb2NhbGVEYXRlU3RyaW5nKCl9XFxuJHsoZC5jdW1fcmV0dXJuKjEwMCkudG9GaXhlZCgyKX0lYCB9KSlcbiAgXVxufSlcbiJ9LHsibWV0aG9kTmFtZSI6ImludGVycHJldCIsImNlbGxOYW1lIjoib2pzLWNlbGwtMTciLCJpbmxpbmUiOmZhbHNlLCJzb3VyY2UiOiJoYXNfZGF0YSA/IGh0bWxgPGgzIHN0eWxlPVwibWFyZ2luLXRvcDoxLjVyZW07Y29sb3I6I2NjY1wiPlByaWNlIEhpc3RvcnkgKEFkanVzdGVkIENsb3NlLCBaQVIpPC9oMz5gIDogbnVsbFxuIn0seyJtZXRob2ROYW1lIjoiaW50ZXJwcmV0IiwiY2VsbE5hbWUiOiJvanMtY2VsbC0xOCIsImlubGluZSI6ZmFsc2UsInNvdXJjZSI6IiFoYXNfZGF0YSA/IG51bGwgOiBQbG90LnBsb3Qoe1xuICBoZWlnaHQ6IDI1MCwgbWFyZ2luTGVmdDogNzAsXG4gIHN0eWxlOiB7IGJhY2tncm91bmQ6IFwidHJhbnNwYXJlbnRcIiwgY29sb3I6IFwiI2NjY1wiLCBmb250U2l6ZTogMTIgfSxcbiAgeDogeyB0eXBlOiBcInRpbWVcIiwgbGFiZWw6IG51bGwgfSxcbiAgeTogeyBsYWJlbDogXCJQcmljZSAoWkFSKVwiLCBncmlkOiB0cnVlIH0sXG4gIG1hcmtzOiBbXG4gICAgUGxvdC5saW5lWShwcmljZXMsIHsgeDpcImRhdGVcIiwgeTpcImFkanVzdGVkXCIsIHN0cm9rZTpcIiNhOGQ0ZjVcIiwgc3Ryb2tlV2lkdGg6MS42IH0pLFxuICAgIFBsb3QudGlwKHByaWNlcywgUGxvdC5wb2ludGVyWCh7IHg6XCJkYXRlXCIsIHk6XCJhZGp1c3RlZFwiLFxuICAgICAgdGl0bGU6IGQgPT4gYCR7ZC5kYXRlLnRvTG9jYWxlRGF0ZVN0cmluZygpfVxcblIgJHtkLmFkanVzdGVkICE9IG51bGwgPyBkLmFkanVzdGVkLnRvRml4ZWQoMikgOiAn4oCUJ31gIH0pKVxuICBdXG59KVxuIn0seyJtZXRob2ROYW1lIjoiaW50ZXJwcmV0IiwiY2VsbE5hbWUiOiJvanMtY2VsbC0xOSIsImlubGluZSI6ZmFsc2UsInNvdXJjZSI6Imhhc19kYXRhID8gaHRtbGA8aDMgc3R5bGU9XCJtYXJnaW4tdG9wOjEuNXJlbTtjb2xvcjojY2NjXCI+RHJhd2Rvd248L2gzPmAgOiBudWxsXG4ifSx7Im1ldGhvZE5hbWUiOiJpbnRlcnByZXQiLCJjZWxsTmFtZSI6Im9qcy1jZWxsLTIwIiwiaW5saW5lIjpmYWxzZSwic291cmNlIjoiZGRfY2hhcnQgPSAoKCkgPT4ge1xuICBpZiAoIWhhc19kYXRhKSByZXR1cm4gbnVsbFxuICBpZiAoZGRfZGF0YS5sZW5ndGggPT09IDApXG4gICAgcmV0dXJuIGh0bWxgPHAgc3R5bGU9XCJjb2xvcjojODg4O2ZvbnQtc3R5bGU6aXRhbGljXCI+Tm8gZHJhd2Rvd24gZGF0YSBhdmFpbGFibGUuPC9wPmBcbiAgY29uc3QgZHJhd2Rvd25zID0gZGRfZGF0YS5tYXAoZCA9PiBkLmRyYXdkb3duKS5maWx0ZXIodiA9PiBpc0Zpbml0ZSh2KSlcbiAgY29uc3QgZGRfbWluID0gZHJhd2Rvd25zLmxlbmd0aCA+IDAgPyBNYXRoLm1pbiguLi5kcmF3ZG93bnMpIDogLTAuMDVcbiAgY29uc3QgeV9sb3dlciA9IE1hdGgubWluKGRkX21pbiAqIDEuMDgsIC0wLjAyKVxuICByZXR1cm4gUGxvdC5wbG90KHtcbiAgICBoZWlnaHQ6IDIyMCwgbWFyZ2luTGVmdDogNjUsXG4gICAgc3R5bGU6IHsgYmFja2dyb3VuZDogXCJ0cmFuc3BhcmVudFwiLCBjb2xvcjogXCIjY2NjXCIsIGZvbnRTaXplOiAxMiB9LFxuICAgIHg6IHsgdHlwZTogXCJ0aW1lXCIsIGxhYmVsOiBudWxsIH0sXG4gICAgeTogeyBsYWJlbDogXCJEcmF3ZG93blwiLCB0aWNrRm9ybWF0OiBkID0+IChkKjEwMCkudG9GaXhlZCgwKStcIiVcIixcbiAgICAgICAgIGRvbWFpbjogW3lfbG93ZXIsIDAuMDJdLCBncmlkOiB0cnVlIH0sXG4gICAgbWFya3M6IFtcbiAgICAgIFBsb3QucnVsZVkoWzBdLCB7IHN0cm9rZTogXCIjNTU1XCIgfSksXG4gICAgICBQbG90LmFyZWFZKGRkX2RhdGEsIHsgeDpcImRhdGVcIiwgeTpcImRyYXdkb3duXCIsIGZpbGw6XCIjNWEyMDIwXCIsIG9wYWNpdHk6MC44NSwgY3VydmU6XCJsaW5lYXJcIiB9KSxcbiAgICAgIFBsb3QubGluZVkoZGRfZGF0YSwgeyB4OlwiZGF0ZVwiLCB5OlwiZHJhd2Rvd25cIiwgc3Ryb2tlOlwiI2UwNzA3MFwiLCBzdHJva2VXaWR0aDoxLjYsIGN1cnZlOlwibGluZWFyXCIgfSksXG4gICAgICBQbG90LnRpcChkZF9kYXRhLCBQbG90LnBvaW50ZXJYKHsgeDpcImRhdGVcIiwgeTpcImRyYXdkb3duXCIsXG4gICAgICAgIHRpdGxlOiBkID0+IGAke2QuZGF0ZS50b0xvY2FsZURhdGVTdHJpbmcoKX1cXG4keyhkLmRyYXdkb3duKjEwMCkudG9GaXhlZCgyKX0lYCB9KSlcbiAgICBdXG4gIH0pXG59KSgpXG4ifSx7Im1ldGhvZE5hbWUiOiJpbnRlcnByZXQiLCJjZWxsTmFtZSI6Im9qcy1jZWxsLTIxIiwiaW5saW5lIjpmYWxzZSwic291cmNlIjoiaGFzX2RhdGEgPyBodG1sYDxoMyBzdHlsZT1cIm1hcmdpbi10b3A6MS41cmVtO2NvbG9yOiNjY2NcIj5Sb2xsaW5nIFZvbGF0aWxpdHk8L2gzPmAgOiBudWxsXG4ifSx7Im1ldGhvZE5hbWUiOiJpbnRlcnByZXQiLCJjZWxsTmFtZSI6Im9qcy1jZWxsLTIyIiwiaW5saW5lIjpmYWxzZSwic291cmNlIjoidmlld29mIHZvbF93aW5kb3cgPSBJbnB1dHMucmFkaW8oXG4gIFtcInZvbF8zMGRcIixcInZvbF85MGRcIixcInZvbF8yNTJkXCJdLFxuICB7IGxhYmVsOiBcIldpbmRvd1wiLFxuICAgIGZvcm1hdDogdiA9PiAoe3ZvbF8zMGQ6XCIzMC1kYXlcIix2b2xfOTBkOlwiOTAtZGF5XCIsdm9sXzI1MmQ6XCIyNTItZGF5XCJ9KVt2XSxcbiAgICB2YWx1ZTogXCJ2b2xfOTBkXCIgfVxuKVxuIn0seyJtZXRob2ROYW1lIjoiaW50ZXJwcmV0IiwiY2VsbE5hbWUiOiJvanMtY2VsbC0yMyIsImlubGluZSI6ZmFsc2UsInNvdXJjZSI6IiFoYXNfZGF0YSA/IG51bGwgOiAoKCkgPT4ge1xuICBjb25zdCByYyA9IHJvbGxpbmcuZmlsdGVyKGQgPT4gZFt2b2xfd2luZG93XSAhPSBudWxsICYmIGlzRmluaXRlKGRbdm9sX3dpbmRvd10pKVxuICBpZiAocmMubGVuZ3RoID09PSAwKVxuICAgIHJldHVybiBodG1sYDxwIHN0eWxlPVwiY29sb3I6Izg4ODtmb250LXN0eWxlOml0YWxpY1wiPk5vdCBlbm91Z2ggZGF0YSBmb3IgJHt2b2xfd2luZG93fS48L3A+YFxuICByZXR1cm4gUGxvdC5wbG90KHtcbiAgICBoZWlnaHQ6IDIzMCwgbWFyZ2luTGVmdDogNjUsXG4gICAgc3R5bGU6IHsgYmFja2dyb3VuZDogXCJ0cmFuc3BhcmVudFwiLCBjb2xvcjogXCIjY2NjXCIsIGZvbnRTaXplOiAxMiB9LFxuICAgIHg6IHsgdHlwZTogXCJ0aW1lXCIsIGxhYmVsOiBudWxsIH0sXG4gICAgeTogeyBsYWJlbDogXCJBbm51YWxpc2VkIFZvbGF0aWxpdHlcIiwgdGlja0Zvcm1hdDogZCA9PiAoZCoxMDApLnRvRml4ZWQoMCkrXCIlXCIsIGdyaWQ6IHRydWUgfSxcbiAgICBtYXJrczogW1xuICAgICAgUGxvdC5hcmVhWShyYywgeyB4OlwiZGF0ZVwiLCB5OnZvbF93aW5kb3csIGZpbGw6XCIjMWEyYTNkXCIsIG9wYWNpdHk6MC42NSB9KSxcbiAgICAgIFBsb3QubGluZVkocmMsIHsgeDpcImRhdGVcIiwgeTp2b2xfd2luZG93LCBzdHJva2U6XCIjYThkNGY1XCIsIHN0cm9rZVdpZHRoOjEuNyB9KSxcbiAgICAgIFBsb3QudGlwKHJjLCBQbG90LnBvaW50ZXJYKHsgeDpcImRhdGVcIiwgeTp2b2xfd2luZG93LFxuICAgICAgICB0aXRsZTogZCA9PiBgJHtkLmRhdGUudG9Mb2NhbGVEYXRlU3RyaW5nKCl9XFxuJHsoZFt2b2xfd2luZG93XSoxMDApLnRvRml4ZWQoMil9JWAgfSkpXG4gICAgXVxuICB9KVxufSkoKVxuIn0seyJtZXRob2ROYW1lIjoiaW50ZXJwcmV0IiwiY2VsbE5hbWUiOiJvanMtY2VsbC0yNCIsImlubGluZSI6ZmFsc2UsInNvdXJjZSI6Imhhc19kYXRhID8gaHRtbGA8aDMgc3R5bGU9XCJtYXJnaW4tdG9wOjEuNXJlbTtjb2xvcjojY2NjXCI+TW9udGhseSBSZXR1cm5zIEhlYXRtYXA8L2gzPmAgOiBudWxsXG4ifSx7Im1ldGhvZE5hbWUiOiJpbnRlcnByZXQiLCJjZWxsTmFtZSI6Im9qcy1jZWxsLTI1IiwiaW5saW5lIjpmYWxzZSwic291cmNlIjoiIWhhc19kYXRhID8gbnVsbCA6ICgoKSA9PiB7XG4gIGNvbnN0IG1sID0gW1wiSmFuXCIsXCJGZWJcIixcIk1hclwiLFwiQXByXCIsXCJNYXlcIixcIkp1blwiLFwiSnVsXCIsXCJBdWdcIixcIlNlcFwiLFwiT2N0XCIsXCJOb3ZcIixcIkRlY1wiXVxuICBpZiAobW9udGhseS5sZW5ndGggPT09IDApXG4gICAgcmV0dXJuIGh0bWxgPHAgc3R5bGU9XCJjb2xvcjojODg4O2ZvbnQtc3R5bGU6aXRhbGljXCI+Tm8gbW9udGhseSBkYXRhLjwvcD5gXG4gIHJldHVybiBQbG90LnBsb3Qoe1xuICAgIG1hcmdpbkxlZnQ6IDQ1LCBtYXJnaW5Cb3R0b206IDMwLFxuICAgIHN0eWxlOiB7IGJhY2tncm91bmQ6IFwidHJhbnNwYXJlbnRcIiwgY29sb3I6IFwiI2NjY1wiLCBmb250U2l6ZTogMTEgfSxcbiAgICB4OiB7IGRvbWFpbjpbMSwyLDMsNCw1LDYsNyw4LDksMTAsMTEsMTJdLFxuICAgICAgICAgdGlja0Zvcm1hdDogZCA9PiBtbFtkLTFdLCBsYWJlbDogbnVsbCB9LFxuICAgIHk6IHsgbGFiZWw6IG51bGwsIHJldmVyc2U6IHRydWUgfSxcbiAgICBjb2xvcjogeyB0eXBlOlwiZGl2ZXJnaW5nXCIsIGRvbWFpbjpbLTAuMTIsMC4xMl0sIHNjaGVtZTpcIlJkWWxHblwiLCBsYWJlbDpcIk1vbnRobHkgUmV0dXJuXCIgfSxcbiAgICBtYXJrczogW1xuICAgICAgUGxvdC5jZWxsKG1vbnRobHksIHsgeDpcIm1vbnRoX251bVwiLCB5OiBkID0+IFN0cmluZyhkLnllYXIpLCBmaWxsOlwicmV0dXJuXCIsIGluc2V0OjEsIHJ4OjMgfSksXG4gICAgICBQbG90LnRleHQobW9udGhseSwgeyB4OlwibW9udGhfbnVtXCIsIHk6IGQgPT4gU3RyaW5nKGQueWVhciksXG4gICAgICAgIHRleHQ6IGQgPT4gKGQucmV0dXJuKjEwMCkudG9GaXhlZCgxKStcIiVcIixcbiAgICAgICAgZmlsbDogZCA9PiBNYXRoLmFicyhkLnJldHVybikgPiAwLjA1NSA/IFwiI2ZmZlwiIDogXCIjMzMzXCIsIGZvbnRTaXplOjkgfSlcbiAgICBdXG4gIH0pXG59KSgpXG4ifSx7Im1ldGhvZE5hbWUiOiJpbnRlcnByZXQiLCJjZWxsTmFtZSI6Im9qcy1jZWxsLTI2IiwiaW5saW5lIjpmYWxzZSwic291cmNlIjoiaGFzX2RhdGEgPyBodG1sYDxoMyBzdHlsZT1cIm1hcmdpbi10b3A6MS41cmVtO2NvbG9yOiNjY2NcIj5EYWlseSBSZXR1cm4gRGlzdHJpYnV0aW9uPC9oMz5gIDogbnVsbFxuIn0seyJtZXRob2ROYW1lIjoiaW50ZXJwcmV0IiwiY2VsbE5hbWUiOiJvanMtY2VsbC0yNyIsImlubGluZSI6ZmFsc2UsInNvdXJjZSI6IiFoYXNfZGF0YSA/IG51bGwgOiAoKCkgPT4ge1xuICBjb25zdCBkciA9IHByaWNlc1xuICAgIC5maWx0ZXIoZCA9PiBkLmRhaWx5X3JldHVybiAhPSBudWxsICYmIGlzRmluaXRlKGQuZGFpbHlfcmV0dXJuKSlcbiAgICAubWFwKGQgPT4gKHsgcjogZC5kYWlseV9yZXR1cm4gfSkpXG4gIGlmIChkci5sZW5ndGggPCA1KVxuICAgIHJldHVybiBodG1sYDxwIHN0eWxlPVwiY29sb3I6Izg4ODtmb250LXN0eWxlOml0YWxpY1wiPk5vdCBlbm91Z2ggZGF0YS48L3A+YFxuICByZXR1cm4gUGxvdC5wbG90KHtcbiAgICBoZWlnaHQ6IDIyMCwgbWFyZ2luTGVmdDogNTIsXG4gICAgc3R5bGU6IHsgYmFja2dyb3VuZDogXCJ0cmFuc3BhcmVudFwiLCBjb2xvcjogXCIjY2NjXCIsIGZvbnRTaXplOiAxMiB9LFxuICAgIHg6IHsgbGFiZWw6IFwiRGFpbHkgUmV0dXJuXCIsIHRpY2tGb3JtYXQ6IGQgPT4gKGQqMTAwKS50b0ZpeGVkKDEpK1wiJVwiIH0sXG4gICAgeTogeyBsYWJlbDogXCJDb3VudFwiLCBncmlkOiB0cnVlIH0sXG4gICAgbWFya3M6IFtcbiAgICAgIFBsb3QucmVjdFkoZHIsIFBsb3QuYmluWCh7IHk6XCJjb3VudFwiIH0sXG4gICAgICAgIHsgeDpcInJcIiwgZmlsbDogZCA9PiBkLngwID49IDAgPyBcIiMyYTVhM2FcIiA6IFwiIzVhMmEyYVwiLCB0aHJlc2hvbGRzOiA1NSB9KSksXG4gICAgICBQbG90LnJ1bGVYKFswXSwgeyBzdHJva2U6XCIjODg4XCIsIHN0cm9rZURhc2hhcnJheTpcIjQsNFwiIH0pLFxuICAgICAgUGxvdC5ydWxlWChbbS52YXJfOTVdLCB7IHN0cm9rZTpcIiNlMDcwNzBcIiwgc3Ryb2tlRGFzaGFycmF5OlwiMywzXCIsIHN0cm9rZVdpZHRoOjEuNSB9KVxuICAgIF1cbiAgfSlcbn0pKClcbiJ9LHsibWV0aG9kTmFtZSI6ImludGVycHJldCIsImNlbGxOYW1lIjoib2pzLWNlbGwtMjgiLCJpbmxpbmUiOmZhbHNlLCJzb3VyY2UiOiJodG1sYDxoMyBzdHlsZT1cIm1hcmdpbi10b3A6MS41cmVtO2NvbG9yOiNjY2NcIj5Ub3AgSG9sZGluZ3M8L2gzPmBcbiJ9LHsibWV0aG9kTmFtZSI6ImludGVycHJldCIsImNlbGxOYW1lIjoib2pzLWNlbGwtMjkiLCJpbmxpbmUiOmZhbHNlLCJzb3VyY2UiOiJcbi8vIE5vcm1hbGlzZSB0b3BfaG9sZGluZ3MgaW50byBhbiBhcnJheSBvZiB7bmFtZSwgd2VpZ2h0fSBvYmplY3RzLlxuLy8gSGFuZGxlcyBldmVyeSBzaGFwZSBqc29ubGl0ZSBtaWdodCBlbWl0IChhcnJheSwgc2luZ2xlIG9iamVjdCwgbWlzc2luZykuXG5mdW5jdGlvbiB0b0hvbGRpbmdzQXJyYXkocmF3KSB7XG4gIGlmIChyYXcgPT0gbnVsbCkgcmV0dXJuIFtdXG4gIC8vIEFscmVhZHkgYW4gYXJyYXkg4oaSIHVzZSBhcy1pc1xuICBpZiAoQXJyYXkuaXNBcnJheShyYXcpKSByZXR1cm4gcmF3XG4gIC8vIE9iamVjdCB3aXRoIG5hbWUvd2VpZ2h0IOKGkiB3cmFwIGFzIGEgc2luZ2xlLWl0ZW0gYXJyYXkgKGF1dG9fdW5ib3ggY2FzZSlcbiAgaWYgKHR5cGVvZiByYXcgPT09IFwib2JqZWN0XCIgJiYgKHJhdy5uYW1lIHx8IHJhdy53ZWlnaHQgIT0gbnVsbCkpIHJldHVybiBbcmF3XVxuICAvLyBTb21lIGxlZ2FjeSBzaGFwZXMgaGF2ZSBwYXJhbGxlbCBhcnJheXMgeyBuYW1lOiBbLi4uXSwgd2VpZ2h0OiBbLi4uXSB9XG4gIGlmICh0eXBlb2YgcmF3ID09PSBcIm9iamVjdFwiICYmIEFycmF5LmlzQXJyYXkocmF3Lm5hbWUpICYmIEFycmF5LmlzQXJyYXkocmF3LndlaWdodCkpIHtcbiAgICByZXR1cm4gcmF3Lm5hbWUubWFwKChuLCBpKSA9PiAoeyBuYW1lOiBuLCB3ZWlnaHQ6IHJhdy53ZWlnaHRbaV0gfSkpXG4gIH1cbiAgcmV0dXJuIFtdXG59XG5cbmhvbGRpbmdzID0gdG9Ib2xkaW5nc0FycmF5KGV0Zi50b3BfaG9sZGluZ3MpXG4gIC5maWx0ZXIoZCA9PiBkICYmIHR5cGVvZiBkLm5hbWUgPT09IFwic3RyaW5nXCIgJiYgZC5uYW1lLmxlbmd0aCA+IDEpXG5ob2xkaW5nc193aXRoX3dlaWdodHMgPSBob2xkaW5ncy5maWx0ZXIoZCA9PiBkLndlaWdodCAhPSBudWxsICYmIGlzRmluaXRlKGQud2VpZ2h0KSAmJiBkLndlaWdodCA+IDApXG5ob2xkaW5nc19ub193ZWlnaHRzICAgPSBob2xkaW5ncy5maWx0ZXIoZCA9PiBkLndlaWdodCA9PSBudWxsIHx8ICFpc0Zpbml0ZShkLndlaWdodCkpXG5cbmhvbGRpbmdzLmxlbmd0aCA9PT0gMFxuICA/IGh0bWxgPHAgc3R5bGU9XCJjb2xvcjojNjY2O2ZvbnQtc3R5bGU6aXRhbGljXCI+SG9sZGluZ3MgZGF0YSBub3QgYXZhaWxhYmxlIGZvciB0aGlzIEVURi48L3A+YFxuICA6IGhvbGRpbmdzX3dpdGhfd2VpZ2h0cy5sZW5ndGggPiAwXG4gID8gUGxvdC5wbG90KHtcbiAgICAgIGhlaWdodDogTWF0aC5tYXgoMTgwLCBob2xkaW5nc193aXRoX3dlaWdodHMubGVuZ3RoICogMjggKyA1MCksXG4gICAgICBtYXJnaW5MZWZ0OiAxNjAsXG4gICAgICBzdHlsZTogeyBiYWNrZ3JvdW5kOlwidHJhbnNwYXJlbnRcIiwgY29sb3I6XCIjY2NjXCIsIGZvbnRTaXplOjEyIH0sXG4gICAgICB4OiB7IGxhYmVsOlwiV2VpZ2h0ICglKVwiLCBncmlkOnRydWUsXG4gICAgICAgICAgIGRvbWFpbjpbMCwgTWF0aC5tYXgoLi4uaG9sZGluZ3Nfd2l0aF93ZWlnaHRzLm1hcChkPT5kLndlaWdodCkpICogMS4xNV0gfSxcbiAgICAgIHk6IHsgbGFiZWw6bnVsbCB9LFxuICAgICAgbWFya3M6IFtcbiAgICAgICAgUGxvdC5iYXJYKGhvbGRpbmdzX3dpdGhfd2VpZ2h0cywge1xuICAgICAgICAgIHg6IFwid2VpZ2h0XCIsIHk6IFwibmFtZVwiLFxuICAgICAgICAgIGZpbGw6IGQgPT4gZC53ZWlnaHQgPj0gMTUgPyBcIiNlMDcwNzBcIlxuICAgICAgICAgICAgICAgICAgIDogZC53ZWlnaHQgPj0gOCAgPyBcIiNkNGE4NTVcIlxuICAgICAgICAgICAgICAgICAgIDogICAgICAgICAgICAgICAgICBcIiNhOGQ0ZjVcIixcbiAgICAgICAgICBzb3J0OiB7IHk6IFwiLXhcIiB9XG4gICAgICAgIH0pLFxuICAgICAgICBQbG90LnRleHQoaG9sZGluZ3Nfd2l0aF93ZWlnaHRzLCB7XG4gICAgICAgICAgeDogXCJ3ZWlnaHRcIiwgeTogXCJuYW1lXCIsXG4gICAgICAgICAgdGV4dDogZCA9PiBkLndlaWdodC50b0ZpeGVkKDEpICsgXCIlXCIsXG4gICAgICAgICAgZmlsbDogXCIjZmZmXCIsIGZvbnRTaXplOiAxMCwgdGV4dEFuY2hvcjpcInN0YXJ0XCIsIGR4OiA0LFxuICAgICAgICAgIHNvcnQ6IHsgeTogXCIteFwiIH1cbiAgICAgICAgfSlcbiAgICAgIF1cbiAgICB9KVxuICA6IGh0bWxgPGRpdiBzdHlsZT1cIlxuICAgICAgYmFja2dyb3VuZDojMWMxYzFjO2JvcmRlcjoxcHggc29saWQgIzJhMmEyYTtib3JkZXItcmFkaXVzOjhweDtcbiAgICAgIHBhZGRpbmc6MTRweCAxOHB4XG4gICAgXCI+XG4gICAgICA8ZGl2IHN0eWxlPVwiZm9udC1zaXplOjAuNzhyZW07Y29sb3I6Izg4ODttYXJnaW4tYm90dG9tOjhweFwiPlxuICAgICAgICBUb3AgMTAgaG9sZGluZ3MgKHdlaWdodHMgbm90IHB1Ymxpc2hlZCBpbiB0aGUgTUREKVxuICAgICAgPC9kaXY+XG4gICAgICA8ZGl2IHN0eWxlPVwiZGlzcGxheTpmbGV4O2ZsZXgtd3JhcDp3cmFwO2dhcDo4cHhcIj5cbiAgICAgICAgJHtob2xkaW5ncy5tYXAoaCA9PiBodG1sYDxzcGFuIHN0eWxlPVwiXG4gICAgICAgICAgYmFja2dyb3VuZDojMjUyNTM1O2NvbG9yOiNhOGQ0ZjU7cGFkZGluZzo1cHggMTJweDtib3JkZXItcmFkaXVzOjE0cHg7XG4gICAgICAgICAgZm9udC1zaXplOjAuODRyZW1cbiAgICAgICAgXCI+JHtoLm5hbWV9PC9zcGFuPmApfVxuICAgICAgPC9kaXY+XG4gICAgPC9kaXY+YFxuIn0seyJtZXRob2ROYW1lIjoiaW50ZXJwcmV0IiwiY2VsbE5hbWUiOiJvanMtY2VsbC0zMCIsImlubGluZSI6ZmFsc2UsInNvdXJjZSI6IlxuaHRtbGA8aDMgc3R5bGU9XCJtYXJnaW4tdG9wOjEuNXJlbTtjb2xvcjojY2NjXCI+SW5kZXggUnVsZXMgJmFtcDsgQ29uc3RydWN0aW9uPC9oMz5cbjxkaXYgc3R5bGU9XCJcbiAgYmFja2dyb3VuZDojMWExYTFhO1xuICBib3JkZXI6MXB4IHNvbGlkICMyYTJhMmE7XG4gIGJvcmRlci1sZWZ0OjNweCBzb2xpZCAjYThkNGY1O1xuICBib3JkZXItcmFkaXVzOjhweDtcbiAgcGFkZGluZzoyMHB4IDI0cHg7XG4gIG1hcmdpbi1ib3R0b206MS41cmVtXG5cIj5cbiAgPGRpdiBzdHlsZT1cImZvbnQtc2l6ZTowLjcycmVtO2NvbG9yOiM4ODg7dGV4dC10cmFuc2Zvcm06dXBwZXJjYXNlO2xldHRlci1zcGFjaW5nOi4wN2VtO21hcmdpbi1ib3R0b206OHB4XCI+XG4gICAgQmVuY2htYXJrIEluZGV4XG4gIDwvZGl2PlxuICA8ZGl2IHN0eWxlPVwiZm9udC1zaXplOjFyZW07Y29sb3I6I2E4ZDRmNTtmb250LXdlaWdodDo2MDA7bWFyZ2luLWJvdHRvbToxNnB4XCI+XG4gICAgJHtldGYuaW5kZXggfHwgXCLigJRcIn1cbiAgPC9kaXY+XG4gIDxkaXYgc3R5bGU9XCJmb250LXNpemU6MC43MnJlbTtjb2xvcjojODg4O3RleHQtdHJhbnNmb3JtOnVwcGVyY2FzZTtsZXR0ZXItc3BhY2luZzouMDdlbTttYXJnaW4tYm90dG9tOjhweFwiPlxuICAgIERlc2NyaXB0aW9uXG4gIDwvZGl2PlxuICA8ZGl2IHN0eWxlPVwiZm9udC1zaXplOjAuOXJlbTtjb2xvcjojY2NjO2xpbmUtaGVpZ2h0OjEuNjU7bWFyZ2luLWJvdHRvbToxNnB4XCI+XG4gICAgJHtldGYuaW5kZXhfcnVsZXMgfHwgXCLigJRcIn1cbiAgPC9kaXY+XG4gIDxkaXYgc3R5bGU9XCJkaXNwbGF5OmZsZXg7Z2FwOjI0cHg7ZmxleC13cmFwOndyYXBcIj5cbiAgICAke2V0Zi50ZXIgIT0gbnVsbCA/IGh0bWxgPGRpdj5cbiAgICAgIDxzcGFuIHN0eWxlPVwiZm9udC1zaXplOjAuNzJyZW07Y29sb3I6Izg4ODt0ZXh0LXRyYW5zZm9ybTp1cHBlcmNhc2U7bGV0dGVyLXNwYWNpbmc6LjA3ZW1cIj5Ub3RhbCBFeHBlbnNlIFJhdGlvPC9zcGFuPlxuICAgICAgPGRpdiBzdHlsZT1cImZvbnQtc2l6ZTowLjlyZW07Y29sb3I6I2U4YTg2YTtmb250LXdlaWdodDo2MDA7bWFyZ2luLXRvcDozcHhcIj4keyhldGYudGVyKjEwMCkudG9GaXhlZCgyKX0lIHAuYS48L2Rpdj5cbiAgICA8L2Rpdj5gIDogXCJcIn1cbiAgICAke2V0Zi5kaXN0cmlidXRpb24gPyBodG1sYDxkaXY+XG4gICAgICA8c3BhbiBzdHlsZT1cImZvbnQtc2l6ZTowLjcycmVtO2NvbG9yOiM4ODg7dGV4dC10cmFuc2Zvcm06dXBwZXJjYXNlO2xldHRlci1zcGFjaW5nOi4wN2VtXCI+RGlzdHJpYnV0aW9uPC9zcGFuPlxuICAgICAgPGRpdiBzdHlsZT1cImZvbnQtc2l6ZTowLjlyZW07Y29sb3I6IzZmY2ZhMDtmb250LXdlaWdodDo2MDA7bWFyZ2luLXRvcDozcHhcIj4ke2V0Zi5kaXN0cmlidXRpb259PC9kaXY+XG4gICAgPC9kaXY+YCA6IFwiXCJ9XG4gICAgPGRpdj5cbiAgICAgIDxzcGFuIHN0eWxlPVwiZm9udC1zaXplOjAuNzJyZW07Y29sb3I6Izg4ODt0ZXh0LXRyYW5zZm9ybTp1cHBlcmNhc2U7bGV0dGVyLXNwYWNpbmc6LjA3ZW1cIj5Qcm92aWRlcjwvc3Bhbj5cbiAgICAgIDxkaXYgc3R5bGU9XCJmb250LXNpemU6MC45cmVtO2NvbG9yOiNjY2M7Zm9udC13ZWlnaHQ6NjAwO21hcmdpbi10b3A6M3B4XCI+JHtldGYucHJvdmlkZXJ9PC9kaXY+XG4gICAgPC9kaXY+XG4gICAgJHtldGYubWRkX3VwZGF0ZWQgPyBodG1sYDxkaXY+XG4gICAgICA8c3BhbiBzdHlsZT1cImZvbnQtc2l6ZTowLjcycmVtO2NvbG9yOiM4ODg7dGV4dC10cmFuc2Zvcm06dXBwZXJjYXNlO2xldHRlci1zcGFjaW5nOi4wN2VtXCI+TUREIFVwZGF0ZWQ8L3NwYW4+XG4gICAgICA8ZGl2IHN0eWxlPVwiZm9udC1zaXplOjAuOXJlbTtjb2xvcjojYWFhO2ZvbnQtd2VpZ2h0OjYwMDttYXJnaW4tdG9wOjNweFwiPiR7ZXRmLm1kZF91cGRhdGVkfTwvZGl2PlxuICAgIDwvZGl2PmAgOiBcIlwifVxuICA8L2Rpdj5cbiAgJHtldGYubWRkX3VwZGF0ZWQgPyBodG1sYDxkaXYgc3R5bGU9XCJtYXJnaW4tdG9wOjE0cHg7Zm9udC1zaXplOjAuNzJyZW07Y29sb3I6IzY2NlwiPlxuICAgIFNvdXJjZTogPGEgaHJlZj1cImh0dHBzOi8vanVzdG9uZWxhcC5jb20vJHtzZWxlY3RlZF90aWNrZXIudG9Mb3dlckNhc2UoKX0vXCIgdGFyZ2V0PVwiX2JsYW5rXCIgc3R5bGU9XCJjb2xvcjojODg4XCI+SnVzdCBPbmUgTGFwPC9hPixcbiAgICBhZ2dyZWdhdGVkIGZyb20gdGhlIGlzc3VlcidzIE1pbmltdW0gRGlzY2xvc3VyZSBEb2N1bWVudC5cbiAgPC9kaXY+YCA6IFwiXCJ9XG48L2Rpdj5gXG4ifSx7Im1ldGhvZE5hbWUiOiJpbnRlcnByZXQiLCJjZWxsTmFtZSI6Im9qcy1jZWxsLTMxIiwiaW5saW5lIjpmYWxzZSwic291cmNlIjoidmlld29mIGNhdF9maWx0ZXIgPSBJbnB1dHMuc2VsZWN0KFxuICBbXCJBbGxcIiwgLi4ubmV3IFNldChldGZfbGlzdC5tYXAoZCA9PiBkLnByb3ZpZGVyKSldLFxuICB7IGxhYmVsOiBcIkZpbHRlciBieSBwcm92aWRlclwiLCB2YWx1ZTogXCJBbGxcIiB9XG4pXG4ifSx7Im1ldGhvZE5hbWUiOiJpbnRlcnByZXQiLCJjZWxsTmFtZSI6Im9qcy1jZWxsLTMyIiwiaW5saW5lIjpmYWxzZSwic291cmNlIjoidmlld29mIHNvcnRfY29sID0gSW5wdXRzLnNlbGVjdChcbiAgW1wiY2FnclwiLFwic2hhcnBlXCIsXCJzb3J0aW5vXCIsXCJjYWxtYXJcIixcInJldHVybl8xeVwiLFwicmV0dXJuXzN5XCIsXCJhbm5fdm9sXCIsXCJtYXhfZHJhd2Rvd25cIixcInl0ZF9yZXR1cm5cIixcInRlclwiXSxcbiAgeyBsYWJlbDogXCJTb3J0IGJ5XCIsXG4gICAgZm9ybWF0OiBjID0+ICh7Y2FncjpcIkNBR1JcIixzaGFycGU6XCJTaGFycGVcIixzb3J0aW5vOlwiU29ydGlub1wiLGNhbG1hcjpcIkNhbG1hclwiLFxuICAgICAgcmV0dXJuXzF5OlwiMVkgUmV0dXJuXCIscmV0dXJuXzN5OlwiM1kgUmV0dXJuXCIsYW5uX3ZvbDpcIlZvbGF0aWxpdHlcIixcbiAgICAgIG1heF9kcmF3ZG93bjpcIk1heCBERFwiLHl0ZF9yZXR1cm46XCJZVERcIix0ZXI6XCJURVJcIn0pW2NdIHx8IGMsXG4gICAgdmFsdWU6IFwic2hhcnBlXCIgfVxuKVxuIn0seyJtZXRob2ROYW1lIjoiaW50ZXJwcmV0IiwiY2VsbE5hbWUiOiJvanMtY2VsbC0zMyIsImlubGluZSI6ZmFsc2UsInNvdXJjZSI6Ilxuc29ydF9hc2NfY29scyA9IFtcImFubl92b2xcIixcIm1heF9kcmF3ZG93blwiLFwidGVyXCJdXG5cbmZpbHRlcmVkID0gKGNhdF9maWx0ZXIgPT09IFwiQWxsXCIgPyBzdW1tYXJ5X2RmXG4gIDogc3VtbWFyeV9kZi5maWx0ZXIoZCA9PiB7XG4gICAgICBjb25zdCBpID0gZXRmX2xpc3QuZmluZChlID0+IGUudGlja2VyID09PSBkLnRpY2tlcilcbiAgICAgIHJldHVybiBpICYmIGkucHJvdmlkZXIgPT09IGNhdF9maWx0ZXJcbiAgICB9KVxuKS5zbGljZSgpLnNvcnQoKGEsIGIpID0+IHtcbiAgY29uc3QgYXNjID0gc29ydF9hc2NfY29scy5pbmNsdWRlcyhzb3J0X2NvbClcbiAgY29uc3QgYXYgPSBhW3NvcnRfY29sXSwgYnYgPSBiW3NvcnRfY29sXVxuICBpZiAoYXYgPT0gbnVsbCB8fCBpc05hTihhdikpIHJldHVybiAxXG4gIGlmIChidiA9PSBudWxsIHx8IGlzTmFOKGJ2KSkgcmV0dXJuIC0xXG4gIHJldHVybiBhc2MgPyBhdiAtIGJ2IDogYnYgLSBhdlxufSlcblxuY29tcGFyaXNvbl90YWJsZSA9ICgoKSA9PiB7XG4gIGNvbnN0IHdyYXAgID0gZG9jdW1lbnQuY3JlYXRlRWxlbWVudChcImRpdlwiKVxuICB3cmFwLnN0eWxlLm92ZXJmbG93WCA9IFwiYXV0b1wiXG5cbiAgY29uc3QgdGFibGUgPSBkb2N1bWVudC5jcmVhdGVFbGVtZW50KFwidGFibGVcIilcbiAgdGFibGUuc3R5bGUuY3NzVGV4dCA9IFwid2lkdGg6MTAwJTtib3JkZXItY29sbGFwc2U6Y29sbGFwc2U7Zm9udC1zaXplOjAuOHJlbVwiXG5cbiAgLy8gSGVhZGVyXG4gIGNvbnN0IHRoZWFkID0gZG9jdW1lbnQuY3JlYXRlRWxlbWVudChcInRoZWFkXCIpXG4gIHRoZWFkLmlubmVySFRNTCA9IGBcbiAgICA8dHIgc3R5bGU9XCJib3JkZXItYm90dG9tOjJweCBzb2xpZCAjMzMzO2NvbG9yOiM2NjY7dGV4dC1hbGlnbjpyaWdodFwiPlxuICAgICAgPHRoIHN0eWxlPVwidGV4dC1hbGlnbjpsZWZ0O3BhZGRpbmc6N3B4IDEwcHg7d2hpdGUtc3BhY2U6bm93cmFwXCI+VGlja2VyPC90aD5cbiAgICAgIDx0aCBzdHlsZT1cInBhZGRpbmc6N3B4IDhweFwiPlRFUjwvdGg+XG4gICAgICA8dGggc3R5bGU9XCJwYWRkaW5nOjdweCA4cHhcIj5ZVEQ8L3RoPlxuICAgICAgPHRoIHN0eWxlPVwicGFkZGluZzo3cHggOHB4XCI+MVk8L3RoPlxuICAgICAgPHRoIHN0eWxlPVwicGFkZGluZzo3cHggOHB4XCI+M1k8L3RoPlxuICAgICAgPHRoIHN0eWxlPVwicGFkZGluZzo3cHggOHB4XCI+Q0FHUjwvdGg+XG4gICAgICA8dGggc3R5bGU9XCJwYWRkaW5nOjdweCA4cHhcIj5Wb2w8L3RoPlxuICAgICAgPHRoIHN0eWxlPVwicGFkZGluZzo3cHggOHB4XCI+U2hhcnBlPC90aD5cbiAgICAgIDx0aCBzdHlsZT1cInBhZGRpbmc6N3B4IDhweFwiPlNvcnRpbm88L3RoPlxuICAgICAgPHRoIHN0eWxlPVwicGFkZGluZzo3cHggOHB4XCI+Q2FsbWFyPC90aD5cbiAgICAgIDx0aCBzdHlsZT1cInBhZGRpbmc6N3B4IDhweFwiPk1heCBERDwvdGg+XG4gICAgPC90cj5gXG4gIHRhYmxlLmFwcGVuZENoaWxkKHRoZWFkKVxuXG4gIC8vIEJvZHlcbiAgY29uc3QgdGJvZHkgPSBkb2N1bWVudC5jcmVhdGVFbGVtZW50KFwidGJvZHlcIilcbiAgZm9yIChjb25zdCByIG9mIGZpbHRlcmVkKSB7XG4gICAgY29uc3QgdHIgPSBkb2N1bWVudC5jcmVhdGVFbGVtZW50KFwidHJcIilcbiAgICBjb25zdCBpc1NlbGVjdGVkID0gci50aWNrZXIgPT09IHNlbGVjdGVkX3RpY2tlclxuICAgIHRyLnN0eWxlLmNzc1RleHQgPVxuICAgICAgYGJvcmRlci1ib3R0b206MXB4IHNvbGlkICMxZTFlMWU7Y3Vyc29yOnBvaW50ZXI7YCArXG4gICAgICBgYmFja2dyb3VuZDoke2lzU2VsZWN0ZWQgPyAnIzFhMmExYScgOiAndHJhbnNwYXJlbnQnfWBcblxuICAgIC8vIENvbWJpbmUgbmFtZSArIHByb3ZpZGVyIGludG8gdGhlIHRpY2tlciBjZWxsJ3MgdG9vbHRpcCBzbyB0aGVcbiAgICAvLyBpbmZvcm1hdGlvbiBpcyBzdGlsbCBkaXNjb3ZlcmFibGUgb24gaG92ZXIgZXZlbiB0aG91Z2ggdGhlIGNvbHVtbnNcbiAgICAvLyBhcmUgaGlkZGVuIHRvIGtlZXAgdGhlIHRhYmxlIGNvbXBhY3QuXG4gICAgY29uc3QgdG9vbHRpcCA9IGAke3IubmFtZX0g4oCUICR7ci5wcm92aWRlcn1gXG4gICAgdHIudGl0bGUgPSB0b29sdGlwXG5cbiAgICB0ci5pbm5lckhUTUwgPSBgXG4gICAgICA8dGQgc3R5bGU9XCJwYWRkaW5nOjZweCAxMHB4O2ZvbnQtd2VpZ2h0OjcwMDtjb2xvcjojYThkNGY1O3doaXRlLXNwYWNlOm5vd3JhcFwiIHRpdGxlPVwiJHt0b29sdGlwfVwiPiR7ci50aWNrZXJ9PC90ZD5cbiAgICAgIDx0ZCBzdHlsZT1cInBhZGRpbmc6NnB4IDhweDt0ZXh0LWFsaWduOnJpZ2h0O2NvbG9yOiM4ODhcIj4ke3IudGVyID09IG51bGwgPyBcIuKAlFwiIDogKHIudGVyKjEwMCkudG9GaXhlZCgyKStcIiVcIn08L3RkPlxuICAgICAgPHRkIHN0eWxlPVwicGFkZGluZzo2cHggOHB4O3RleHQtYWxpZ246cmlnaHQ7Y29sb3I6JHtwb3Moci55dGRfcmV0dXJuKX1cIj4ke3BjdChyLnl0ZF9yZXR1cm4pfTwvdGQ+XG4gICAgICA8dGQgc3R5bGU9XCJwYWRkaW5nOjZweCA4cHg7dGV4dC1hbGlnbjpyaWdodDtjb2xvcjoke3BvcyhyLnJldHVybl8xeSl9XCI+JHtwY3Qoci5yZXR1cm5fMXkpfTwvdGQ+XG4gICAgICA8dGQgc3R5bGU9XCJwYWRkaW5nOjZweCA4cHg7dGV4dC1hbGlnbjpyaWdodDtjb2xvcjoke3BvcyhyLnJldHVybl8zeSl9XCI+JHtwY3Qoci5yZXR1cm5fM3kpfTwvdGQ+XG4gICAgICA8dGQgc3R5bGU9XCJwYWRkaW5nOjZweCA4cHg7dGV4dC1hbGlnbjpyaWdodDtjb2xvcjoke3BvcyhyLmNhZ3IpfVwiPiR7cGN0KHIuY2Fncil9PC90ZD5cbiAgICAgIDx0ZCBzdHlsZT1cInBhZGRpbmc6NnB4IDhweDt0ZXh0LWFsaWduOnJpZ2h0O2NvbG9yOiNhYWM0ZTBcIj4ke3BjdChyLmFubl92b2wpfTwvdGQ+XG4gICAgICA8dGQgc3R5bGU9XCJwYWRkaW5nOjZweCA4cHg7dGV4dC1hbGlnbjpyaWdodDtjb2xvcjoke3BvcyhyLnNoYXJwZSl9XCI+JHtudW0oci5zaGFycGUpfTwvdGQ+XG4gICAgICA8dGQgc3R5bGU9XCJwYWRkaW5nOjZweCA4cHg7dGV4dC1hbGlnbjpyaWdodDtjb2xvcjoke3BvcyhyLnNvcnRpbm8pfVwiPiR7bnVtKHIuc29ydGlubyl9PC90ZD5cbiAgICAgIDx0ZCBzdHlsZT1cInBhZGRpbmc6NnB4IDhweDt0ZXh0LWFsaWduOnJpZ2h0O2NvbG9yOiR7cG9zKHIuY2FsbWFyKX1cIj4ke251bShyLmNhbG1hcil9PC90ZD5cbiAgICAgIDx0ZCBzdHlsZT1cInBhZGRpbmc6NnB4IDhweDt0ZXh0LWFsaWduOnJpZ2h0O2NvbG9yOiNlMDcwNzBcIj4ke3BjdChyLm1heF9kcmF3ZG93bil9PC90ZD5gXG5cbiAgICB0ci5hZGRFdmVudExpc3RlbmVyKFwiY2xpY2tcIiwgKCkgPT4gc2V0VGlja2VyKHIudGlja2VyKSlcbiAgICB0ci5hZGRFdmVudExpc3RlbmVyKFwibW91c2VvdmVyXCIsICgpID0+IHtcbiAgICAgIGlmIChyLnRpY2tlciAhPT0gc2VsZWN0ZWRfdGlja2VyKSB0ci5zdHlsZS5iYWNrZ3JvdW5kID0gXCIjMWExYTFhXCJcbiAgICB9KVxuICAgIHRyLmFkZEV2ZW50TGlzdGVuZXIoXCJtb3VzZW91dFwiLCAoKSA9PiB7XG4gICAgICBpZiAoci50aWNrZXIgIT09IHNlbGVjdGVkX3RpY2tlcikgdHIuc3R5bGUuYmFja2dyb3VuZCA9IFwidHJhbnNwYXJlbnRcIlxuICAgIH0pXG4gICAgdGJvZHkuYXBwZW5kQ2hpbGQodHIpXG4gIH1cbiAgdGFibGUuYXBwZW5kQ2hpbGQodGJvZHkpXG4gIHdyYXAuYXBwZW5kQ2hpbGQodGFibGUpXG5cbiAgY29uc3Qgbm90ZSA9IGRvY3VtZW50LmNyZWF0ZUVsZW1lbnQoXCJwXCIpXG4gIG5vdGUuc3R5bGUuY3NzVGV4dCA9IFwiZm9udC1zaXplOjAuNzNyZW07Y29sb3I6IzU1NTttYXJnaW4tdG9wOjZweFwiXG4gIG5vdGUudGV4dENvbnRlbnQgPSBcIkhvdmVyIGEgcm93IGZvciB0aGUgZnVuZCdzIGZ1bGwgbmFtZSBhbmQgcHJvdmlkZXIuIENsaWNrIHRvIGxvYWQgdGhhdCBFVEYncyBmdWxsIGFuYWx5dGljcyBhYm92ZS4gRW0tZGFzaGVzICjigJQpIGluZGljYXRlIG1pc3NpbmcgZGF0YS5cIlxuXG4gIGNvbnN0IGNvbnRhaW5lciA9IGRvY3VtZW50LmNyZWF0ZUVsZW1lbnQoXCJkaXZcIilcbiAgY29udGFpbmVyLmFwcGVuZENoaWxkKHdyYXApXG4gIGNvbnRhaW5lci5hcHBlbmRDaGlsZChub3RlKVxuICByZXR1cm4gY29udGFpbmVyXG59KSgpXG4ifSx7Im1ldGhvZE5hbWUiOiJpbnRlcnByZXRRdWlldCIsInNvdXJjZSI6InNoaW55SW5wdXQoJ3NlYXJjaF9xdWVyeScpIn0seyJtZXRob2ROYW1lIjoiaW50ZXJwcmV0UXVpZXQiLCJzb3VyY2UiOiJzaGlueUlucHV0KCdzZWxlY3RlZF90aWNrZXInKSJ9LHsibWV0aG9kTmFtZSI6ImludGVycHJldFF1aWV0Iiwic291cmNlIjoic2hpbnlJbnB1dCgndm9sX3dpbmRvdycpIn0seyJtZXRob2ROYW1lIjoiaW50ZXJwcmV0UXVpZXQiLCJzb3VyY2UiOiJzaGlueUlucHV0KCdjYXRfZmlsdGVyJykifSx7Im1ldGhvZE5hbWUiOiJpbnRlcnByZXRRdWlldCIsInNvdXJjZSI6InNoaW55SW5wdXQoJ3NvcnRfY29sJykifV19
-</script><script type=module>
+</script>
+<script type="module">
 if (window.location.protocol === "file:") { alert("The OJS runtime does not work with file:// URLs. Please use a web server to view this document."); }
 window._ojs.paths.runtimeToDoc = "../../..";
 window._ojs.paths.runtimeToRoot = "../../../../../..";
 window._ojs.paths.docToRoot = "../../..";
 window._ojs.selfContained = false;
 window._ojs.runtime.interpretFromScriptTags();
-</script></div></article></main><div class="col-span-3 lg:col-span-1"><div class="bg-white rounded-xl shadow-sm mb-4 overflow-hidden dark:bg-warmgray-900"><div class="px-5 py-4 border-b border-gray-100 dark:border-warmgray-700"><p class="text-xs font-semibold uppercase tracking-widest text-gray-500 dark:text-gray-400">Categories</p></div><div class="divide-y divide-gray-100 dark:divide-warmgray-700"><a class="flex items-center justify-between px-5 py-3 hover:bg-gray-50 dark:hover:bg-warmgray-800 transition-colors duration-150 text-sm text-gray-700 dark:text-gray-300" href=https://overfitandchill.co.za//categories/alm><span>Alm</span><span class="text-xs text-gray-400 dark:text-gray-500">1</span></a>
-<a class="flex items-center justify-between px-5 py-3 hover:bg-gray-50 dark:hover:bg-warmgray-800 transition-colors duration-150 text-sm text-gray-700 dark:text-gray-300" href=https://overfitandchill.co.za//categories/banking><span>Banking</span><span class="text-xs text-gray-400 dark:text-gray-500">2</span></a>
-<a class="flex items-center justify-between px-5 py-3 hover:bg-gray-50 dark:hover:bg-warmgray-800 transition-colors duration-150 text-sm text-gray-700 dark:text-gray-300" href=https://overfitandchill.co.za//categories/etf><span>Etf</span><span class="text-xs text-gray-400 dark:text-gray-500">2</span></a>
-<a class="flex items-center justify-between px-5 py-3 hover:bg-gray-50 dark:hover:bg-warmgray-800 transition-colors duration-150 text-sm text-gray-700 dark:text-gray-300" href=https://overfitandchill.co.za//categories/finance><span>Finance</span><span class="text-xs text-gray-400 dark:text-gray-500">2</span></a>
-<a class="flex items-center justify-between px-5 py-3 hover:bg-gray-50 dark:hover:bg-warmgray-800 transition-colors duration-150 text-sm text-gray-700 dark:text-gray-300" href=https://overfitandchill.co.za//categories/fixed-income><span>Fixed income</span><span class="text-xs text-gray-400 dark:text-gray-500">2</span></a>
-<a class="flex items-center justify-between px-5 py-3 hover:bg-gray-50 dark:hover:bg-warmgray-800 transition-colors duration-150 text-sm text-gray-700 dark:text-gray-300" href=https://overfitandchill.co.za//categories/irrbb><span>Irrbb</span><span class="text-xs text-gray-400 dark:text-gray-500">1</span></a>
-<a class="flex items-center justify-between px-5 py-3 hover:bg-gray-50 dark:hover:bg-warmgray-800 transition-colors duration-150 text-sm text-gray-700 dark:text-gray-300" href=https://overfitandchill.co.za//categories/machine-learning><span>Machine learning</span><span class="text-xs text-gray-400 dark:text-gray-500">3</span></a>
-<a class="flex items-center justify-between px-5 py-3 hover:bg-gray-50 dark:hover:bg-warmgray-800 transition-colors duration-150 text-sm text-gray-700 dark:text-gray-300" href=https://overfitandchill.co.za//categories/optimisation-alm><span>Optimisation alm</span><span class="text-xs text-gray-400 dark:text-gray-500">1</span></a>
-<a class="flex items-center justify-between px-5 py-3 hover:bg-gray-50 dark:hover:bg-warmgray-800 transition-colors duration-150 text-sm text-gray-700 dark:text-gray-300" href=https://overfitandchill.co.za//categories/portfolio-optimization><span>Portfolio optimization</span><span class="text-xs text-gray-400 dark:text-gray-500">1</span></a>
-<a class="flex items-center justify-between px-5 py-3 hover:bg-gray-50 dark:hover:bg-warmgray-800 transition-colors duration-150 text-sm text-gray-700 dark:text-gray-300" href=https://overfitandchill.co.za//categories/quant-finance><span>Quant finance</span><span class="text-xs text-gray-400 dark:text-gray-500">1</span></a>
-<a class="flex items-center justify-between px-5 py-3 hover:bg-gray-50 dark:hover:bg-warmgray-800 transition-colors duration-150 text-sm text-gray-700 dark:text-gray-300" href=https://overfitandchill.co.za//categories/yield-curve><span>Yield curve</span><span class="text-xs text-gray-400 dark:text-gray-500">2</span></a></div></div><div class="bg-white rounded-xl shadow-sm mb-4 overflow-hidden dark:bg-warmgray-900"><div class="px-5 py-4 border-b border-gray-100 dark:border-warmgray-700"><p class="text-xs font-semibold uppercase tracking-widest text-gray-500 dark:text-gray-400">Recent Posts</p></div><div class="divide-y divide-gray-100 dark:divide-warmgray-700"><a href=/posts/deposit-beta-1-4/ class="block px-5 py-3 hover:bg-gray-50 dark:hover:bg-warmgray-800 transition-colors duration-150"><p class="text-sm font-medium text-gray-900 dark:text-white leading-snug mb-1">What Is a Deposit Actually Worth When Rates Move?</p><time class="flex items-center text-xs text-gray-500 dark:text-gray-500 gap-1"><span class="inline-flex align-middle pb-0.5 text-xs"><svg height="1em" viewBox="0 -960 960 960" width="1em" fill="currentColor"><path d="m612-292 56-56-148-148v-184h-80v216l172 172zM480-80q-83 0-156-31.5T197-197t-85.5-127T80-480t31.5-156T197-763t127-85.5T480-880t156 31.5T763-763t85.5 127T880-480t-31.5 156T763-197t-127 85.5T480-80zm0-4e2zm0 320q133 0 226.5-93.5T8e2-480t-93.5-226.5T480-8e2t-226.5 93.5T160-480t93.5 226.5T480-160z"/></svg></span></span>
-2026/06/19</time>
-</a><a href=/posts/fc-yields-macro/ class="block px-5 py-3 hover:bg-gray-50 dark:hover:bg-warmgray-800 transition-colors duration-150"><p class="text-sm font-medium text-gray-900 dark:text-white leading-snug mb-1">Do Macro Variables Help Forecast the Yield Curve? Three Honest Experiments</p><time class="flex items-center text-xs text-gray-500 dark:text-gray-500 gap-1"><span class="inline-flex align-middle pb-0.5 text-xs"><svg height="1em" viewBox="0 -960 960 960" width="1em" fill="currentColor"><path d="m612-292 56-56-148-148v-184h-80v216l172 172zM480-80q-83 0-156-31.5T197-197t-85.5-127T80-480t31.5-156T197-763t127-85.5T480-880t156 31.5T763-763t85.5 127T880-480t-31.5 156T763-197t-127 85.5T480-80zm0-4e2zm0 320q133 0 226.5-93.5T8e2-480t-93.5-226.5T480-8e2t-226.5 93.5T160-480t93.5 226.5T480-160z"/></svg></span></span>
-2026/06/14</time>
-</a><a href=/posts/ee-etf-tracker/ class="block px-5 py-3 hover:bg-gray-50 dark:hover:bg-warmgray-800 transition-colors duration-150"><p class="text-sm font-medium text-gray-900 dark:text-white leading-snug mb-1">Easy Equities TFSA ETF Analytics</p><time class="flex items-center text-xs text-gray-500 dark:text-gray-500 gap-1"><span class="inline-flex align-middle pb-0.5 text-xs"><svg height="1em" viewBox="0 -960 960 960" width="1em" fill="currentColor"><path d="m612-292 56-56-148-148v-184h-80v216l172 172zM480-80q-83 0-156-31.5T197-197t-85.5-127T80-480t31.5-156T197-763t127-85.5T480-880t156 31.5T763-763t85.5 127T880-480t-31.5 156T763-197t-127 85.5T480-80zm0-4e2zm0 320q133 0 226.5-93.5T8e2-480t-93.5-226.5T480-8e2t-226.5 93.5T160-480t93.5 226.5T480-160z"/></svg></span></span>
-2026/05/31</time>
-</a><a href=/posts/fc-yields/ class="block px-5 py-3 hover:bg-gray-50 dark:hover:bg-warmgray-800 transition-colors duration-150"><p class="text-sm font-medium text-gray-900 dark:text-white leading-snug mb-1">Forecasting South African Government Bond Yields</p><time class="flex items-center text-xs text-gray-500 dark:text-gray-500 gap-1"><span class="inline-flex align-middle pb-0.5 text-xs"><svg height="1em" viewBox="0 -960 960 960" width="1em" fill="currentColor"><path d="m612-292 56-56-148-148v-184h-80v216l172 172zM480-80q-83 0-156-31.5T197-197t-85.5-127T80-480t31.5-156T197-763t127-85.5T480-880t156 31.5T763-763t85.5 127T880-480t-31.5 156T763-197t-127 85.5T480-80zm0-4e2zm0 320q133 0 226.5-93.5T8e2-480t-93.5-226.5T480-8e2t-226.5 93.5T160-480t93.5 226.5T480-160z"/></svg></span></span>
-2026/05/31</time>
-</a><a href=/posts/etf-optim/ class="block px-5 py-3 hover:bg-gray-50 dark:hover:bg-warmgray-800 transition-colors duration-150"><p class="text-sm font-medium text-gray-900 dark:text-white leading-snug mb-1">ML-Driven TFSA ETF Portfolio Optimization for EE</p><time class="flex items-center text-xs text-gray-500 dark:text-gray-500 gap-1"><span class="inline-flex align-middle pb-0.5 text-xs"><svg height="1em" viewBox="0 -960 960 960" width="1em" fill="currentColor"><path d="m612-292 56-56-148-148v-184h-80v216l172 172zM480-80q-83 0-156-31.5T197-197t-85.5-127T80-480t31.5-156T197-763t127-85.5T480-880t156 31.5T763-763t85.5 127T880-480t-31.5 156T763-197t-127 85.5T480-80zm0-4e2zm0 320q133 0 226.5-93.5T8e2-480t-93.5-226.5T480-8e2t-226.5 93.5T160-480t93.5 226.5T480-160z"/></svg></span></span>
-2026/05/17</time></a></div></div></div></div></div></div><footer class="bg-gray-800 text-white p-6"><div class="container max-w-7xl mr-auto ml-auto"><p>&copy;
-2026
-<a href=https://overfitandchill.co.za/ class="duration-200 hover:opacity-50">Rossouw van Jaarsveld | Overfit and Chill</a></p><p>Powered by
-<a href=https://gohugo.io/ class="duration-200 hover:opacity-50">Hugo</a>, Theme
-<a href=https://github.com/opera7133/Blonde class="duration-200 hover:opacity-50">Blonde</a>.</p></div><script>function setDarkModeIcons(e){var t=document.getElementById("icon-moon"),n=document.getElementById("icon-sun"),s=document.getElementById("icon2-moon"),o=document.getElementById("icon2-sun");t&&t.classList.toggle("hidden",e),n&&n.classList.toggle("hidden",!e),s&&s.classList.toggle("hidden",e),o&&o.classList.toggle("hidden",!e)}document.documentElement.classList.contains("dark")||localStorage.theme==="dark"||!("theme"in localStorage)&&window.matchMedia("(prefers-color-scheme: dark)").matches?(setDarkModeIcons(!0),document.documentElement.classList.add("dark")):(setDarkModeIcons(!1),document.documentElement.classList.remove("dark"));function toggleDarkMode(){document.documentElement.classList.contains("dark")?(setDarkModeIcons(!1),document.documentElement.classList.remove("dark"),localStorage.theme="light"):(setDarkModeIcons(!0),document.documentElement.classList.add("dark"),localStorage.theme="dark")}</script></footer></div></body></html>
+</script>
+</div>
+    </article>
+  </main>
+  
+    <div
+  class="
+    col-span-3 lg:col-span-1
+  "
+>
+  
+  
+      
+      
+  <div
+    class="bg-white rounded-xl shadow-sm mb-4 overflow-hidden dark:bg-warmgray-900"
+  >
+    <div class="px-5 py-4 border-b border-gray-100 dark:border-warmgray-700">
+      <p
+        class="text-xs font-semibold uppercase tracking-widest text-gray-500 dark:text-gray-400"
+      >
+        Categories
+      </p>
+    </div>
+    <div class="divide-y divide-gray-100 dark:divide-warmgray-700">
+      
+        <a
+          class="flex items-center justify-between px-5 py-3 hover:bg-gray-50 dark:hover:bg-warmgray-800 transition-colors duration-150 text-sm text-gray-700 dark:text-gray-300"
+          href="http://localhost:1313//categories/alm"
+          ><span>Alm</span
+          ><span class="text-xs text-gray-400 dark:text-gray-500"
+            >2</span
+          ></a
+        >
+      
+        <a
+          class="flex items-center justify-between px-5 py-3 hover:bg-gray-50 dark:hover:bg-warmgray-800 transition-colors duration-150 text-sm text-gray-700 dark:text-gray-300"
+          href="http://localhost:1313//categories/banking"
+          ><span>Banking</span
+          ><span class="text-xs text-gray-400 dark:text-gray-500"
+            >2</span
+          ></a
+        >
+      
+        <a
+          class="flex items-center justify-between px-5 py-3 hover:bg-gray-50 dark:hover:bg-warmgray-800 transition-colors duration-150 text-sm text-gray-700 dark:text-gray-300"
+          href="http://localhost:1313//categories/deposits"
+          ><span>Deposits</span
+          ><span class="text-xs text-gray-400 dark:text-gray-500"
+            >1</span
+          ></a
+        >
+      
+        <a
+          class="flex items-center justify-between px-5 py-3 hover:bg-gray-50 dark:hover:bg-warmgray-800 transition-colors duration-150 text-sm text-gray-700 dark:text-gray-300"
+          href="http://localhost:1313//categories/etf"
+          ><span>Etf</span
+          ><span class="text-xs text-gray-400 dark:text-gray-500"
+            >2</span
+          ></a
+        >
+      
+        <a
+          class="flex items-center justify-between px-5 py-3 hover:bg-gray-50 dark:hover:bg-warmgray-800 transition-colors duration-150 text-sm text-gray-700 dark:text-gray-300"
+          href="http://localhost:1313//categories/finance"
+          ><span>Finance</span
+          ><span class="text-xs text-gray-400 dark:text-gray-500"
+            >2</span
+          ></a
+        >
+      
+        <a
+          class="flex items-center justify-between px-5 py-3 hover:bg-gray-50 dark:hover:bg-warmgray-800 transition-colors duration-150 text-sm text-gray-700 dark:text-gray-300"
+          href="http://localhost:1313//categories/fixed-income"
+          ><span>Fixed income</span
+          ><span class="text-xs text-gray-400 dark:text-gray-500"
+            >2</span
+          ></a
+        >
+      
+        <a
+          class="flex items-center justify-between px-5 py-3 hover:bg-gray-50 dark:hover:bg-warmgray-800 transition-colors duration-150 text-sm text-gray-700 dark:text-gray-300"
+          href="http://localhost:1313//categories/irrbb"
+          ><span>Irrbb</span
+          ><span class="text-xs text-gray-400 dark:text-gray-500"
+            >2</span
+          ></a
+        >
+      
+        <a
+          class="flex items-center justify-between px-5 py-3 hover:bg-gray-50 dark:hover:bg-warmgray-800 transition-colors duration-150 text-sm text-gray-700 dark:text-gray-300"
+          href="http://localhost:1313//categories/machine-learning"
+          ><span>Machine learning</span
+          ><span class="text-xs text-gray-400 dark:text-gray-500"
+            >3</span
+          ></a
+        >
+      
+        <a
+          class="flex items-center justify-between px-5 py-3 hover:bg-gray-50 dark:hover:bg-warmgray-800 transition-colors duration-150 text-sm text-gray-700 dark:text-gray-300"
+          href="http://localhost:1313//categories/ngfb"
+          ><span>Ngfb</span
+          ><span class="text-xs text-gray-400 dark:text-gray-500"
+            >1</span
+          ></a
+        >
+      
+        <a
+          class="flex items-center justify-between px-5 py-3 hover:bg-gray-50 dark:hover:bg-warmgray-800 transition-colors duration-150 text-sm text-gray-700 dark:text-gray-300"
+          href="http://localhost:1313//categories/optimisation-alm"
+          ><span>Optimisation alm</span
+          ><span class="text-xs text-gray-400 dark:text-gray-500"
+            >1</span
+          ></a
+        >
+      
+        <a
+          class="flex items-center justify-between px-5 py-3 hover:bg-gray-50 dark:hover:bg-warmgray-800 transition-colors duration-150 text-sm text-gray-700 dark:text-gray-300"
+          href="http://localhost:1313//categories/portfolio-optimization"
+          ><span>Portfolio optimization</span
+          ><span class="text-xs text-gray-400 dark:text-gray-500"
+            >1</span
+          ></a
+        >
+      
+        <a
+          class="flex items-center justify-between px-5 py-3 hover:bg-gray-50 dark:hover:bg-warmgray-800 transition-colors duration-150 text-sm text-gray-700 dark:text-gray-300"
+          href="http://localhost:1313//categories/quant-finance"
+          ><span>Quant finance</span
+          ><span class="text-xs text-gray-400 dark:text-gray-500"
+            >1</span
+          ></a
+        >
+      
+        <a
+          class="flex items-center justify-between px-5 py-3 hover:bg-gray-50 dark:hover:bg-warmgray-800 transition-colors duration-150 text-sm text-gray-700 dark:text-gray-300"
+          href="http://localhost:1313//categories/yield-curve"
+          ><span>Yield curve</span
+          ><span class="text-xs text-gray-400 dark:text-gray-500"
+            >2</span
+          ></a
+        >
+      
+    </div>
+  </div>
+
+
+    
+      
+      
+
+    
+      
+      
+
+  <div
+    class="bg-white rounded-xl shadow-sm mb-4 overflow-hidden dark:bg-warmgray-900"
+  >
+    <div class="px-5 py-4 border-b border-gray-100 dark:border-warmgray-700">
+      <p
+        class="text-xs font-semibold uppercase tracking-widest text-gray-500 dark:text-gray-400"
+      >
+        Recent Posts
+      </p>
+    </div>
+    <div class="divide-y divide-gray-100 dark:divide-warmgray-700">
+        <a
+          href="/posts/deposit-duration-2-4/"
+          class="block px-5 py-3 hover:bg-gray-50 dark:hover:bg-warmgray-800 transition-colors duration-150"
+        >
+          <p
+            class="text-sm font-medium text-gray-900 dark:text-white leading-snug mb-1"
+          >
+            Banking on Deposits That Can Leave
+          </p>
+          <time
+            class="flex items-center text-xs text-gray-500 dark:text-gray-500 gap-1"
+            ><span
+      class="inline-flex align-middle pb-0.5 text-xs"
+      ><svg xmlns="http://www.w3.org/2000/svg" height="1em" viewBox="0 -960 960 960" width="1em" fill="currentColor"><path d="m612-292 56-56-148-148v-184h-80v216l172 172ZM480-80q-83 0-156-31.5T197-197q-54-54-85.5-127T80-480q0-83 31.5-156T197-763q54-54 127-85.5T480-880q83 0 156 31.5T763-763q54 54 85.5 127T880-480q0 83-31.5 156T763-197q-54 54-127 85.5T480-80Zm0-400Zm0 320q133 0 226.5-93.5T800-480q0-133-93.5-226.5T480-800q-133 0-226.5 93.5T160-480q0 133 93.5 226.5T480-160Z"/></svg></span
+    ></span
+>
+2026/07/12</time
+          >
+        </a>
+        <a
+          href="/posts/deposit-beta-1-4/"
+          class="block px-5 py-3 hover:bg-gray-50 dark:hover:bg-warmgray-800 transition-colors duration-150"
+        >
+          <p
+            class="text-sm font-medium text-gray-900 dark:text-white leading-snug mb-1"
+          >
+            What Is a Deposit Actually Worth When Rates Move?
+          </p>
+          <time
+            class="flex items-center text-xs text-gray-500 dark:text-gray-500 gap-1"
+            ><span
+      class="inline-flex align-middle pb-0.5 text-xs"
+      ><svg xmlns="http://www.w3.org/2000/svg" height="1em" viewBox="0 -960 960 960" width="1em" fill="currentColor"><path d="m612-292 56-56-148-148v-184h-80v216l172 172ZM480-80q-83 0-156-31.5T197-197q-54-54-85.5-127T80-480q0-83 31.5-156T197-763q54-54 127-85.5T480-880q83 0 156 31.5T763-763q54 54 85.5 127T880-480q0 83-31.5 156T763-197q-54 54-127 85.5T480-80Zm0-400Zm0 320q133 0 226.5-93.5T800-480q0-133-93.5-226.5T480-800q-133 0-226.5 93.5T160-480q0 133 93.5 226.5T480-160Z"/></svg></span
+    ></span
+>
+2026/06/19</time
+          >
+        </a>
+        <a
+          href="/posts/fc-yields-macro/"
+          class="block px-5 py-3 hover:bg-gray-50 dark:hover:bg-warmgray-800 transition-colors duration-150"
+        >
+          <p
+            class="text-sm font-medium text-gray-900 dark:text-white leading-snug mb-1"
+          >
+            Do Macro Variables Help Forecast the Yield Curve? Three Honest Experiments
+          </p>
+          <time
+            class="flex items-center text-xs text-gray-500 dark:text-gray-500 gap-1"
+            ><span
+      class="inline-flex align-middle pb-0.5 text-xs"
+      ><svg xmlns="http://www.w3.org/2000/svg" height="1em" viewBox="0 -960 960 960" width="1em" fill="currentColor"><path d="m612-292 56-56-148-148v-184h-80v216l172 172ZM480-80q-83 0-156-31.5T197-197q-54-54-85.5-127T80-480q0-83 31.5-156T197-763q54-54 127-85.5T480-880q83 0 156 31.5T763-763q54 54 85.5 127T880-480q0 83-31.5 156T763-197q-54 54-127 85.5T480-80Zm0-400Zm0 320q133 0 226.5-93.5T800-480q0-133-93.5-226.5T480-800q-133 0-226.5 93.5T160-480q0 133 93.5 226.5T480-160Z"/></svg></span
+    ></span
+>
+2026/06/14</time
+          >
+        </a>
+        <a
+          href="/posts/ee-etf-tracker/"
+          class="block px-5 py-3 hover:bg-gray-50 dark:hover:bg-warmgray-800 transition-colors duration-150"
+        >
+          <p
+            class="text-sm font-medium text-gray-900 dark:text-white leading-snug mb-1"
+          >
+            Easy Equities TFSA ETF Analytics
+          </p>
+          <time
+            class="flex items-center text-xs text-gray-500 dark:text-gray-500 gap-1"
+            ><span
+      class="inline-flex align-middle pb-0.5 text-xs"
+      ><svg xmlns="http://www.w3.org/2000/svg" height="1em" viewBox="0 -960 960 960" width="1em" fill="currentColor"><path d="m612-292 56-56-148-148v-184h-80v216l172 172ZM480-80q-83 0-156-31.5T197-197q-54-54-85.5-127T80-480q0-83 31.5-156T197-763q54-54 127-85.5T480-880q83 0 156 31.5T763-763q54 54 85.5 127T880-480q0 83-31.5 156T763-197q-54 54-127 85.5T480-80Zm0-400Zm0 320q133 0 226.5-93.5T800-480q0-133-93.5-226.5T480-800q-133 0-226.5 93.5T160-480q0 133 93.5 226.5T480-160Z"/></svg></span
+    ></span
+>
+2026/05/31</time
+          >
+        </a>
+        <a
+          href="/posts/fc-yields/"
+          class="block px-5 py-3 hover:bg-gray-50 dark:hover:bg-warmgray-800 transition-colors duration-150"
+        >
+          <p
+            class="text-sm font-medium text-gray-900 dark:text-white leading-snug mb-1"
+          >
+            Forecasting South African Government Bond Yields
+          </p>
+          <time
+            class="flex items-center text-xs text-gray-500 dark:text-gray-500 gap-1"
+            ><span
+      class="inline-flex align-middle pb-0.5 text-xs"
+      ><svg xmlns="http://www.w3.org/2000/svg" height="1em" viewBox="0 -960 960 960" width="1em" fill="currentColor"><path d="m612-292 56-56-148-148v-184h-80v216l172 172ZM480-80q-83 0-156-31.5T197-197q-54-54-85.5-127T80-480q0-83 31.5-156T197-763q54-54 127-85.5T480-880q83 0 156 31.5T763-763q54 54 85.5 127T880-480q0 83-31.5 156T763-197q-54 54-127 85.5T480-80Zm0-400Zm0 320q133 0 226.5-93.5T800-480q0-133-93.5-226.5T480-800q-133 0-226.5 93.5T160-480q0 133 93.5 226.5T480-160Z"/></svg></span
+    ></span
+>
+2026/05/31</time
+          >
+        </a>
+    </div>
+  </div>
+
+    
+  
+</div>
+
+  
+</div>
+</div>
+      </div><footer class="bg-gray-800 text-white p-6">
+  
+  <div class="container max-w-7xl mr-auto ml-auto">
+    <p>
+      &copy;
+      2026
+      <a href="http://localhost:1313/" class="duration-200 hover:opacity-50"
+        >Rossouw van Jaarsveld | Overfit and Chill</a
+      >
+    </p>
+    <p>
+      Powered by
+      <a href="https://gohugo.io/" class="duration-200 hover:opacity-50">Hugo</a
+      >, Theme
+      <a
+        href="https://github.com/opera7133/Blonde"
+        class="duration-200 hover:opacity-50"
+        >Blonde</a
+      >.
+    </p>
+  </div>
+  
+  <script>
+    function setDarkModeIcons(isDark) {
+      var moonIcon1 = document.getElementById("icon-moon");
+      var sunIcon1 = document.getElementById("icon-sun");
+      var moonIcon2 = document.getElementById("icon2-moon");
+      var sunIcon2 = document.getElementById("icon2-sun");
+      if (moonIcon1) moonIcon1.classList.toggle("hidden", isDark);
+      if (sunIcon1) sunIcon1.classList.toggle("hidden", !isDark);
+      if (moonIcon2) moonIcon2.classList.toggle("hidden", isDark);
+      if (sunIcon2) sunIcon2.classList.toggle("hidden", !isDark);
+    }
+    
+    if (
+      document.documentElement.classList.contains("dark") ||
+      localStorage.theme === "dark" ||
+      (!("theme" in localStorage) &&
+        window.matchMedia("(prefers-color-scheme: dark)").matches)
+    ) {
+      setDarkModeIcons(true);
+      document.documentElement.classList.add("dark");
+    } else {
+      setDarkModeIcons(false);
+      document.documentElement.classList.remove("dark");
+    }
+    function toggleDarkMode() {
+      if (document.documentElement.classList.contains("dark")) {
+        setDarkModeIcons(false);
+        document.documentElement.classList.remove("dark");
+        localStorage.theme = "light";
+      } else {
+        setDarkModeIcons(true);
+        document.documentElement.classList.add("dark");
+        localStorage.theme = "dark";
+      }
+    }
+  </script>
+</footer>
+</div>
+  </body>
+</html>

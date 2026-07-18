@@ -1,1 +1,103 @@
-<?xml version="1.0" encoding="utf-8" standalone="yes"?><rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom"><channel><title>Categories on Rossouw van Jaarsveld | Overfit and Chill</title><link>https://overfitandchill.co.za/categories/</link><description>Recent content in Categories on Rossouw van Jaarsveld | Overfit and Chill</description><generator>Hugo</generator><language>en</language><lastBuildDate>Fri, 19 Jun 2026 00:00:00 +0000</lastBuildDate><atom:link href="https://overfitandchill.co.za/categories/index.xml" rel="self" type="application/rss+xml"/><item><title>ALM</title><link>https://overfitandchill.co.za/categories/alm/</link><pubDate>Fri, 19 Jun 2026 00:00:00 +0000</pubDate><guid>https://overfitandchill.co.za/categories/alm/</guid><description/></item><item><title>Banking</title><link>https://overfitandchill.co.za/categories/banking/</link><pubDate>Fri, 19 Jun 2026 00:00:00 +0000</pubDate><guid>https://overfitandchill.co.za/categories/banking/</guid><description/></item><item><title>IRRBB</title><link>https://overfitandchill.co.za/categories/irrbb/</link><pubDate>Fri, 19 Jun 2026 00:00:00 +0000</pubDate><guid>https://overfitandchill.co.za/categories/irrbb/</guid><description/></item><item><title>Fixed Income</title><link>https://overfitandchill.co.za/categories/fixed-income/</link><pubDate>Sun, 14 Jun 2026 00:00:00 +0000</pubDate><guid>https://overfitandchill.co.za/categories/fixed-income/</guid><description/></item><item><title>Machine Learning</title><link>https://overfitandchill.co.za/categories/machine-learning/</link><pubDate>Sun, 14 Jun 2026 00:00:00 +0000</pubDate><guid>https://overfitandchill.co.za/categories/machine-learning/</guid><description/></item><item><title>Yield Curve</title><link>https://overfitandchill.co.za/categories/yield-curve/</link><pubDate>Sun, 14 Jun 2026 00:00:00 +0000</pubDate><guid>https://overfitandchill.co.za/categories/yield-curve/</guid><description/></item><item><title>ETF</title><link>https://overfitandchill.co.za/categories/etf/</link><pubDate>Sun, 31 May 2026 00:00:00 +0000</pubDate><guid>https://overfitandchill.co.za/categories/etf/</guid><description/></item><item><title>Finance</title><link>https://overfitandchill.co.za/categories/finance/</link><pubDate>Sun, 31 May 2026 00:00:00 +0000</pubDate><guid>https://overfitandchill.co.za/categories/finance/</guid><description/></item><item><title>Portfolio Optimization</title><link>https://overfitandchill.co.za/categories/portfolio-optimization/</link><pubDate>Sun, 17 May 2026 00:00:00 +0000</pubDate><guid>https://overfitandchill.co.za/categories/portfolio-optimization/</guid><description/></item><item><title>Quant Finance</title><link>https://overfitandchill.co.za/categories/quant-finance/</link><pubDate>Sun, 17 May 2026 00:00:00 +0000</pubDate><guid>https://overfitandchill.co.za/categories/quant-finance/</guid><description/></item><item><title>Optimisation ALM</title><link>https://overfitandchill.co.za/categories/optimisation-alm/</link><pubDate>Mon, 22 Dec 2025 00:00:00 +0000</pubDate><guid>https://overfitandchill.co.za/categories/optimisation-alm/</guid><description/></item></channel></rss>
+<?xml version="1.0" encoding="utf-8" standalone="yes"?>
+<rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom">
+  <channel>
+    <title>Categories on Rossouw van Jaarsveld | Overfit and Chill</title>
+    <link>http://localhost:1313/categories/</link>
+    <description>Recent content in Categories on Rossouw van Jaarsveld | Overfit and Chill</description>
+    <generator>Hugo</generator>
+    <language>en</language>
+    <lastBuildDate>Sun, 12 Jul 2026 00:00:00 +0000</lastBuildDate>
+    <atom:link href="http://localhost:1313/categories/index.xml" rel="self" type="application/rss+xml" />
+    <item>
+      <title>ALM</title>
+      <link>http://localhost:1313/categories/alm/</link>
+      <pubDate>Sun, 12 Jul 2026 00:00:00 +0000</pubDate>
+      <guid>http://localhost:1313/categories/alm/</guid>
+      <description></description>
+    </item>
+    <item>
+      <title>Deposits</title>
+      <link>http://localhost:1313/categories/deposits/</link>
+      <pubDate>Sun, 12 Jul 2026 00:00:00 +0000</pubDate>
+      <guid>http://localhost:1313/categories/deposits/</guid>
+      <description></description>
+    </item>
+    <item>
+      <title>IRRBB</title>
+      <link>http://localhost:1313/categories/irrbb/</link>
+      <pubDate>Sun, 12 Jul 2026 00:00:00 +0000</pubDate>
+      <guid>http://localhost:1313/categories/irrbb/</guid>
+      <description></description>
+    </item>
+    <item>
+      <title>NGFB</title>
+      <link>http://localhost:1313/categories/ngfb/</link>
+      <pubDate>Sun, 12 Jul 2026 00:00:00 +0000</pubDate>
+      <guid>http://localhost:1313/categories/ngfb/</guid>
+      <description></description>
+    </item>
+    <item>
+      <title>Banking</title>
+      <link>http://localhost:1313/categories/banking/</link>
+      <pubDate>Fri, 19 Jun 2026 00:00:00 +0000</pubDate>
+      <guid>http://localhost:1313/categories/banking/</guid>
+      <description></description>
+    </item>
+    <item>
+      <title>Fixed Income</title>
+      <link>http://localhost:1313/categories/fixed-income/</link>
+      <pubDate>Sun, 14 Jun 2026 00:00:00 +0000</pubDate>
+      <guid>http://localhost:1313/categories/fixed-income/</guid>
+      <description></description>
+    </item>
+    <item>
+      <title>Machine Learning</title>
+      <link>http://localhost:1313/categories/machine-learning/</link>
+      <pubDate>Sun, 14 Jun 2026 00:00:00 +0000</pubDate>
+      <guid>http://localhost:1313/categories/machine-learning/</guid>
+      <description></description>
+    </item>
+    <item>
+      <title>Yield Curve</title>
+      <link>http://localhost:1313/categories/yield-curve/</link>
+      <pubDate>Sun, 14 Jun 2026 00:00:00 +0000</pubDate>
+      <guid>http://localhost:1313/categories/yield-curve/</guid>
+      <description></description>
+    </item>
+    <item>
+      <title>ETF</title>
+      <link>http://localhost:1313/categories/etf/</link>
+      <pubDate>Sun, 31 May 2026 00:00:00 +0000</pubDate>
+      <guid>http://localhost:1313/categories/etf/</guid>
+      <description></description>
+    </item>
+    <item>
+      <title>Finance</title>
+      <link>http://localhost:1313/categories/finance/</link>
+      <pubDate>Sun, 31 May 2026 00:00:00 +0000</pubDate>
+      <guid>http://localhost:1313/categories/finance/</guid>
+      <description></description>
+    </item>
+    <item>
+      <title>Portfolio Optimization</title>
+      <link>http://localhost:1313/categories/portfolio-optimization/</link>
+      <pubDate>Sun, 17 May 2026 00:00:00 +0000</pubDate>
+      <guid>http://localhost:1313/categories/portfolio-optimization/</guid>
+      <description></description>
+    </item>
+    <item>
+      <title>Quant Finance</title>
+      <link>http://localhost:1313/categories/quant-finance/</link>
+      <pubDate>Sun, 17 May 2026 00:00:00 +0000</pubDate>
+      <guid>http://localhost:1313/categories/quant-finance/</guid>
+      <description></description>
+    </item>
+    <item>
+      <title>Optimisation ALM</title>
+      <link>http://localhost:1313/categories/optimisation-alm/</link>
+      <pubDate>Mon, 22 Dec 2025 00:00:00 +0000</pubDate>
+      <guid>http://localhost:1313/categories/optimisation-alm/</guid>
+      <description></description>
+    </item>
+  </channel>
+</rss>
