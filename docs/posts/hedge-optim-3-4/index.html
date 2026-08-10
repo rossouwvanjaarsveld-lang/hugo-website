@@ -1,0 +1,359 @@
+<!doctype html><html lang=en><head><title>Shorter Than You Booked | Rossouw van Jaarsveld | Overfit and Chill</title><meta charset=utf-8><meta name=viewport content="width=device-width,initial-scale=1,minimum-scale=1"><link rel=apple-touch-icon sizes=180x180 href=/favicon/apple-touch-icon.png><link rel=icon type=image/png sizes=32x32 href=/favicon/favicon-32x32.png><link rel=icon type=image/png sizes=16x16 href=/favicon/favicon-16x16.png><link rel=manifest href=/favicon/site.webmanifest><link rel=mask-icon href=/favicon/safari-pinned-tab.svg color=#5bbad5><link rel="shortcut icon" href=/favicon/favicon.ico><meta name=theme-color content="#ffffff"><meta property="og:title" content="Shorter Than You Booked"><link rel=stylesheet href=/css/style.367e6d359278a3cf84a2256cf92e8ce796111cd10c545cb5015aaa638bfdf257.css integrity="sha256-Nn5tNZJ4o8+EoiVs+S6M55YRHNEMVFy1AVqqY4v98lc=" crossorigin=anonymous><meta name=description content="The structural hedge caterpillar is a boxcar filter. Estimating the SA short-rate spectrum, deriving the transfer function, and solving the constrained design problem for No Gut Feelings Bank - then discovering that deposit growth compresses the hedge by a third and that the decision worth arguing about is bonds versus swaps."><meta property="og:site_name" content="Rossouw van Jaarsveld | Overfit and Chill"><meta property="og:description" content="The structural hedge caterpillar is a boxcar filter. Estimating the SA short-rate spectrum, deriving the transfer function, and solving the constrained design problem for No Gut Feelings Bank - then discovering that deposit growth compresses the hedge by a third and that the decision worth arguing about is bonds versus swaps."><meta property="og:url" content="https://overfitandchill.co.za/posts/hedge-optim-3-4/"><meta property="og:type" content="website"><meta property="og:locale" content="en_US"><meta name=twitter:card content="summary_large_image"><meta name=twitter:site content><link rel=canonical href=https://overfitandchill.co.za/posts/hedge-optim-3-4/><meta name=twitter:description content="The structural hedge caterpillar is a boxcar filter. Estimating the SA short-rate spectrum, deriving the transfer function, and solving the constrained design problem for No Gut Feelings Bank - then discovering that deposit growth compresses the hedge by a third and that the decision worth arguing about is bonds versus swaps."><meta property="article:published_time" content="2026-08-10T00:00:00+00:00"><meta property="article:updated_time" content="2026-08-10T00:00:00+00:00"><meta property="og:image" content="https://overfitandchill.co.za/posts/hedge-optim-3-4/thumbnail.png"><meta property="og:image:url" content="https://overfitandchill.co.za/posts/hedge-optim-3-4/thumbnail.png"><link rel=stylesheet href=https://cdn.jsdelivr.net/npm/katex@0.16.11/dist/katex.min.css><script defer src=https://cdn.jsdelivr.net/npm/katex@0.16.11/dist/katex.min.js></script><script defer src=https://cdn.jsdelivr.net/npm/katex@0.16.11/dist/contrib/auto-render.min.js onload='renderMathInElement(document.body,{delimiters:[{left:"$$",right:"$$",display:!0},{left:"$",right:"$",display:!1},{left:"\\(",right:"\\)",display:!1},{left:"\\[",right:"\\]",display:!0}],throwOnError:!1})'></script><i class="dark hidden"></i></head><style>.katex-display{overflow-x:auto;overflow-y:hidden;padding:4px 0}</style><i class="dark hidden"></i></head><body class=font-sans><div class="min-h-screen flex flex-col bg-gray-100 dark:bg-warmgray-800"><div class="bg-gray-800 shadow-sm"><div class="container max-w-7xl mr-auto ml-auto"><nav class="flex items-center justify-between flex-wrap px-6 py-4"><div class="flex items-center flex-no-shrink text-white mr-6"><a href=https://overfitandchill.co.za/><span class="font-semibold text-xl tracking-tight">Rossouw van Jaarsveld | Overfit and Chill</span></a></div><div class="flex md:hidden"><div class=py-2><button onclick=toggleDarkMode() class="focus-visible:outline-none mr-1 text-white/80 hover:text-white transition-colors duration-200 cursor-pointer" aria-label="Darkmode Toggle Button">
+<span id=icon-moon><span class="inline-flex align-middle pb-0.5 text-lg"><svg height="1em" viewBox="0 -960 960 960" width="1em" fill="currentColor"><path d="M484-80q-84 0-157.5-32t-128-86.5-86.5-128T80-484q0-146 93-257.5T410-880q-18 99 11 193.5T521-521t165.5 1e2T880-410q-26 144-138 237T484-80z"/></svg></span></span>
+</span><span id=icon-sun class=hidden><span class="inline-flex align-middle pb-0.5 text-lg"><svg height="1em" viewBox="0 -960 960 960" width="1em" fill="currentColor"><path d="M440-760v-160h80v160h-80zm266 110-55-55 112-115 56 57-113 113zm54 210v-80h160v80H760zM440-40v-160h80v160h-80zM254-652 140-763l57-56 113 113-56 54zm508 512L651-255l54-54 114 110-57 59zM40-440v-80h160v80H40zm157 3e2-56-57 112-112 29 27 29 28-114 114zm113-170q-70-70-70-170t70-170 170-70 170 70 70 170-70 170-170 70-170-70z"/></svg></span></span>
+</span></button>
+<span class=text-white>|</span></div><button id=hamburgerbtn class="flex items-center px-3 py-2 text-white/80 hover:text-white transition-colors duration-200" aria-label="Hamburger Button">
+<span class="inline-flex align-middle pb-0.5 text-2xl"><svg height="1em" viewBox="0 -960 960 960" width="1em" fill="currentColor"><path d="M120-240v-80h720v80H120zm0-2e2v-80h720v80H120zm0-2e2v-80h720v80H120z"/></svg></span></span></button></div><div class="hidden w-full md:flex md:flex-row sm:items-center md:w-auto" id=mobileMenu><div class="text-sm lg:grow"></div><div class="flex flex-col md:flex-row gap-2"><a href=/ class="no-underline font-medium text-sm block sm:inline-block sm:mt-0 text-white/80 hover:text-white mr-4 py-2 sm:py-0 transition-colors duration-200">Home
+</a><a href=/about/ class="no-underline font-medium text-sm block sm:inline-block sm:mt-0 text-white/80 hover:text-white mr-4 py-2 sm:py-0 transition-colors duration-200">About</a></div><div class="text-white hidden md:block"><span>|</span>
+<button onclick=toggleDarkMode() class="focus-visible:outline-none hover:opacity-50 duration-200 ml-2 cursor-pointer" aria-label="Darkmode Toggle Button">
+<span id=icon2-moon><span class="inline-flex align-middle pb-0.5 text-lg"><svg height="1em" viewBox="0 -960 960 960" width="1em" fill="currentColor"><path d="M484-80q-84 0-157.5-32t-128-86.5-86.5-128T80-484q0-146 93-257.5T410-880q-18 99 11 193.5T521-521t165.5 1e2T880-410q-26 144-138 237T484-80z"/></svg></span></span>
+</span><span id=icon2-sun class=hidden><span class="inline-flex align-middle pb-0.5 text-lg"><svg height="1em" viewBox="0 -960 960 960" width="1em" fill="currentColor"><path d="M440-760v-160h80v160h-80zm266 110-55-55 112-115 56 57-113 113zm54 210v-80h160v80H760zM440-40v-160h80v160h-80zM254-652 140-763l57-56 113 113-56 54zm508 512L651-255l54-54 114 110-57 59zM40-440v-80h160v80H40zm157 3e2-56-57 112-112 29 27 29 28-114 114zm113-170q-70-70-70-170t70-170 170-70 170 70 70 170-70 170-170 70-170-70z"/></svg></span></span></span></button></div></div></nav></div></div><style>.active{display:block}</style><script>let hamburger=document.getElementById("hamburgerbtn"),mobileMenu=document.getElementById("mobileMenu");hamburger.addEventListener("click",function(){mobileMenu.classList.toggle("active")})</script><div class="container max-w-7xl mx-auto mt-4 grow px-5 lg:px-0" id=content><div class=lg:mx-5><div class="grid grid-cols-3 gap-4"><main class="col-span-3 lg:col-span-2"><article class="bg-white dark:bg-warmgray-900 dark:text-white rounded-xl shadow-sm p-6 my-4"><h1 class="title text-4xl font-bold mb-2">Shorter Than You Booked</h1><div class="content prose md:prose-base lg:prose-lg max-w-none dark:prose-invert py-1"><div style="display:flex;align-items:flex-start;gap:14px;border:1px solid #5a4720;border-left:4px solid #e8a838;border-radius:8px;background:#1d1a12;padding:16px 20px;margin:1.5rem 0;font-size:.9rem;line-height:1.6;color:#ccc"><span style=font-size:1.2rem;flex-shrink:0;margin-top:1px>⚠️</span><div><div style=font-size:.72rem;font-weight:600;letter-spacing:.08em;text-transform:uppercase;color:#e8a838;margin-bottom:5px>Synthetic bank notice</div><div>No Gut Feelings Bank does not exist. It is a single draw from the posterior predictive of a hierarchical model fitted to the South African majors, with the bank-specific effects integrated out. Nothing here ranks, names, or reverse-engineers any individual institution. Nothing here is financial advice.</div></div></div><div style="border:1px solid #2a2a2a;border-radius:10px;padding:24px 28px;background:#1c1c1c;margin:2rem 0;font-family:inherit"><div style=margin-bottom:20px><div style=font-size:.68rem;font-weight:700;letter-spacing:.1em;text-transform:uppercase;color:#fff;margin-bottom:8px>For the Lantern Bearers</div><div style=font-size:.95rem;font-weight:400;color:#a8d4f5;line-height:1.5>Three numbers, on a R100bn deposit book. Size it at about half - that is one minus your deposit beta, and it is stable across every tenor and growth rate I tested. Run it at ten to fifteen years, not five: that single change is worth R1.1bn a year of extra income and R160m less earnings volatility, because you are collecting three times the term premium while smoothing over three times as many past rates. Then argue about bonds versus swaps, because SA government bonds pay 156bp over the matched swap for identical rate risk - another R778m a year, which is rent on your capital volatility rather than a free lunch. All in, moving from a typical 40%-at-five- years programme to the recommendation is worth about R2.0bn a year of income and a 39% cut in earnings volatility. Two warnings. Your book grows, which turns a ten-year programme into a seven-year one, so anything past fifteen years is mostly paperwork. And do not try to time it - even perfect foresight made things worse on one axis.</div></div><hr style="border:none;border-top:1px solid #2a2a2a;margin:16px 0"><div><div style=font-size:.68rem;font-weight:700;letter-spacing:.1em;text-transform:uppercase;color:#fff;margin-bottom:8px>For the Elven Loremasters</div><div style=font-size:.88rem;font-weight:400;color:#ccc;line-height:1.7>A rolling ladder is an FIR filter whose weights are the tail sums of the roll flows, so spot programmes realise exactly the monotone filters and the uniform caterpillar is the flattest member of that class - which makes it provably optimal in it, rather than merely conventional. I estimate the spectral density of year-on-year repo changes, derive the boxcar transfer function, and solve the design problem as a convex QP with deposit growth in the roll mechanics. Three negative results: the spectrum has no cycle peak, so there is nothing to notch; the optimiser returns the single longest tenor and shaping buys 0.00bps; and timing rules fail even under perfect foresight, because a varying notional makes the floating leg a product of two moving quantities. The positive results are a derived sizing rule at one minus beta, an effective-lag correction of about a third at twenty years once the book grows at the measured 8.07%, and a priced instrument choice. Growth also correlates +0.62 with the repo level, which the constant-growth model does not handle and which is stated as a limitation rather than absorbed.</div></div></div><h2 id=why-bother>Why bother</h2><p>A South African bank funds itself largely with current accounts and savings
+deposits. Those balances have no maturity - a depositor can walk into a branch
+tomorrow and take the lot - but in aggregate they barely move, and the rate paid
+on them lags the repo rate rather than tracking it. The bank is sitting on a very
+large pool of money that is contractually overnight and behaviourally long, and
+it has to decide what to do about that.</p><p>Take a bank with <strong>R100bn</strong> of non-maturing deposits. I will carry that example
+the whole way through, because every ratio in this post turns into a rand figure
+once you have it.</p><p>Post 2 measured how much of a repo move this bank passes on to depositors. The
+answer is <strong>β = 0.489</strong>. So when the SARB hikes 100bp: assets reprice almost
+immediately and earn an extra R1,000m, deposits cost an extra R489m, and net
+interest income rises <strong>R511m</strong>.</p><p>That R511m is the entire problem in one number. It is a windfall when rates rise
+and an identical hole when they fall, and South African rates do not move
+politely - over our sample the repo ranged from <strong>3.50% to 12.00%</strong>. A bank that
+does nothing is running an unhedged R511m-per-100bp position on the SARB&rsquo;s mood,
+and the year-on-year swing in its net interest income has a standard deviation of
+about <strong>R828m</strong>.</p><div style="display:flex;align-items:flex-start;gap:14px;border:1px solid #1d3a55;border-left:4px solid #38bdf8;border-radius:8px;background:#0d1d30;padding:16px 20px;margin:1.5rem 0;font-size:.95rem;line-height:1.55;color:#d9e6f2"><span style=font-size:1.2rem;flex-shrink:0;margin-top:1px>&#128214;</span><div><div style=font-size:.78rem;font-weight:600;letter-spacing:.08em;text-transform:uppercase;color:#38bdf8;margin-bottom:5px>What a structural hedge is</div><div>The bank enters interest rate swaps in which it <em>receives</em> a
+fixed rate and <em>pays</em> a floating one, on some notional amount. The
+floating leg it pays rises and falls with the repo rate, cancelling part of that
+R511m sensitivity. The fixed leg it receives is locked in for years. The
+programme is rolled continuously - a slice matures each month and is replaced at
+whatever rate happens to be on the screen - so the book yield becomes a moving
+average of past swap rates. <em>Notional</em> is simply the size of the
+programme; a swap costs nothing to enter, so notional is a scale, not a spend.
+And the number that ought to govern that scale is already visible above:
+<strong>R51.1bn</strong>, the notional whose floating leg exactly cancels
+R511m.</div></div></div><p>Ask a desk how the programme is designed and you will hear a version of this: one
+hundred and twentieth of the book matures each month, reinvested at the ten-year
+swap rate, so the yield is a ten-year moving average. RBS described its programme
+in exactly those terms. Barclays&rsquo; teach-in describes the same mechanics. It is
+sensible, legible, and very widely copied.</p><p>It is also, quite literally, a <strong>boxcar filter</strong> - the crudest low-pass filter in
+signal processing, the one every textbook uses as the example of what not to
+build. So this post takes the observation seriously: estimate what South African
+rates actually do, work out what the boxcar does to it, and solve for the filter
+that would do it better.</p><h3 id=what-i-found>What I found</h3><p>Three things came out sideways, and they are the post.</p><p><strong>There is no rate cycle to design against.</strong> The South African short-rate
+spectrum has no peak. It is a shelf that rises with period and flattens past ten
+years, because the SARB&rsquo;s big moves are responses to shocks - the financial
+crisis, the pandemic, the inflation surge - and shocks do not arrive on a
+schedule. There is no bump for a cleverer filter to notch out.</p><p><strong>The optimiser handed back the design the industry already uses.</strong> Solve for
+the best possible weighting of past rates, and the answer is a uniform ladder at
+the longest tenor available. The gain from reshaping is 0.00 basis points. That
+is not a failure of the optimisation; it is a small theorem, and I can now say
+<em>why</em> the caterpillar is right rather than merely that it is common.</p><p><strong>A growing deposit book quietly shortens the hedge by a third.</strong> Every published
+treatment of a caterpillar I are aware of - ours included, until I checked -
+assumes a constant deposit base. Real programmes maintain notional as a
+percentage of a book that grows, so old tranches shrink as a share of today&rsquo;s
+balance. At the growth rate I measured, a twenty-year programme behaves like a
+seven-and-a-half-year one.</p><h3 id=what-it-is-worth>What it is worth</h3><p>A great many structural hedge programmes sit somewhere near 40% of the
+non-maturing book at around five years. Starting there, on our R100bn example:</p><table><thead><tr><th>Decision</th><th>earnings volatility</th><th>income per year</th></tr></thead><tbody><tr><td>size it at 49% instead of 40%</td><td>−R8m</td><td>+R80m</td></tr><tr><td><strong>run it at fifteen years, not five</strong></td><td><strong>−R160m</strong></td><td><strong>+R1104m</strong></td></tr><tr><td>build it from bonds rather than swaps</td><td>R0m</td><td>+R778m</td></tr><tr><td>reshape the ladder</td><td>R0m</td><td>R0m</td></tr><tr><td><strong>all together</strong></td><td><strong>−R168m</strong></td><td><strong>+R1962m</strong></td></tr></tbody></table><p>That is roughly <strong>39% less earnings
+volatility and about R2.0bn a year of additional
+income</strong>, on a deposit book of R100bn. Scale it to a South African major and the
+tenor decision alone is a multi-billion-rand line item that no committee is
+currently voting on, because it is buried in a programme description rather than
+presented as a choice.</p><p>The tenor decision is the largest single lever, which surprised us - it beats the
+instrument decision by a comfortable margin. Lengthening from five years to
+fifteen roughly triples the term premium collected <em>and</em> smooths over three times
+as many past rates, so it is one of the rare changes that improves both axes at
+once.</p><h3 id=what-is-different-about-this>What is different about this</h3><p>Most of what follows is an argument that existing practice is right. That is
+worth saying plainly, because the two things that are genuinely new are narrow.</p><p>The <strong>framing</strong> is borrowed wholesale from signal processing, and that is the
+point: a rolling ladder is a finite impulse response filter, so the question
+&ldquo;what is the best ladder?&rdquo; becomes &ldquo;what is the best filter?&rdquo;, which has a
+literature and a set of tools. What that buys is not a better ladder - it is a
+<em>proof</em> that the uniform one is optimal within the class a spot programme can
+build, where the industry has only ever had a convention. Practice sets the hedge
+ratio by policy, usually somewhere in a 40&ndash;70% band; I derive it, and it
+comes out at one minus the deposit beta, stable across every tenor and growth
+rate tested. Practice quotes the programme by the tenor of the swaps in it; I
+show that number is a third too long once the book grows.</p><p>Against the academic literature, the closest reference point is
+Drechsler et al. (2021), which established that the deposit franchise carries
+duration and that banks can transform maturity without bearing rate risk. That is
+a statement about <em>economic value</em>. Post 2 of this series priced NGFB&rsquo;s franchise
+on the same basis. This post asks the question that sits directly downstream and
+is much less examined: given that value-side licence, what programme delivers it
+on the <em>earnings</em> line, and does it? The answer turns out to be that the two
+objectives want different-sized books, and that no ladder in the tradeable tenor
+range satisfies both.</p><p>The genuinely new pieces are the growth correction - elementary arithmetic with a
+large consequence, absent from every treatment I could find - and the instrument
+comparison, which prices the bonds-versus-swaps choice at 156bp rather than
+leaving it as an accounting preference. Neither required a spectrum. Both took
+one to find.</p><div style="display:flex;gap:12px;flex-wrap:wrap;margin:1.2rem 0"><div style="flex:1 1 200px;background:#15203a;border:1px solid #27374d;border-radius:9px;padding:12px 14px"><span style="display:block;font-family:jetbrains mono,monospace;font-size:1.25rem;font-weight:700;color:#38bdf8;margin-bottom:4px">20 years &rarr; 7.4</span>
+<span style=display:block;font-size:.8rem;color:#93a3b8;line-height:1.45>effective lag of a twenty-year programme once the deposit book grows at the
+rate I measured. The hedge you booked is not the hedge you have.</span></div><div style="flex:1 1 200px;background:#15203a;border:1px solid #27374d;border-radius:9px;padding:12px 14px"><span style="display:block;font-family:jetbrains mono,monospace;font-size:1.25rem;font-weight:700;color:#38bdf8;margin-bottom:4px">about 50%</span>
+<span style=display:block;font-size:.8rem;color:#93a3b8;line-height:1.45>the hedge ratio that minimises earnings volatility, stable across every tenor
+and every growth rate tested. It is 1&nbsp;&minus;&nbsp;&beta;, and it is the
+single most useful number here.</span></div><div style="flex:1 1 200px;background:#15203a;border:1px solid #27374d;border-radius:9px;padding:12px 14px"><span style="display:block;font-family:jetbrains mono,monospace;font-size:1.25rem;font-weight:700;color:#38bdf8;margin-bottom:4px">0.00 bps</span>
+<span style=display:block;font-size:.8rem;color:#93a3b8;line-height:1.45>gain from optimising the ladder&rsquo;s shape once its tenor is set. The whole
+filter-design apparatus resolves to two numbers: how big, and how long.</span></div></div><h2 id=the-caterpillar-is-a-filter>The caterpillar is a filter</h2><p>Write the programme down properly. Let $c_m$ be the fraction of the book rolled
+each month into swaps of tenor $m$ months. In steady state the book holds one
+vintage of every age, so what it is currently earning is a weighted average of
+the swap rates that prevailed over the past $m$ months. That is a filter, and its
+weights are the tail sums of the roll flows:</p>$$y_t = \sum_{k \ge 0} h_k \, s_{t-k} \qquad\text{where}\qquad h_k = \sum_{m > k} c_m$$<p>Reading that off: $y_t$ is what the book is earning this month; $s_{t-k}$ is the
+swap rate that was on the screen $k$ months ago; $c_m$ is the fraction of the
+book rolled each month into swaps of tenor $m$; and $h_k$ is the weight the book
+currently places on the rate from $k$ months ago. The identity says that weight
+is the <em>tail sum</em> of the roll flows - every programme with a tenor longer than
+$k$ still has a tranche alive that was struck back then.</p><p>Three things fall out of that single line. The weights sum to one automatically.
+The book&rsquo;s average remaining maturity is the mean lag plus a month. And - the one
+that decides everything later - because the weights are tail sums of non-negative
+numbers, they must be <strong>non-increasing</strong>: last month&rsquo;s rate always gets at least
+as much weight as an older one.</p><p>So a spot-starting ladder can build any declining weighting scheme and no other.
+You cannot build a programme that weights the rate from five years ago more
+heavily than last month&rsquo;s, because there is no combination of swap tenors that
+does it. Hold that thought.</p><p>For the uniform ten-year caterpillar every weight is $h_k = 1/120$, and the
+average lag - the centre of gravity of those weights - is</p>$$\bar{k} = \sum_{k=0}^{N-1} k \, h_k = \frac{N-1}{2} = 59.5 \text{ months}$$<p>A permanent change in rates reaches the margin, on average,
+five years late - the benefit arrives now-now, and any South African can tell you
+how long that can be.</p><h2 id=there-is-no-cycle-to-design-against>There is no cycle to design against</h2><p>To design a filter you must know what you are filtering. A <em>spectrum</em> answers
+that: it splits historical variation according to how fast the variation happens.
+If the repo rate moved in a tidy seven-year cycle, the spectrum would show a bump
+at seven years and a filter could be built to suppress it.</p><p>Look at what the SARB actually did over our sample. The repo peaked at 12% in
+2008, was cut to 5% by 2012, hiked back to 7% by 2016, slashed to 3.5% in the
+pandemic, hiked to 8.25% by 2023, and has since eased to 7%. That is five turning
+points in nineteen years, spaced between two and a half and four and a half years
+apart, with moves of wildly different size - a 700bp easing, a 200bp tightening,
+a 300bp easing, a 475bp tightening.</p><p><strong>Those are not cycles. They are responses to shocks</strong> - the financial crisis,
+the pandemic, the global inflation surge - and shocks do not arrive on a
+schedule, which is more than can be said for the load-shedding.</p><p><img src=index.markdown_strict_files/figure-markdown_strict/fig-spectrum-1.png id=fig-spectrum alt="Figure 1: The design spectrum: how much of the repo rate’s historical variation happens at each speed, estimated two ways. One fits an autoregression to monthly changes and converts algebraically to the year-on-year quantity; the other applies a multitaper estimator directly to year-on-year changes. They share neither the differencing path nor the estimator family, so where they disagree is informative rather than a shared assumption. Mass rises with period and flattens past ten years - a shelf, not a peak. The amber bar is the centre of spectral mass with its bootstrap interquartile range."></p><p>The line rises and flattens. Notice <em>which</em> moves dominate: the biggest ones Ire
+also the slowest, unfolding over three to four years, and slow large moves put
+their energy at long periods. That is why the curve climbs to the right and stays
+there.</p><p>The sample is 232 months, which sounds generous until you divide by the
+length of a rate cycle. Against a seventy-eight month cycle that is
+3.0 realisations, and the resolution limit at that
+period is plus or minus 26 months - a
+five-and-a-half year cycle and a seven year cycle sit in the same bin. Anything
+I say about the <em>height</em> of a spectral feature here is decoration.</p><p>But the shape is not ambiguous, and the peak-finder&rsquo;s failure is not a resolution
+problem. <strong>93% of bootstrap replicates pinned
+the peak to the edge of the search range</strong>, which is what an algorithm does when
+asked to find something that is not there.</p><h2 id=the-caterpillars-nulls-point-at-nothing>The caterpillar&rsquo;s nulls point at nothing</h2><p><img src=index.markdown_strict_files/figure-markdown_strict/fig-transfer-1.png id=fig-transfer alt="Figure 2: Transfer function of the uniform 120-month caterpillar - how much of each speed of rate variation it passes through to the margin. It blocks variation at exactly ten and five years, and leaks worst at a 6.7-year period. The amber line marks the estimated centre of spectral mass, which lands on the five-year null."></p><p>What that chart plots is the <em>transfer function</em> - the fraction of a rate wobble
+at each speed that survives the averaging. For a uniform ladder of $N$ months it
+has a closed form, the Dirichlet kernel:</p>$$H(\omega) = \frac{1}{N}\sum_{k=0}^{N-1} e^{-i\omega k} = e^{-i\omega (N-1)/2} \cdot \frac{\sin(N\omega/2)}{N \sin(\omega/2)}$$<p>Here $\omega$ is angular frequency in radians per month, so a wobble with a
+period of $P$ months has $\omega = 2\pi/P$. The chart shows the magnitude,
+$|H(\omega)|$, which is the fraction passed through. The exponential in front is
+pure phase: its slope is exactly the $(N-1)/2$ month lag from before, which is
+why a moving average delays without distorting.</p><p>The magnitude vanishes wherever $\sin(N\omega/2) = 0$ but $\sin(\omega/2) \ne 0$,
+which happens when $N\omega/2 = \pi j$ - that is, at periods of $N/j$ months for
+$j = 1, 2, 3, \dots$ For $N = 120$ those are 120 months, 60 months, 40 months and
+so on: <strong>ten years, five years, three and a third</strong>. The nulls are not chosen.
+They fall out of the length.</p><p>The centre of spectral mass is at 5.0 years.
+The caterpillar has a null at five years. <strong>It is aimed almost perfectly.</strong></p><p>Its aim was never the problem. The problem is everything to the <em>right</em> of that
+chart, where a ten-year average simply cannot reach: at a twenty-year period the
+filter passes about two-thirds of the variation straight through, and that is
+where South Africa&rsquo;s rate moves actually live. The leaky side lobes that make the
+boxcar an embarrassment in a signal processing course turn out to be irrelevant
+here.</p><h2 id=the-hedge-is-shorter-than-the-swaps-you-booked>The hedge is shorter than the swaps you booked</h2><p>Here is the part the textbook version of this analysis gets wrong, and it is not
+a rounding detail.</p><p>The standard treatment - ours included, until I checked - assumes a constant
+deposit base: roll one hundred and twentieth each month, hold one vintage of
+every age, weight them equally. Real programmes maintain notional as a
+<em>percentage of a book that grows</em>. Each month the desk books replacement tranches
+for what matured <strong>plus growth tranches for the larger base</strong>. And older tranches
+shrink as a share of today&rsquo;s book, simply because today&rsquo;s book is bigger.</p><p>So the weights are not equal. A tranche booked $k$ months ago was sized against
+a book that was smaller then, by a factor $e^{-ak}$ where $a = g/12$ is the
+monthly growth rate. As a share of <em>today&rsquo;s</em> balance it has shrunk by exactly
+that much, so</p>$$h_k = \frac{e^{-ak}}{\sum_{j=0}^{L-1} e^{-aj}} \qquad\text{for } k < L, \qquad a = g/12$$<p>The boxcar becomes a truncated exponential. Setting $g = 0$ recovers $h_k = 1/L$
+and the textbook case, which is a useful check.</p><p>The average lag has a closed form too, and it is worth writing down because it
+shows exactly where the compression comes from:</p>$$\bar{k} = \frac{1}{e^{a}-1} - \frac{L}{e^{aL}-1}$$<p>The first term is the lag you would get from an <em>infinitely long</em> programme on a
+growing book - about $1/a$ months, or twelve and a half years at 8% growth. It is
+a ceiling that growth alone imposes, with no reference to the swaps at all. The
+second term is the correction for actually stopping at $L$. At short tenors the
+second term dominates and the programme behaves as advertised; at long tenors it
+fades and the first term takes over. <strong>Past a certain point you are no longer
+buying lag from the swap market - you are bumping against a ceiling set by how
+fast your own deposit book grows.</strong></p><p>I measured the growth rather than assuming it. <strong>BA100 core deposits for the
+total SA banking sector grew at 8.07% a year</strong>
+between 2013 and 2025, on the same definition the balance-sheet ratios in this
+post use. M3&rsquo;s rolling twenty-year windows since 2000 sit between
+8.8% and 11.1%. The
+scenarios below bracket both, so the 11% case is not a stress - it is the upper
+half of the plausible range.</p><p><img src=index.markdown_strict_files/figure-markdown_strict/fig-lag-1.png id=fig-lag alt="Figure 3: Effective average lag of the programme against the nominal tenor of the swaps in it. The dotted line is what a constant deposit base would give you. Longer programmes are compressed hardest, because growth tranches swamp the old vintages faster than the replacement schedule retires them."></p><div id=tbl-lag><table><thead><tr><th style=text-align:left>Swap tenor</th><th style=text-align:left>no growth</th><th style=text-align:left>5% growth</th><th style=text-align:left>8% growth</th><th style=text-align:left>11% growth</th></tr></thead><tbody><tr><td style=text-align:left>2 years</td><td style=text-align:left>1.0y</td><td style=text-align:left>0.9y</td><td style=text-align:left>0.9y</td><td style=text-align:left>0.9y</td></tr><tr><td style=text-align:left>3 years</td><td style=text-align:left>1.5y</td><td style=text-align:left>1.4y</td><td style=text-align:left>1.4y</td><td style=text-align:left>1.4y</td></tr><tr><td style=text-align:left>5 years</td><td style=text-align:left>2.5y</td><td style=text-align:left>2.4y</td><td style=text-align:left>2.3y</td><td style=text-align:left>2.2y</td></tr><tr><td style=text-align:left>7 years</td><td style=text-align:left>3.5y</td><td style=text-align:left>3.3y</td><td style=text-align:left>3.1y</td><td style=text-align:left>3.0y</td></tr><tr><td style=text-align:left>10 years</td><td style=text-align:left>5.0y</td><td style=text-align:left>4.5y</td><td style=text-align:left>4.3y</td><td style=text-align:left>4.1y</td></tr><tr><td style=text-align:left>12 years</td><td style=text-align:left>6.0y</td><td style=text-align:left>5.4y</td><td style=text-align:left>5.0y</td><td style=text-align:left>4.7y</td></tr><tr><td style=text-align:left>15 years</td><td style=text-align:left>7.5y</td><td style=text-align:left>6.5y</td><td style=text-align:left>6.0y</td><td style=text-align:left>5.5y</td></tr><tr><td style=text-align:left>20 years</td><td style=text-align:left>10.0y</td><td style=text-align:left>8.3y</td><td style=text-align:left>7.4y</td><td style=text-align:left>6.6y</td></tr></tbody></table><p>Table 1: Effective average lag. A twenty-year programme on a book growing at the rate I measured behaves like a seven-and-a-half-year one; at 11% it behaves like six and a half.</p></div><p><strong>A twenty-year programme on a book growing 11% behaves like a
+6.6-year one.</strong> The hedge you think you have
+is roughly two-thirds of the hedge you booked, and the gap widens with tenor.</p><div style="display:flex;align-items:flex-start;gap:14px;border:1px solid #5a4720;border-left:4px solid #e8a838;border-radius:8px;background:#1d1a12;padding:16px 20px;margin:1.5rem 0;font-size:.95rem;line-height:1.55;color:#ccc"><span style=font-size:1.2rem;flex-shrink:0;margin-top:1px>⚠️</span><div><div style=font-size:.78rem;font-weight:600;letter-spacing:.08em;text-transform:uppercase;color:#e8a838;margin-bottom:5px>Why growth compresses long programmes hardest</div><div>Replacement flow is 1/L a month, so it shrinks as the programme
+lengthens. Growth flow is g/12 a month regardless of tenor. At five years,
+replacement is 1.67% a month against growth of 0.67%, so replacement dominates
+and the programme behaves roughly as advertised. At twenty years, replacement is
+0.42% against the same 0.67% &mdash; growth dominates, and the effective lag
+collapses toward 1/g. <strong>Past a certain tenor you are not lengthening the
+hedge at all.</strong> You are booking longer swaps into a filter whose shape is
+set by how fast your deposit book is growing.</div></div></div><h2 id=what-actually-works-size-it-properly>What actually works: size it properly</h2><p>Post 2 priced the deposit franchise at <strong>5.12 years</strong> of
+duration per rand of non-maturing deposits. Meeting that with ten-year swaps
+requires R126bn of notional against a R100bn deposit book. <strong>Nobody runs a 126%
+hedge ratio.</strong> Typical structural hedge ratios are 40&ndash;70% of non-maturing
+balances - and, as it turns out, that is almost exactly what the earnings
+objective wants.</p><p><img src=index.markdown_strict_files/figure-markdown_strict/fig-sizing-1.png id=fig-sizing alt="Figure 4: The same ten-year ladder at two sizes, on a book growing 8%. Vertical scale is signed square root, because the lag-zero weight is roughly fifty times the tail weights and a linear axis would flatten the tail into the baseline. Forced to the value licence, the programme develops a deep negative weight at lag zero against a positive tail - a dipole, which differences rather than smooths. Sized for earnings, it does not."></p><h3 id=why-the-size-matters-more-than-anything-else>Why the size matters more than anything else</h3><p>What ALCO actually cares about is not the hedge&rsquo;s own income but <em>net</em> interest
+income, and writing that down explains the whole post. Per rand of non-maturing
+deposits, with $N$ the notional and $h_k$ the ladder&rsquo;s weights:</p>$$\Delta_{12}\text{NII}_t = (1 - \beta - N)\,\Delta_{12}r_t + N\sum_{k \ge 1} h_k\,\Delta_{12}r_{t-k}$$<p>The first term is today: the bank gains $(1-\beta)$ per rand from the deposit
+book repricing and pays $N$ per rand on the swap&rsquo;s floating leg. The second is
+the fixed leg, which is still earning rates struck up to $L$ months ago. Writing
+the whole thing as one filter $h^{\text{net}}$, its coefficients have a property
+that does not depend on the ladder at all:</p>$$\sum_k h^{\text{net}}_k = (1 - \beta - N) + N\sum_k h_k = (1-\beta) - N + N = 1-\beta$$<p><strong>A structural hedge cannot remove rate exposure from earnings. It can only move
+that exposure to different frequencies.</strong> Whatever the programme, the bank&rsquo;s
+sensitivity to a permanent shift in rates is the same $1-\beta$ it always was.
+Only the timing changes.</p><p>Now the objective. The variance of that year-on-year change is a quadratic form
+in the weights:</p>$$\mathcal{V}(h^{\text{net}}) = \sum_j \sum_k h^{\text{net}}_j h^{\text{net}}_k \, \gamma(|j-k|) \qquad\text{where}\qquad \gamma(d) = \text{Cov}\!\left(\Delta_{12}r_t,\, \Delta_{12}r_{t-d}\right)$$<p>and $\gamma$ is exactly what the spectrum estimated. Differentiating with respect
+to $N$ and setting it to zero gives the optimal size in closed form. Writing
+$u = h - e_0$ for the difference between the ladder&rsquo;s weights and a spike at
+lag zero:</p>$$N^{\star} = (1-\beta)\,\frac{\gamma(0) - \sum_k h_k\gamma(k)}{\gamma(0) - 2\sum_k h_k\gamma(k) + \sum_j\sum_k h_jh_k\gamma(|j-k|)}$$<p>That looks worse than it is. For a long, smooth ladder the averaging kills almost
+all of the variance, so the sums involving $h$ shrink toward zero and the whole
+fraction tends to one:</p>$$N^{\star} \longrightarrow 1 - \beta$$<p><strong>That is the sizing rule, and it is why the answer came out between
+40% and 51%
+rather than at exactly 51.1%.</strong> The correction terms
+are small but not zero, and they shrink as the ladder lengthens - which is why
+the optimal size creeps upward with tenor in the table below. Practice sets the
+hedge ratio somewhere in a 40&ndash;70% band by convention; this says the number
+is one minus the deposit beta, and says why.</p><p>The dipole was a sizing mistake, not a tenor one. What is happening is easy to
+see on the day of a hike. With R100bn of ten-year swaps, the bank pays an extra
+R1,000m on the floating leg while the fixed leg sits unchanged, against the R511m
+it gained on the deposit book: net <strong>−R489m</strong>. The hedge did not damp the
+exposure, it overshot and flipped the sign. Sized at
+49% instead, the floating leg costs about R490m
+against that R511m and the two very nearly cancel - which is the whole idea.</p><h2 id=every-tenor-at-its-own-best-size>Every tenor, at its own best size</h2><p>So ask the fair question instead: what does each horizon deliver at <em>its own</em>
+best size? Horizons stop at twenty years here, because most treasuries will not
+transact beyond that in size, and the results say they need not.</p><div id=tbl-tenors><table><thead><tr><th style=text-align:left>Programme</th><th style=text-align:left>best size</th><th style=text-align:left>income per year</th><th style=text-align:left>volatility</th><th style=text-align:left>volatility cut</th><th style=text-align:left>% of value licence</th></tr></thead><tbody><tr><td style=text-align:left>no hedge at all</td><td style=text-align:left>&mdash;</td><td style=text-align:left>R0m</td><td style=text-align:left>R828m</td><td style=text-align:left>&mdash;</td><td style=text-align:left>0%</td></tr><tr><td style=text-align:left>2 years</td><td style=text-align:left>41%</td><td style=text-align:left>R42m</td><td style=text-align:left>R600m</td><td style=text-align:left>27%</td><td style=text-align:left>8%</td></tr><tr><td style=text-align:left>3 years</td><td style=text-align:left>43%</td><td style=text-align:left>R136m</td><td style=text-align:left>R518m</td><td style=text-align:left>37%</td><td style=text-align:left>13%</td></tr><tr><td style=text-align:left>5 years</td><td style=text-align:left>46%</td><td style=text-align:left>R410m</td><td style=text-align:left>R422m</td><td style=text-align:left>49%</td><td style=text-align:left>22%</td></tr><tr><td style=text-align:left>7 years</td><td style=text-align:left>48%</td><td style=text-align:left>R677m</td><td style=text-align:left>R365m</td><td style=text-align:left>56%</td><td style=text-align:left>31%</td></tr><tr><td style=text-align:left>10 years</td><td style=text-align:left>49%</td><td style=text-align:left>R1083m</td><td style=text-align:left>R313m</td><td style=text-align:left>62%</td><td style=text-align:left>43%</td></tr><tr><td style=text-align:left>12 years</td><td style=text-align:left>50%</td><td style=text-align:left>R1268m</td><td style=text-align:left>R290m</td><td style=text-align:left>65%</td><td style=text-align:left>51%</td></tr><tr><td style=text-align:left>15 years</td><td style=text-align:left>50%</td><td style=text-align:left>R1539m</td><td style=text-align:left>R264m</td><td style=text-align:left>68%</td><td style=text-align:left>62%</td></tr><tr><td style=text-align:left>20 years</td><td style=text-align:left>51%</td><td style=text-align:left>R1718m</td><td style=text-align:left>R237m</td><td style=text-align:left>71%</td><td style=text-align:left>79%</td></tr></tbody></table><p>Table 2: Per R100bn of non-maturing deposits, on a book growing 8% a year. Income is the term premium the programme earns; volatility is the standard deviation of the year-on-year change in net interest income. The last column is how much of Post 2&rsquo;s value-based duration licence the programme covers - and it never reaches 100%.</p></div><p><strong>A ten-year caterpillar at a 49% hedge ratio cuts
+earnings volatility by 62% and earns
+R1083m a year.</strong> It is a perfectly good hedge. Even a
+five-year programme roughly halves the volatility. There is no tenor at which
+hedging fails to help.</p><p><img src=index.markdown_strict_files/figure-markdown_strict/fig-tenors-1.png id=fig-tenors alt="Figure 5: Every tenor at its own best size, under three growth scenarios. Down and to the right is better. The three curves nearly coincide, which is the point: growth changes the effective lag a great deal and the outcome very little, because the size decision dominates the shape decision."></p><p>Two things stand out, and both are more useful than anything the filter theory
+produced.</p><p>The best hedge ratio is
+<strong>40&ndash;51%
+across every tenor and every growth rate tested</strong>. It is tracking
+$1-\beta = 0.511$, and it barely moves. That is a robust
+operating rule and the single most valuable number in this post.</p><p>And the three growth curves nearly overlap. Growth shifts income and volatility
+by only a few per cent, because the <em>size</em> decision dominates the <em>shape</em>
+decision. Growth matters enormously for what the programme <strong>is</strong> - a twenty-year
+ladder is really a seven-year one - and hardly at all for what it <strong>delivers</strong>,
+once it is sized correctly.</p><p>The last column of the table is the uncomfortable one. Even a twenty-year
+programme at its own best size reaches only
+<strong>79% of the value licence</strong>. Sizing for earnings
+leaves value risk on the table, and nothing in the tradeable tenor range closes
+the gap. That is the genuine tension: not that hedging is bad, but that <strong>the
+earnings objective and the value objective want different-sized books</strong>, and no
+ladder satisfies both.</p><h2 id=filter-shaping-buys-nothing>Filter shaping buys nothing</h2><p>Now solve the whole thing properly. Minimise earnings volatility over every
+combination of roll flows across every tenor, with growth in the mechanics,
+subject to the notional cap. It is a convex quadratic program and it solves in
+milliseconds.</p><p>The answer is a single tenor at the longest horizon available, and the gain over
+simply picking that tenor is <strong>0.00 bps</strong>, at every growth rate tested.</p><p>The reason follows from the tail-sum identity at the top. Because
+$h_k = \sum_{m>k} c_m$ with every $c_m \ge 0$, the weights must satisfy</p>$$h_0 \ge h_1 \ge h_2 \ge \dots \ge h_{L-1} \ge 0$$<p>and conversely any such sequence can be built by choosing
+$c_m = h_{m-1} - h_m$. So the set of programmes a spot ladder can construct is
+<em>exactly</em> the set of non-increasing weightings - no more, no less.</p><p>Now ask which member of that set minimises the objective. Concentrating weight
+raises the quadratic form; spreading it lowers it. The clean case is white noise,
+where $\gamma(d) = 0$ for $d \ne 0$ and the variance collapses to
+$\gamma(0)\sum_k h_k^2$ - and for a fixed total $\sum_k h_k$ over a fixed
+support, $\sum_k h_k^2$ is minimised by making every weight equal. That is the
+uniform ladder. Rates are not white noise, so this is an argument rather than a
+proof, and I checked it numerically instead: across every tenor and growth rate
+tested, the optimiser returned the uniform ladder to two decimal places. Flattest means most
+smoothing, which is exactly what the objective rewards. <strong>RBS did not pick the
+uniform caterpillar by luck.</strong> It is the best member of its own family, and a
+decade of desks copying it Ire not being lazy.</p><p>That leaves forward-starting swaps, the one way out of the declining family,
+since they weight a block of past rates while ignoring the most recent ones. They
+Ire tested rather than assumed, and they lose twice. On duration: counting
+notional from trade date, as a notional register does, a swap starting in two
+years and running ten occupies the same twelve years of footprint as a spot
+twelve-year swap but earns less duration, because the waiting period contributes
+nothing. On the objective: offered the full menu, the optimiser gave them <strong>zero
+weight at every delay</strong>.</p><h2 id=could-i-not-time-the-cycle>Could I not time the cycle?</h2><p>The obvious next thought, and the one every ALCO raises: hedge more when rates
+are high, less when they are low. Lock in the peaks. I tested it by simulating
+rate paths with the estimated spectrum and running timing rules against a static
+programme.</p><table><thead><tr><th>Rule</th><th>income</th><th>volatility</th><th>beats static on both</th></tr></thead><tbody><tr><td>static, no timing</td><td>R1,701m</td><td>1.0×</td><td>&mdash;</td></tr><tr><td>timed on the rate level, mild</td><td>R1,837m</td><td>2.0×</td><td><strong>0%</strong></td></tr><tr><td>timed on the rate level, aggressive</td><td>R2,157m</td><td>3.5×</td><td><strong>0%</strong></td></tr><tr><td><strong>perfect foresight</strong></td><td>R3,003m</td><td>2.0×</td><td><strong>0%</strong></td></tr></tbody></table><p>Even knowing the next two years of rates exactly, timing never improved both.
+Not rarely - never, across two hundred simulated paths.</p><p>There is a mechanical reason and it is the useful part. The floating leg costs
+notional × rate. Hold notional fixed and that is a constant times a moving
+quantity. Let notional vary and it becomes <strong>a product of two moving
+quantities</strong>, which is strictly more variable. Timing buys income at a guaranteed
+volatility cost, paid whether or not the forecast is any good. Perfect foresight
+earned R1.3bn more and still doubled the volatility.</p><p>And the signals are not there anyway. <em>Cycle position</em> is dead already - there is
+no cycle to be early or late in. <em>Rate level</em> is dead by a number already in this
+post: the model fits the monthly <em>changes</em> as stationary, which makes the level a
+random walk, and a random walk&rsquo;s current level tells you nothing about the
+direction of its next move. <em>Curve slope</em> is the one with real literature behind
+it, and the Cochrane&ndash;Piazzesi finding that the predictable term premium does
+not survive out of sample is the reason to keep expectations modest.</p><div style="border:1px solid #2a3140;border-left:4px solid #9ece6a;border-radius:8px;background:#141a15;padding:16px 20px;margin:1.5rem 0;font-size:.9rem;line-height:1.6;color:#cfd8d3"><div style=font-size:.72rem;font-weight:600;letter-spacing:.08em;text-transform:uppercase;color:#9ece6a;margin-bottom:6px>What is not timing</div><div>Moving from a 25% hedge ratio to 50% is not a market call &mdash; it is
+correcting a mis-sized book, and it improves both axes regardless of what rates
+do next. Extending tenor is a structural choice, not a bet. The test is whether
+the decision requires a view: sizing and tenor need none, and timing needs one
+you cannot reliably form.</div></div><h2 id=a-different-instrument-entirely>A different instrument entirely</h2><p>All of the above assumes swaps. It need not. The same duration can be bought by
+taking the deposits and buying fixed-rate government bonds - which is what a
+great many banks in fact do - and in South Africa the two are not priced the
+same.</p><p>SA government bonds yield materially <em>more</em> than the matched swap. The gap is
+measured directly from the overlap in the data behind this post: <strong>57bp at one
+year, widening to 156bp at ten years</strong> and held flat
+beyond, which is the convention the SARB&rsquo;s own derivatives workstream uses for
+the equivalent spread. A bank that buys the bond rather than receiving fixed on
+the swap collects that on every rand, for identical duration and therefore
+identical earnings volatility.</p><div id=tbl-instrument><table><thead><tr><th style=text-align:left>Route</th><th style=text-align:left>income per year</th><th style=text-align:left>volatility</th><th style=text-align:left>what you take on</th></tr></thead><tbody><tr><td style=text-align:left>receive fixed on swaps</td><td style=text-align:left>R1718m</td><td style=text-align:left>R237m</td><td style=text-align:left>collateralised, off balance sheet, hedge-accountable</td></tr><tr><td style=text-align:left>buy government bonds</td><td style=text-align:left>R2506m</td><td style=text-align:left>R237m</td><td style=text-align:left>consumes balance sheet; marks flow through to capital</td></tr></tbody></table><p>Table 3: A twenty-year programme at 51% of a R100bn deposit book, built two ways. Same duration, same earnings volatility. The bond route earns R787m a year more - which is payment for risks the swap does not carry, not a free lunch.</p></div><p>That is the largest number in this post and it deserves care rather than
+celebration. <strong>The spread is compensation for real risks the swap does not
+carry</strong>, and three of them matter.</p><p><strong>Sovereign credit.</strong> A swap is collateralised daily against a bank counterparty.
+A government bond is an unsecured claim on a sub-investment-grade sovereign. A
+good deal of that 156bp is simply the price of that, and anyone who has spent a
+Friday evening waiting on a ratings announcement knows why it is not small.</p><p><strong>Capital volatility, which is the one that ends careers.</strong> Bonds held at fair
+value mark to market, and those marks flow through to capital. A twenty-year bond
+portfolio at half the deposit base would swing capital hard as rates move -
+which is precisely what happened to several US banks in 2023. A swap designated
+as a cash flow hedge does not do that. So the bond route delivers identical
+<em>earnings</em> stability while giving up <em>capital</em> stability. Those are different
+balance sheets in a stress.</p><p><strong>Balance sheet capacity.</strong> Bonds consume leverage-ratio headroom even where they
+attract no credit risk weight, and that headroom has an internal price no public
+dataset can tell you.</p><p>Note the coupling, because it changes the tenor answer. Bond capital volatility
+scales with duration, so a bank taking the R787m should
+think about a <em>shorter</em> book than the swap analysis alone would suggest. <strong>The
+instrument decision and the tenor decision are not independent.</strong></p><h2 id=so-what-should-the-desk-do>So what should the desk do?</h2><div id=tbl-decide><table><thead><tr><th style=text-align:right>#</th><th style=text-align:left>Decision</th><th style=text-align:left>What the analysis says</th><th style=text-align:left>Worth</th></tr></thead><tbody><tr><td style=text-align:right>1</td><td style=text-align:left>Which instrument</td><td style=text-align:left>Bonds pay 156bp over matched swaps at ten years and beyond, for identical rate risk. Take it only if the balance sheet and the capital-volatility appetite are there.</td><td style=text-align:left>R787m a year</td></tr><tr><td style=text-align:right>2</td><td style=text-align:left>How big</td><td style=text-align:left>About 49% of the non-maturing book. That is one minus beta, and it holds across every tenor and growth rate tested.</td><td style=text-align:left>R515m of volatility removed</td></tr><tr><td style=text-align:right>3</td><td style=text-align:left>How long</td><td style=text-align:left>Longer is better on both axes, but growth eats the benefit past fifteen years. Ten to fifteen captures most of it.</td><td style=text-align:left>R158m more, 5y to 15y</td></tr><tr><td style=text-align:right>4</td><td style=text-align:left>What shape</td><td style=text-align:left>Uniform. Do not build a weighting scheme.</td><td style=text-align:left>R0m</td></tr><tr><td style=text-align:right>5</td><td style=text-align:left>Whether to time it</td><td style=text-align:left>No. Even perfect foresight fails.</td><td style=text-align:left>negative</td></tr></tbody></table><p>Table 4: In descending order of what each is worth, per R100bn of non-maturing deposits per year.</p></div><p>As a single instruction: <strong>run about half your non-maturing deposit base in a
+uniform ladder of ten to fifteen years, and have a serious argument about whether
+it should be bonds rather than swaps.</strong> Nothing in that requires a spectrum, a
+filter or a quadratic program - but it took all three to be confident that
+nothing more elaborate was being left on the table.</p><p>What would change it. Decision 1 reverses if capital volatility is scarce.
+Decision 2 tightens if the economic-value limit binds before the earnings
+objective does. Decision 3 is capped by what actually trades, and by how fast the
+book is growing. Decision 4 did not reverse under anything I tested, including
+the full forward-start menu.</p><h2 id=the-alco-bridge>The ALCO bridge</h2><div id=tbl-bridge><table><thead><tr><th style=text-align:left>Bridge leg</th><th style=text-align:left>R m on R100bn</th><th style=text-align:left>bps of NIM</th><th style=text-align:left>bps of pre-tax ROE</th></tr></thead><tbody><tr><td style=text-align:left>5-year programme at its best size</td><td style=text-align:left>R422m</td><td style=text-align:left>16.2</td><td style=text-align:left>200</td></tr><tr><td style=text-align:left>extend to 10 years</td><td style=text-align:left>-R109m</td><td style=text-align:left>-4.2</td><td style=text-align:left>-52</td></tr><tr><td style=text-align:left>extend to 15 years</td><td style=text-align:left>-R49m</td><td style=text-align:left>-1.9</td><td style=text-align:left>-23</td></tr><tr><td style=text-align:left>optimise the filter shape</td><td style=text-align:left>R0m</td><td style=text-align:left>0.0</td><td style=text-align:left>0</td></tr><tr><td style=text-align:left>optimised programme</td><td style=text-align:left>R264m</td><td style=text-align:left>10.2</td><td style=text-align:left>126</td></tr><tr><td style=text-align:left>memo: no structural hedge at all</td><td style=text-align:left>R828m</td><td style=text-align:left>31.8</td><td style=text-align:left>393</td></tr></tbody></table><p>Table 5: Year-on-year NII volatility. Balance-sheet ratios are averages over 36 monthly BA100 returns for the total banking sector: core deposits are 68.3% of interest-earning assets, and interest-earning assets are 12.4 times ordinary equity. Tax is omitted deliberately - it is a uniform scalar that cannot change any ranking - so the ROE column is pre-tax.</p></div><p>Because a bank holds roughly one rand of capital for every
+12.4 of assets, a small move in margin becomes a
+large move in return on equity. One basis point of NII per rand of the
+non-maturing deposit base is 0.385 bps of net interest
+margin and 4.75 bps of pre-tax return on equity. The whole
+bridge from a five-year to a fifteen-year programme is
+75 bps of pre-tax ROE volatility,
+and the fourth line - reshaping - is zero.</p><h2 id=what-this-is-not>What this is not</h2><p>The sample is 232 months - three realisations of a rate cycle - so what
+I say about <em>where</em> spectral mass sits is on firmer ground than anything about
+how much. The term premium is measured over a window that includes the 2020
+steepening and therefore flatters itself. Growth is treated as a constant when it
+demonstrably is not, as above.</p><p>The optimisation always wants the longest tenor available, so whether twenty-year
+rand swaps trade in the size a structural hedge needs is a question for a desk
+rather than a spectrum. Growth makes that question less urgent than it looks: the
+gap between a fifteen-year and a twenty-year programme is small once the book is
+growing, so a treasury that cannot go past fifteen is giving up very little.</p><p>Finally, this post measures <em>earnings</em> volatility throughout. Post 2&rsquo;s licence is
+about <em>economic value</em>. A committee managing to earnings and one managing to
+value will read the same ladder differently, and the gap between them -
+79% at best - is the number to put on the slide
+rather than any single ladder.</p><p>Basel Committee on Banking Supervision. 2016. <em>Interest Rate Risk in the Banking Book</em>. Standards No. d368. Bank for International Settlements. <a href=https://www.bis.org/bcbs/publ/d368.htm>https://www.bis.org/bcbs/publ/d368.htm</a>.</p><p>Cochrane, John H., and Monika Piazzesi. 2005. &ldquo;Bond Risk Premia.&rdquo; <em>American Economic Review</em> 95 (1): 138&ndash;60. <a href=https://doi.org/10.1257/0002828053828581>https://doi.org/10.1257/0002828053828581</a>.</p><p>Drechsler, Itamar, Alexi Savov, and Philipp Schnabl. 2021. &ldquo;Banking on Deposits: Maturity Transformation Without Interest Rate Risk.&rdquo; <em>The Journal of Finance</em> 76 (3): 1091&ndash;143. <a href=https://doi.org/10.1111/jofi.13013>https://doi.org/10.1111/jofi.13013</a>.</p><p>Percival, Donald B., and Andrew T. Walden. 1993. <em>Spectral Analysis for Physical Applications: Multitaper and Conventional Univariate Techniques</em>. Cambridge University Press. <a href=https://doi.org/10.1017/CBO9780511622762>https://doi.org/10.1017/CBO9780511622762</a>.</p><p>South African Reserve Bank. 2023. <em>Market Conventions for ZARONIA-Based Derivatives</em>. Market Practitioners Group, Derivatives Workstream. <a href=https://www.resbank.co.za/content/dam/sarb/publications/media-releases/2023/zaronia-based-derivatives/Market%20conventions%20for%20ZARONIA-based%20derivatives.pdf>https://www.resbank.co.za/content/dam/sarb/publications/media-releases/2023/zaronia-based-derivatives/Market\20conventions\20for\20ZARONIA-based\20derivatives.pdf</a>.</p><p>South African Reserve Bank. 2025. <em>Historical Estimation of the ZARONIA OIS Curve</em>. Market Practitioners Group, Derivatives Workstream. <a href=https://www.resbank.co.za/en/home/publications/publication-detail-pages/Financial-Markets/Committees/MPG/MPG-Related-pages/2025/historical-estimation-of-the-zaronia-ois-curve>https://www.resbank.co.za/en/home/publications/publication-detail-pages/Financial-Markets/Committees/MPG/MPG-Related-pages/2025/historical-estimation-of-the-zaronia-ois-curve</a>.</p></div></article></main><div class="col-span-3 lg:col-span-1"><div class="bg-white rounded-xl shadow-sm mb-4 overflow-hidden dark:bg-warmgray-900"><div class="px-5 py-4 border-b border-gray-100 dark:border-warmgray-700"><p class="text-xs font-semibold uppercase tracking-widest text-gray-500 dark:text-gray-400">Categories</p></div><div class="divide-y divide-gray-100 dark:divide-warmgray-700"><a class="flex items-center justify-between px-5 py-3 hover:bg-gray-50 dark:hover:bg-warmgray-800 transition-colors duration-150 text-sm text-gray-700 dark:text-gray-300" href=https://overfitandchill.co.za//categories/alm><span>Alm</span><span class="text-xs text-gray-400 dark:text-gray-500">3</span></a>
+<a class="flex items-center justify-between px-5 py-3 hover:bg-gray-50 dark:hover:bg-warmgray-800 transition-colors duration-150 text-sm text-gray-700 dark:text-gray-300" href=https://overfitandchill.co.za//categories/banking><span>Banking</span><span class="text-xs text-gray-400 dark:text-gray-500">2</span></a>
+<a class="flex items-center justify-between px-5 py-3 hover:bg-gray-50 dark:hover:bg-warmgray-800 transition-colors duration-150 text-sm text-gray-700 dark:text-gray-300" href=https://overfitandchill.co.za//categories/deposits><span>Deposits</span><span class="text-xs text-gray-400 dark:text-gray-500">1</span></a>
+<a class="flex items-center justify-between px-5 py-3 hover:bg-gray-50 dark:hover:bg-warmgray-800 transition-colors duration-150 text-sm text-gray-700 dark:text-gray-300" href=https://overfitandchill.co.za//categories/etf><span>Etf</span><span class="text-xs text-gray-400 dark:text-gray-500">2</span></a>
+<a class="flex items-center justify-between px-5 py-3 hover:bg-gray-50 dark:hover:bg-warmgray-800 transition-colors duration-150 text-sm text-gray-700 dark:text-gray-300" href=https://overfitandchill.co.za//categories/finance><span>Finance</span><span class="text-xs text-gray-400 dark:text-gray-500">2</span></a>
+<a class="flex items-center justify-between px-5 py-3 hover:bg-gray-50 dark:hover:bg-warmgray-800 transition-colors duration-150 text-sm text-gray-700 dark:text-gray-300" href=https://overfitandchill.co.za//categories/fixed-income><span>Fixed income</span><span class="text-xs text-gray-400 dark:text-gray-500">2</span></a>
+<a class="flex items-center justify-between px-5 py-3 hover:bg-gray-50 dark:hover:bg-warmgray-800 transition-colors duration-150 text-sm text-gray-700 dark:text-gray-300" href=https://overfitandchill.co.za//categories/hedging><span>Hedging</span><span class="text-xs text-gray-400 dark:text-gray-500">1</span></a>
+<a class="flex items-center justify-between px-5 py-3 hover:bg-gray-50 dark:hover:bg-warmgray-800 transition-colors duration-150 text-sm text-gray-700 dark:text-gray-300" href=https://overfitandchill.co.za//categories/irrbb><span>Irrbb</span><span class="text-xs text-gray-400 dark:text-gray-500">3</span></a>
+<a class="flex items-center justify-between px-5 py-3 hover:bg-gray-50 dark:hover:bg-warmgray-800 transition-colors duration-150 text-sm text-gray-700 dark:text-gray-300" href=https://overfitandchill.co.za//categories/machine-learning><span>Machine learning</span><span class="text-xs text-gray-400 dark:text-gray-500">3</span></a>
+<a class="flex items-center justify-between px-5 py-3 hover:bg-gray-50 dark:hover:bg-warmgray-800 transition-colors duration-150 text-sm text-gray-700 dark:text-gray-300" href=https://overfitandchill.co.za//categories/ngfb><span>Ngfb</span><span class="text-xs text-gray-400 dark:text-gray-500">2</span></a>
+<a class="flex items-center justify-between px-5 py-3 hover:bg-gray-50 dark:hover:bg-warmgray-800 transition-colors duration-150 text-sm text-gray-700 dark:text-gray-300" href=https://overfitandchill.co.za//categories/optimisation-alm><span>Optimisation alm</span><span class="text-xs text-gray-400 dark:text-gray-500">1</span></a>
+<a class="flex items-center justify-between px-5 py-3 hover:bg-gray-50 dark:hover:bg-warmgray-800 transition-colors duration-150 text-sm text-gray-700 dark:text-gray-300" href=https://overfitandchill.co.za//categories/portfolio-optimization><span>Portfolio optimization</span><span class="text-xs text-gray-400 dark:text-gray-500">1</span></a>
+<a class="flex items-center justify-between px-5 py-3 hover:bg-gray-50 dark:hover:bg-warmgray-800 transition-colors duration-150 text-sm text-gray-700 dark:text-gray-300" href=https://overfitandchill.co.za//categories/quant-finance><span>Quant finance</span><span class="text-xs text-gray-400 dark:text-gray-500">1</span></a>
+<a class="flex items-center justify-between px-5 py-3 hover:bg-gray-50 dark:hover:bg-warmgray-800 transition-colors duration-150 text-sm text-gray-700 dark:text-gray-300" href=https://overfitandchill.co.za//categories/signal-processing><span>Signal processing</span><span class="text-xs text-gray-400 dark:text-gray-500">1</span></a>
+<a class="flex items-center justify-between px-5 py-3 hover:bg-gray-50 dark:hover:bg-warmgray-800 transition-colors duration-150 text-sm text-gray-700 dark:text-gray-300" href=https://overfitandchill.co.za//categories/yield-curve><span>Yield curve</span><span class="text-xs text-gray-400 dark:text-gray-500">2</span></a></div></div><div class="bg-white rounded-xl shadow-sm mb-4 overflow-hidden dark:bg-warmgray-900"><div class="px-5 py-4 border-b border-gray-100 dark:border-warmgray-700"><p class="text-xs font-semibold uppercase tracking-widest text-gray-500 dark:text-gray-400">Recent Posts</p></div><div class="divide-y divide-gray-100 dark:divide-warmgray-700"><a href=/posts/hedge-optim-3-4/ class="block px-5 py-3 hover:bg-gray-50 dark:hover:bg-warmgray-800 transition-colors duration-150"><p class="text-sm font-medium text-gray-900 dark:text-white leading-snug mb-1">Shorter Than You Booked</p><time class="flex items-center text-xs text-gray-500 dark:text-gray-500 gap-1"><span class="inline-flex align-middle pb-0.5 text-xs"><svg height="1em" viewBox="0 -960 960 960" width="1em" fill="currentColor"><path d="m612-292 56-56-148-148v-184h-80v216l172 172zM480-80q-83 0-156-31.5T197-197t-85.5-127T80-480t31.5-156T197-763t127-85.5T480-880t156 31.5T763-763t85.5 127T880-480t-31.5 156T763-197t-127 85.5T480-80zm0-4e2zm0 320q133 0 226.5-93.5T8e2-480t-93.5-226.5T480-8e2t-226.5 93.5T160-480t93.5 226.5T480-160z"/></svg></span></span>
+2026/08/10</time>
+</a><a href=/posts/deposit-duration-2-4/ class="block px-5 py-3 hover:bg-gray-50 dark:hover:bg-warmgray-800 transition-colors duration-150"><p class="text-sm font-medium text-gray-900 dark:text-white leading-snug mb-1">Banking on Deposits That Can Leave</p><time class="flex items-center text-xs text-gray-500 dark:text-gray-500 gap-1"><span class="inline-flex align-middle pb-0.5 text-xs"><svg height="1em" viewBox="0 -960 960 960" width="1em" fill="currentColor"><path d="m612-292 56-56-148-148v-184h-80v216l172 172zM480-80q-83 0-156-31.5T197-197t-85.5-127T80-480t31.5-156T197-763t127-85.5T480-880t156 31.5T763-763t85.5 127T880-480t-31.5 156T763-197t-127 85.5T480-80zm0-4e2zm0 320q133 0 226.5-93.5T8e2-480t-93.5-226.5T480-8e2t-226.5 93.5T160-480t93.5 226.5T480-160z"/></svg></span></span>
+2026/07/18</time>
+</a><a href=/posts/deposit-beta-1-4/ class="block px-5 py-3 hover:bg-gray-50 dark:hover:bg-warmgray-800 transition-colors duration-150"><p class="text-sm font-medium text-gray-900 dark:text-white leading-snug mb-1">What Is a Deposit Actually Worth When Rates Move?</p><time class="flex items-center text-xs text-gray-500 dark:text-gray-500 gap-1"><span class="inline-flex align-middle pb-0.5 text-xs"><svg height="1em" viewBox="0 -960 960 960" width="1em" fill="currentColor"><path d="m612-292 56-56-148-148v-184h-80v216l172 172zM480-80q-83 0-156-31.5T197-197t-85.5-127T80-480t31.5-156T197-763t127-85.5T480-880t156 31.5T763-763t85.5 127T880-480t-31.5 156T763-197t-127 85.5T480-80zm0-4e2zm0 320q133 0 226.5-93.5T8e2-480t-93.5-226.5T480-8e2t-226.5 93.5T160-480t93.5 226.5T480-160z"/></svg></span></span>
+2026/06/19</time>
+</a><a href=/posts/fc-yields-macro/ class="block px-5 py-3 hover:bg-gray-50 dark:hover:bg-warmgray-800 transition-colors duration-150"><p class="text-sm font-medium text-gray-900 dark:text-white leading-snug mb-1">Do Macro Variables Help Forecast the Yield Curve? Three Honest Experiments</p><time class="flex items-center text-xs text-gray-500 dark:text-gray-500 gap-1"><span class="inline-flex align-middle pb-0.5 text-xs"><svg height="1em" viewBox="0 -960 960 960" width="1em" fill="currentColor"><path d="m612-292 56-56-148-148v-184h-80v216l172 172zM480-80q-83 0-156-31.5T197-197t-85.5-127T80-480t31.5-156T197-763t127-85.5T480-880t156 31.5T763-763t85.5 127T880-480t-31.5 156T763-197t-127 85.5T480-80zm0-4e2zm0 320q133 0 226.5-93.5T8e2-480t-93.5-226.5T480-8e2t-226.5 93.5T160-480t93.5 226.5T480-160z"/></svg></span></span>
+2026/06/14</time>
+</a><a href=/posts/ee-etf-tracker/ class="block px-5 py-3 hover:bg-gray-50 dark:hover:bg-warmgray-800 transition-colors duration-150"><p class="text-sm font-medium text-gray-900 dark:text-white leading-snug mb-1">Easy Equities TFSA ETF Analytics</p><time class="flex items-center text-xs text-gray-500 dark:text-gray-500 gap-1"><span class="inline-flex align-middle pb-0.5 text-xs"><svg height="1em" viewBox="0 -960 960 960" width="1em" fill="currentColor"><path d="m612-292 56-56-148-148v-184h-80v216l172 172zM480-80q-83 0-156-31.5T197-197t-85.5-127T80-480t31.5-156T197-763t127-85.5T480-880t156 31.5T763-763t85.5 127T880-480t-31.5 156T763-197t-127 85.5T480-80zm0-4e2zm0 320q133 0 226.5-93.5T8e2-480t-93.5-226.5T480-8e2t-226.5 93.5T160-480t93.5 226.5T480-160z"/></svg></span></span>
+2026/05/31</time></a></div></div></div></div></div></div><footer class="bg-gray-800 text-white p-6"><div class="container max-w-7xl mr-auto ml-auto"><p>&copy;
+2026
+<a href=https://overfitandchill.co.za/ class="duration-200 hover:opacity-50">Rossouw van Jaarsveld | Overfit and Chill</a></p><p>Powered by
+<a href=https://gohugo.io/ class="duration-200 hover:opacity-50">Hugo</a>, Theme
+<a href=https://github.com/opera7133/Blonde class="duration-200 hover:opacity-50">Blonde</a>.</p></div><script>function setDarkModeIcons(e){var t=document.getElementById("icon-moon"),n=document.getElementById("icon-sun"),s=document.getElementById("icon2-moon"),o=document.getElementById("icon2-sun");t&&t.classList.toggle("hidden",e),n&&n.classList.toggle("hidden",!e),s&&s.classList.toggle("hidden",e),o&&o.classList.toggle("hidden",!e)}document.documentElement.classList.contains("dark")||localStorage.theme==="dark"||!("theme"in localStorage)&&window.matchMedia("(prefers-color-scheme: dark)").matches?(setDarkModeIcons(!0),document.documentElement.classList.add("dark")):(setDarkModeIcons(!1),document.documentElement.classList.remove("dark"));function toggleDarkMode(){document.documentElement.classList.contains("dark")?(setDarkModeIcons(!1),document.documentElement.classList.remove("dark"),localStorage.theme="light"):(setDarkModeIcons(!0),document.documentElement.classList.add("dark"),localStorage.theme="dark")}</script></footer></div></body></html>
